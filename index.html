@@ -209,12 +209,70 @@
   }
 
 
-  /* ── MÓVIL ── */
+  /* ── RESPONSIVO ── */
+
+  /* Tablet (481px - 768px) */
+  @media (max-width: 768px) and (min-width: 481px) {
+    .logo-wrap img { height: 200px; }
+    .name { font-size: clamp(1.3rem, 3.5vw, 1.9rem); }
+    .role { font-size: 0.7rem; }
+    .links { gap: 0.6rem; }
+    .btn { font-size: 0.75rem; padding: 0.55rem 1rem; }
+    .filmstrip-wrap { flex: 0 0 30vh; }
+  }
+
+  /* Móvil (hasta 480px) */
   @media (max-width: 480px) {
-    .logo-wrap img { height: 180px; }
-    .name { font-size: 1.4rem; }
-    .btn { font-size: 0.72rem; padding: 0.55rem 0.9rem; }
-    .filmstrip-wrap { flex: 0 0 28vh; }
+    html, body { overflow: hidden; }
+
+    .top {
+      padding: 1.2rem 1.2rem 0.8rem;
+      justify-content: center;
+    }
+
+    .top::before { display: none; }
+
+    .logo-wrap {
+      margin-bottom: 1rem;
+    }
+    .logo-wrap img {
+      height: 140px;
+    }
+
+    .name {
+      font-size: clamp(1.05rem, 5.5vw, 1.35rem);
+      letter-spacing: 0.07em;
+    }
+
+    .role {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      margin-top: 0.35rem;
+    }
+
+    .sep { margin: 1rem auto; }
+
+    /* Botones: grilla de 2 columnas */
+    .links {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .btn {
+      font-size: 0.72rem;
+      padding: 0.65rem 0.7rem;
+      justify-content: center;
+      border-radius: 3px;
+    }
+
+    .filmstrip-wrap {
+      flex: 0 0 26vh;
+    }
+
+    /* Touch control para el filmstrip en móvil */
   }
 </style>
 </head>
@@ -371,6 +429,33 @@
   }
 
   raf = requestAnimationFrame(tick);
+
+  // ── CONTROL TÁCTIL (móvil) ──
+  var touchStartX = 0;
+  var touchCurrentX = 0;
+  var isTouching = false;
+
+  wrap.addEventListener('touchstart', function(e){
+    touchStartX   = e.touches[0].clientX;
+    touchCurrentX = touchStartX;
+    isTouching    = true;
+  }, {passive: true});
+
+  wrap.addEventListener('touchmove', function(e){
+    touchCurrentX = e.touches[0].clientX;
+    var rect   = wrap.getBoundingClientRect();
+    var relX   = touchCurrentX - rect.left;
+    var center = rect.width / 2;
+    var dist   = relX - center;
+    var norm   = dist / center;
+    speed = norm * BASE_SPEED * 2.5;
+  }, {passive: true});
+
+  wrap.addEventListener('touchend', function(){
+    isTouching = false;
+    speed = BASE_SPEED;
+  }, {passive: true});
+
 })();
 </script>
 
