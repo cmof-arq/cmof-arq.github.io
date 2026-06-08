@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>César Ortiz | CMOF Architecture Office</title>
+<title>Cesar Ortiz | CMOF Architecture Office</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
@@ -93,7 +93,7 @@
     font-weight: 400;
     letter-spacing: 0.25em;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #8cd7f7;
     margin-top: 0.5rem;
     opacity: 0;
     animation: fadeUp 0.8s 0.55s forwards;
@@ -173,10 +173,8 @@
     display: flex;
     height: 100%;
     width: max-content;
-    /* velocidad original 60s → 75% de velocidad = 80s */
-    animation: scroll 80s linear infinite;
+    will-change: transform;
   }
-  .filmstrip:hover { animation-play-state: paused; }
 
   .filmstrip img {
     height: 100%;
@@ -195,10 +193,7 @@
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  @keyframes scroll {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
+
 
   /* ── MÓVIL ── */
   @media (max-width: 480px) {
@@ -219,7 +214,7 @@
       <img src="LOGO-CMOF - Q-2023 - ORIGINAL.png" alt="CMOF Logo">
     </div>
 
-    <div class="name">César Ortiz</div>
+    <div class="name">Cesar Ortiz</div>
     <div class="role">Arquitecto &nbsp;·&nbsp; CMOF Architecture Office</div>
     <div class="sep"></div>
 
@@ -303,5 +298,67 @@
   </div>
 
 </div>
+
+<script>
+(function(){
+  var wrap  = document.querySelector('.filmstrip-wrap');
+  var strip = document.querySelector('.filmstrip');
+
+  // Posición acumulada en px
+  var pos        = 0;
+  // Velocidad base: px por frame (positivo = izquierda)
+  var BASE_SPEED = 0.6;
+  var speed      = BASE_SPEED;   // velocidad actual (puede ser negativa)
+  var mouseX     = -1;           // -1 = mouse fuera del zócalo
+  var halfWidth  = 0;
+  var raf;
+
+  // Ancho total de una mitad del strip (para loop)
+  function getHalfWidth() {
+    return strip.scrollWidth / 2;
+  }
+
+  wrap.addEventListener('mouseenter', function(e){
+    halfWidth = getHalfWidth();
+    mouseX = e.clientX;
+  });
+  wrap.addEventListener('mousemove', function(e){
+    mouseX = e.clientX;
+  });
+  wrap.addEventListener('mouseleave', function(){
+    mouseX = -1;
+  });
+
+  function tick() {
+    var half = getHalfWidth();
+
+    if (mouseX < 0) {
+      // Mouse fuera: velocidad base hacia la izquierda
+      speed = BASE_SPEED;
+    } else {
+      var rect   = wrap.getBoundingClientRect();
+      var relX   = mouseX - rect.left;          // 0 … rect.width
+      var center = rect.width / 2;
+      var dist   = relX - center;               // negativo=izq, positivo=der
+      // Normalizar: -1 (extremo izq) … 0 (centro) … +1 (extremo der)
+      var norm   = dist / center;
+      // Velocidad: centro = 0, bordes = ±BASE_SPEED * 2.5
+      speed = norm * BASE_SPEED * 2.5;
+    }
+
+    pos -= speed;  // restar porque translateX negativo mueve a la izquierda
+
+    // Loop seamless: cuando llega al -half, vuelve a 0
+    if (pos <= -half) pos += half;
+    if (pos > 0)      pos -= half;
+
+    strip.style.transform = 'translateX(' + pos + 'px)';
+    raf = requestAnimationFrame(tick);
+  }
+
+  raf = requestAnimationFrame(tick);
+})();
+</script>
+
 </body>
 </html>
