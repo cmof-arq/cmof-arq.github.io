@@ -149,13 +149,13 @@ html, body {
   font-size: 0.68rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #0E6BA8;
   text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s, opacity 0.2s;
   white-space: nowrap;
 }
-.nav-link:hover { color: var(--orange); }
-.nav-link.active { color: var(--orange); }
+.nav-link:hover { opacity: 0.75; }
+.nav-link.active { opacity: 1; }
 
 /* Selector de idioma */
 .lang-switch {
@@ -201,28 +201,31 @@ html, body {
   cursor: crosshair;
 }
 
-/* Overlay degradado color/BW via CSS mask + canvas */
-.filmstrip-wrap .bw-overlay {
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 2;
-  pointer-events: none;
-}
-
-.filmstrip {
+.filmstrip-layer {
   display: flex;
   height: 100%;
   width: max-content;
   will-change: transform;
+  position: absolute;
+  top: 0; left: 0;
 }
 
-.filmstrip img {
+.filmstrip-layer img {
   height: 100%;
   width: auto;
   object-fit: cover;
   flex-shrink: 0;
   margin-right: 3px;
   display: block;
+}
+
+/* Capa color: se revela solo en el centro via mask, definida inline por JS */
+.layer-color {
+  z-index: 2;
+}
+.layer-bw {
+  z-index: 1;
+  filter: grayscale(1) contrast(1.05);
 }
 
 /* ─── FAJA FOOTER (1/32) ─── */
@@ -318,7 +321,7 @@ html, body {
 
   <!-- ═══ BANDA 2: CINTA 1 ═══ -->
   <div class="filmstrip-wrap" id="strip-wrap-1">
-    <div class="filmstrip" id="strip-1">
+    <div class="filmstrip-layer layer-color" id="strip-1">
       <!-- Cinta 1 — imágenes de la carpeta cintas/cinta-1/ -->
       <img src="cintas/cinta-1/img-01.jpg" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-1/img-02.jpg" alt="" onerror="this.style.display='none'">
@@ -344,7 +347,7 @@ html, body {
 
   <!-- ═══ BANDA 3: CINTA 2 ═══ -->
   <div class="filmstrip-wrap" id="strip-wrap-2">
-    <div class="filmstrip" id="strip-2">
+    <div class="filmstrip-layer layer-color" id="strip-2">
       <img src="cintas/cinta-2/img-01.jpg" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-2/img-02.jpg" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-2/img-03.jpg" alt="" onerror="this.style.display='none'">
@@ -368,7 +371,7 @@ html, body {
 
   <!-- ═══ BANDA 4: CINTA 3 ═══ -->
   <div class="filmstrip-wrap" id="strip-wrap-3">
-    <div class="filmstrip" id="strip-3">
+    <div class="filmstrip-layer layer-color" id="strip-3">
       <img src="cintas/cinta-3/img-01.jpg" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-3/img-02.jpg" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-3/img-03.jpg" alt="" onerror="this.style.display='none'">
@@ -448,145 +451,129 @@ html, body {
 
 (function() {
 
-  var BASE_SPEED = 0.55;
-
-  // Configuración por cinta: velocidad base inicial y multiplicador
+  // Configuración por cinta: velocidad base (px/frame sin mouse) y dirección
   var configs = [
-    { wrapId: 'strip-wrap-1', stripId: 'strip-1', baseSpeed:  0.165, mult: 0.72, pos: 0 },
-    { wrapId: 'strip-wrap-2', stripId: 'strip-2', baseSpeed: -0.120, mult: 0.66, pos: 0 },
-    { wrapId: 'strip-wrap-3', stripId: 'strip-3', baseSpeed:  0.195, mult: 0.78, pos: 0 },
+    { wrapId: 'strip-wrap-1', stripId: 'strip-1', baseSpeed:  0.165, pos: 0 },
+    { wrapId: 'strip-wrap-2', stripId: 'strip-2', baseSpeed: -0.120, pos: 0 },
+    { wrapId: 'strip-wrap-3', stripId: 'strip-3', baseSpeed:  0.195, pos: 0 },
   ];
 
+  // En los extremos del mouse, la velocidad llega a este múltiplo de la base
+  var MAX_MULT = 2;
+
   configs.forEach(function(cfg) {
-    var wrap  = document.getElementById(cfg.wrapId);
-    var strip = document.getElementById(cfg.stripId);
-    if (!wrap || !strip) return;
+    var wrap      = document.getElementById(cfg.wrapId);
+    var colorLayer = document.getElementById(cfg.stripId);
+    if (!wrap || !colorLayer) return;
 
-    var mouseX   = -1;
-    var speed    = cfg.baseSpeed;
-    var absBase  = Math.abs(cfg.baseSpeed);
-    var sign     = cfg.baseSpeed >= 0 ? 1 : -1;
+    var mouseX  = -1;
+    var speed   = cfg.baseSpeed;
+    var absBase = Math.abs(cfg.baseSpeed);
 
-    // Canvas overlay para efecto BN/color degradado
-    var canvas = document.createElement('canvas');
-    canvas.style.cssText = 'position:absolute;top:0;left:0;width:100%;height:100%;z-index:2;pointer-events:none;';
-    wrap.appendChild(canvas);
-    var ctx = canvas.getContext('2d');
+    // ── Crear capa B/N duplicando la capa de color ──
+    var bwLayer = colorLayer.cloneNode(true);
+    bwLayer.id = '';
+    bwLayer.className = 'filmstrip-layer layer-bw';
+    wrap.insertBefore(bwLayer, colorLayer);
 
-    function resizeCanvas() {
-      canvas.width  = wrap.offsetWidth;
-      canvas.height = wrap.offsetHeight;
-    }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    // La capa de color se revela solo donde la máscara es opaca (blanco = visible)
+    colorLayer.style.webkitMaskRepeat = 'no-repeat';
+    colorLayer.style.maskRepeat = 'no-repeat';
+    colorLayer.style.webkitMaskSize = '100% 100%';
+    colorLayer.style.maskSize = '100% 100%';
 
-    // Dibuja el overlay BN/color en función del mouseX
-    function drawOverlay(relX) {
-      var w = canvas.width;
-      var h = canvas.height;
-      ctx.clearRect(0, 0, w, h);
-
+    function applyMask(relX) {
+      var w = wrap.offsetWidth;
       if (relX < 0) {
-        // Sin mouse: toda la cinta levemente desaturada
-        ctx.fillStyle = 'rgba(17,17,16,0.35)';
-        ctx.fillRect(0, 0, w, h);
+        // Sin mouse: todo en B/N (oculta capa color por completo)
+        colorLayer.style.webkitMaskImage = 'linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0))';
+        colorLayer.style.maskImage = 'linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0))';
         return;
       }
+      var third  = w / 3;
+      var cx     = Math.max(third * 0.5, Math.min(w - third * 0.5, relX));
+      var fadeW  = third * 0.6;
+      var p0 = Math.max(0, cx - fadeW);
+      var p1 = cx;
+      var p2 = cx;
+      var p3 = Math.min(w, cx + fadeW);
+      var pct = function(px) { return (px / w * 100).toFixed(2) + '%'; };
 
-      // Zona central: color puro. Zona lateral: BN
-      // El tercio central (mouseX ± ~1/6 del ancho) queda en color
-      var third = w / 3;
-      var cx = relX; // centro del efecto (sigue al mouse)
+      var grad = 'linear-gradient(to right,' +
+        ' rgba(0,0,0,0) 0%,' +
+        ' rgba(0,0,0,0) ' + pct(p0) + ',' +
+        ' rgba(0,0,0,1) ' + pct(p1) + ',' +
+        ' rgba(0,0,0,1) ' + pct(p2) + ',' +
+        ' rgba(0,0,0,0) ' + pct(p3) + ',' +
+        ' rgba(0,0,0,0) 100%)';
 
-      // Clampeamos el centro para que siempre haya zona BN en ambos lados
-      cx = Math.max(third * 0.5, Math.min(w - third * 0.5, cx));
-
-      var fadeW = third * 0.6; // ancho de la zona de transición
-
-      // Izquierda: BN
-      var gradL = ctx.createLinearGradient(0, 0, cx, 0);
-      gradL.addColorStop(0,   'rgba(17,17,16,0.82)');
-      gradL.addColorStop(Math.max(0, 1 - (fadeW / cx)), 'rgba(17,17,16,0.82)');
-      gradL.addColorStop(1,   'rgba(17,17,16,0)');
-      ctx.fillStyle = gradL;
-      ctx.fillRect(0, 0, cx, h);
-
-      // Derecha: BN
-      var gradR = ctx.createLinearGradient(cx, 0, w, 0);
-      gradR.addColorStop(0,   'rgba(17,17,16,0)');
-      gradR.addColorStop(Math.min(1, fadeW / (w - cx)), 'rgba(17,17,16,0.82)');
-      gradR.addColorStop(1,   'rgba(17,17,16,0.82)');
-      ctx.fillStyle = gradR;
-      ctx.fillRect(cx, 0, w - cx, h);
+      colorLayer.style.webkitMaskImage = grad;
+      colorLayer.style.maskImage = grad;
     }
 
-    // Duplicar imágenes para loop
-    function ensureLoop() {
-      var imgs = strip.querySelectorAll('img');
+    // Estado inicial: todo B/N (sin mouse)
+    applyMask(-1);
+
+    // ── Loop de imágenes: duplicar contenido para scroll infinito ──
+    function ensureLoop(layer) {
+      var imgs = layer.querySelectorAll('img');
       var visible = Array.from(imgs).filter(function(i){ return i.style.display !== 'none'; });
-      if (visible.length === 0) return;
-      // Solo duplicar si no se ha duplicado aún
-      if (!strip.dataset.looped) {
-        visible.forEach(function(img) {
-          var clone = img.cloneNode(true);
-          strip.appendChild(clone);
-        });
-        strip.dataset.looped = '1';
-      }
+      if (visible.length === 0 || layer.dataset.looped) return;
+      visible.forEach(function(img) {
+        layer.appendChild(img.cloneNode(true));
+      });
+      layer.dataset.looped = '1';
     }
 
-    // Esperar a que carguen imágenes para duplicar
-    var loaded = 0;
-    var imgs = strip.querySelectorAll('img');
-    if (imgs.length === 0) { ensureLoop(); }
-    else {
+    [colorLayer, bwLayer].forEach(function(layer) {
+      var imgs = layer.querySelectorAll('img');
+      var loaded = 0;
+      if (imgs.length === 0) { ensureLoop(layer); return; }
       imgs.forEach(function(img) {
-        if (img.complete) { loaded++; if (loaded >= imgs.length) ensureLoop(); }
+        if (img.complete) { loaded++; if (loaded >= imgs.length) ensureLoop(layer); }
         else {
-          img.addEventListener('load',  function(){ loaded++; if (loaded >= imgs.length) ensureLoop(); });
-          img.addEventListener('error', function(){ loaded++; if (loaded >= imgs.length) ensureLoop(); });
+          img.addEventListener('load',  function(){ loaded++; if (loaded >= imgs.length) ensureLoop(layer); });
+          img.addEventListener('error', function(){ loaded++; if (loaded >= imgs.length) ensureLoop(layer); });
         }
       });
-    }
+    });
 
-    // Mouse
+    // ── Mouse / touch ──
     wrap.addEventListener('mouseenter', function(e) { mouseX = e.clientX; });
     wrap.addEventListener('mousemove',  function(e) { mouseX = e.clientX; });
     wrap.addEventListener('mouseleave', function()  { mouseX = -1; });
+    wrap.addEventListener('touchmove', function(e) { mouseX = e.touches[0].clientX; }, {passive: true});
+    wrap.addEventListener('touchend',  function()   { mouseX = -1; }, {passive: true});
 
-    // Touch
-    wrap.addEventListener('touchmove', function(e) {
-      mouseX = e.touches[0].clientX;
-    }, {passive: true});
-    wrap.addEventListener('touchend', function() { mouseX = -1; }, {passive: true});
-
-    // RAF loop
+    // ── RAF loop ──
     (function tick() {
-      var halfW = strip.scrollWidth / 2;
+      var halfW = colorLayer.scrollWidth / 2;
 
       if (mouseX < 0) {
-        // Sin mouse: velocidad base (dirección original)
         speed = cfg.baseSpeed;
-        drawOverlay(-1);
+        applyMask(-1);
       } else {
-        var rect  = wrap.getBoundingClientRect();
-        var relX  = mouseX - rect.left;
+        var rect   = wrap.getBoundingClientRect();
+        var relX   = mouseX - rect.left;
         var center = rect.width / 2;
-        var dist  = relX - center;
-        var norm  = dist / center; // -1 … +1
-        // Velocidad: al centro se acerca a 0, en los bordes al máximo
-        speed = norm * absBase * cfg.mult;
-        drawOverlay(relX);
+        var norm   = Math.max(-1, Math.min(1, (relX - center) / center)); // -1…+1, 0 en el centro
+
+        // Curva suave: 0 en el centro, hasta MAX_MULT en los extremos.
+        // Se usa norm^2 con signo para una aceleración gradual (no lineal abrupta).
+        var curved = Math.sign(norm) * Math.pow(Math.abs(norm), 1.6);
+        speed = curved * absBase * MAX_MULT * Math.sign(cfg.baseSpeed || 1);
+
+        applyMask(relX);
       }
 
       cfg.pos -= speed;
-
       if (halfW > 0) {
         if (cfg.pos <= -halfW) cfg.pos += halfW;
         if (cfg.pos > 0)       cfg.pos -= halfW;
       }
 
-      strip.style.transform = 'translateX(' + cfg.pos + 'px)';
+      colorLayer.style.transform = 'translateX(' + cfg.pos + 'px)';
+      bwLayer.style.transform    = 'translateX(' + cfg.pos + 'px)';
       requestAnimationFrame(tick);
     })();
 
