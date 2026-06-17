@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://cmof-arq.github.io/">
 <meta property="og:title" content="Cesar Ortiz Ferrer | Arquitecto | CMOF Architecture Office">
 <meta property="og:description" content="Arquitecto especializado en hoteles boutique, hospitality y arquitectura residencial. Córdoba, Argentina.">
-<meta property="og:image" content="https://cmof-arq.github.io/assets/images/LOGO-CMOF_-_Q-2023_-_ORIGINAL.png">
+<meta property="og:image" content="https://cmof-arq.github.io/LOGO-CMOF - Q-2023 - ORIGINAL.png">
 <meta property="og:locale" content="es_AR">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cesar Ortiz Ferrer | Arquitecto | CMOF Architecture Office">
@@ -92,35 +92,6 @@ html, body {
   min-height: 0;
 }
 
-/* Zona izquierda: íconos redes */
-.header-social {
-  width: 52px;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  padding: 0 0;
-  border-right: 1px solid var(--border);
-}
-
-.social-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  flex: 1;
-  color: var(--muted);
-  text-decoration: none;
-  transition: color 0.2s, background 0.2s;
-}
-.social-icon:hover {
-  color: var(--orange);
-  background: rgba(255,102,0,0.06);
-}
-.social-icon svg { width: 16px; height: 16px; }
-
 /* Zona logo */
 .header-logo {
   flex-shrink: 0;
@@ -186,6 +157,30 @@ html, body {
 .nav-link:hover { color: var(--orange); }
 .nav-link.active { color: var(--orange); }
 
+/* Selector de idioma */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.6rem;
+  padding-left: 1.2rem;
+  border-left: 1px solid var(--border2, #333330);
+}
+.lang-btn {
+  font-family: 'Square721BT', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.2s;
+}
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { color: var(--orange); }
+.lang-sep { color: var(--border2, #333330); font-size: 0.6rem; }
+
 /* Línea naranja en la parte inferior del header */
 .header::after {
   content: '';
@@ -235,6 +230,7 @@ html, body {
   flex: 0 0 calc(100vh * 1/32);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 2rem;
   border-top: 1px solid var(--border);
   background: var(--bg);
@@ -245,6 +241,23 @@ html, body {
   color: var(--muted);
   text-transform: uppercase;
 }
+
+.footer-social {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* igual al tamaño del ícono (12px) */
+  height: 100%;
+}
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-social a:hover { color: var(--orange); }
+.footer-social svg { width: 12px; height: 12px; }
 
 /* ─── ANIMACIÓN ENTRADA ─── */
 @keyframes fadeUp {
@@ -265,7 +278,6 @@ html, body {
   .header { flex: 0 0 calc(100dvh * 7/32); }
   .filmstrip-wrap { flex: 0 0 calc(100dvh * 1/4); }
   .footer-bar { flex: 0 0 calc(100dvh * 1/32); }
-  .header-social { width: 40px; }
   .header-logo img { height: calc(100dvh * 7/32 * 0.65); }
   .h-name { font-size: 0.72rem; }
 }
@@ -277,39 +289,9 @@ html, body {
   <!-- ═══ BANDA 1: HEADER ═══ -->
   <div class="header">
 
-    <!-- Íconos redes (derecha del header, arriba) -->
-    <!-- SOCIAL: 4 íconos a la derecha -->
-    <div class="header-social">
-      <a class="social-icon" href="https://www.instagram.com/cmof.arq" target="_blank" title="Instagram">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="2" width="20" height="20" rx="5"/>
-          <circle cx="12" cy="12" r="4"/>
-          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
-        </svg>
-      </a>
-      <a class="social-icon" href="https://www.linkedin.com/in/ortizferrer" target="_blank" title="LinkedIn">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/>
-          <rect x="2" y="9" width="4" height="12"/>
-          <circle cx="4" cy="4" r="2"/>
-        </svg>
-      </a>
-      <a class="social-icon" href="https://ar.pinterest.com/cmof_architecture" target="_blank" title="Pinterest">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.19-.77 1.27-5.38 1.27-5.38s-.32-.65-.32-1.61c0-1.51.88-2.64 1.97-2.64.93 0 1.38.7 1.38 1.54 0 .94-.6 2.34-.91 3.64-.26 1.09.54 1.97 1.6 1.97 1.92 0 3.4-2.02 3.4-4.95 0-2.59-1.86-4.4-4.51-4.4-3.07 0-4.87 2.3-4.87 4.68 0 .93.36 1.92.8 2.46.09.11.1.2.07.31-.08.33-.26 1.09-.3 1.24-.05.2-.16.24-.37.14-1.39-.65-2.26-2.68-2.26-4.32 0-3.51 2.55-6.74 7.36-6.74 3.86 0 6.86 2.75 6.86 6.42 0 3.83-2.41 6.91-5.76 6.91-1.13 0-2.19-.59-2.55-1.28l-.69 2.59c-.25.97-.93 2.18-1.39 2.92C10.1 21.95 11.04 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
-        </svg>
-      </a>
-      <a class="social-icon" href="mailto:cmof2@hotmail.com" title="Email">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-        </svg>
-      </a>
-    </div>
-
     <!-- Logo -->
     <div class="header-logo">
-      <img src="assets/images/LOGO-CMOF_-_Q-2023_-_ORIGINAL.png" alt="CMOF Architecture Office">
+      <img src="LOGO-CMOF - Q-2023 - ORIGINAL.png" alt="CMOF Architecture Office">
     </div>
 
     <!-- Nombre + rol -->
@@ -325,6 +307,11 @@ html, body {
       <a class="nav-link" href="publicaciones.html">Publicaciones</a>
       <a class="nav-link" href="cv.html">CV</a>
       <a class="nav-link" href="contacto.html">Contacto</a>
+      <div class="lang-switch" id="lang-switch">
+        <button class="lang-btn active" data-lang="es">ESP</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" data-lang="en">ENG</button>
+      </div>
     </nav>
 
   </div>
@@ -406,9 +393,51 @@ html, body {
   <!-- ═══ FAJA FOOTER ═══ -->
   <div class="footer-bar">
     <span>© CMOF Architecture Office — Córdoba, Argentina</span>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/cmof.arq" target="_blank" title="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com/in/ortizferrer" target="_blank" title="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/>
+          <rect x="2" y="9" width="4" height="12"/>
+          <circle cx="4" cy="4" r="2"/>
+        </svg>
+      </a>
+      <a href="https://ar.pinterest.com/cmof_architecture" target="_blank" title="Pinterest">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C6.48 2 2 6.48 2 12c0 4.24 2.65 7.86 6.39 9.29-.09-.78-.17-1.98.03-2.83.19-.77 1.27-5.38 1.27-5.38s-.32-.65-.32-1.61c0-1.51.88-2.64 1.97-2.64.93 0 1.38.7 1.38 1.54 0 .94-.6 2.34-.91 3.64-.26 1.09.54 1.97 1.6 1.97 1.92 0 3.4-2.02 3.4-4.95 0-2.59-1.86-4.4-4.51-4.4-3.07 0-4.87 2.3-4.87 4.68 0 .93.36 1.92.8 2.46.09.11.1.2.07.31-.08.33-.26 1.09-.3 1.24-.05.2-.16.24-.37.14-1.39-.65-2.26-2.68-2.26-4.32 0-3.51 2.55-6.74 7.36-6.74 3.86 0 6.86 2.75 6.86 6.42 0 3.83-2.41 6.91-5.76 6.91-1.13 0-2.19-.59-2.55-1.28l-.69 2.59c-.25.97-.93 2.18-1.39 2.92C10.1 21.95 11.04 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2z"/>
+        </svg>
+      </a>
+      <a href="mailto:cmof2@hotmail.com" title="Email">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+        </svg>
+      </a>
+    </div>
   </div>
 
 </div>
+
+<script>
+/* ── Selector de idioma (placeholder visual; integración completa de textos pendiente) ── */
+(function() {
+  var sw = document.getElementById('lang-switch');
+  if (!sw) return;
+  sw.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('lang-btn')) return;
+    sw.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
+    e.target.classList.add('active');
+    document.documentElement.setAttribute('data-lang', e.target.dataset.lang);
+    // TODO: aplicar diccionario ES/EN cuando se implemente el bilingüe completo
+  });
+})();
+</script>
 
 <script>
 /* ══════════════════════════════════════════════════
@@ -423,9 +452,9 @@ html, body {
 
   // Configuración por cinta: velocidad base inicial y multiplicador
   var configs = [
-    { wrapId: 'strip-wrap-1', stripId: 'strip-1', baseSpeed:  0.55, mult: 2.4, pos: 0 },
-    { wrapId: 'strip-wrap-2', stripId: 'strip-2', baseSpeed: -0.40, mult: 2.2, pos: 0 },
-    { wrapId: 'strip-wrap-3', stripId: 'strip-3', baseSpeed:  0.65, mult: 2.6, pos: 0 },
+    { wrapId: 'strip-wrap-1', stripId: 'strip-1', baseSpeed:  0.165, mult: 0.72, pos: 0 },
+    { wrapId: 'strip-wrap-2', stripId: 'strip-2', baseSpeed: -0.120, mult: 0.66, pos: 0 },
+    { wrapId: 'strip-wrap-3', stripId: 'strip-3', baseSpeed:  0.195, mult: 0.78, pos: 0 },
   ];
 
   configs.forEach(function(cfg) {
