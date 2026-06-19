@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Portfolio — César Ortiz Ferrer | CMOF Architecture Office">
+<title>Portfolio | CMOF Architecture Office</title>
+
+<style>
+@font-face {
+  font-family: 'Conthrax';
+  src: url('assets/fonts/CONTHRAX-SEMIBOLD.OTF') format('opentype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_BOLD.TTF') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_ROMAN.TTF') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+
+:root {
+  --bg:      #111110;
+  --surface: #1a1a18;
+  --surface2:#222220;
+  --orange:  #ff6600;
+  --blue:    #8cd7f7;
+  --green:   #4ac87a;
+  --yellow:  #c8b84a;
+  --muted:   #888880;
+  --border:  #2a2a28;
+  --border2: #333330;
+  --text:    #e8e6e0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Square721BT', sans-serif;
+  overflow: hidden;
+}
+
+/* ══ LAYOUT PRINCIPAL ══ */
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ─ TOPBAR ─ */
+.topbar {
+  flex-shrink: 0;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  gap: 1.5rem;
+  position: relative;
+  z-index: 10;
+}
+
+.topbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  text-decoration: none;
+}
+.topbar-logo img {
+  height: 28px;
+  width: auto;
+}
+.topbar-name {
+  font-family: 'Conthrax', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+
+.topbar-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--border2);
+}
+
+.topbar-section {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+.topbar-nav {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+.topbar-nav a {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.topbar-nav a:hover { color: var(--orange); }
+.topbar-nav a.active { color: var(--orange); }
+
+/* ─ CONTENIDO PRINCIPAL ─ */
+.content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* ─ SIDEBAR: lista proyectos (1/7) ─ */
+.sidebar {
+  width: calc(100% / 7);
+  min-width: 160px;
+  max-width: 220px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-head {
+  padding: 0.9rem 1rem 0.7rem;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.sidebar-head h2 {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.5rem;
+}
+
+/* Filtros rápidos */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+}
+.filter-btn {
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 2px;
+  border: 1px solid var(--border2);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+/* Lista de proyectos */
+.project-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.4rem 0;
+}
+
+.project-list::-webkit-scrollbar { width: 4px; }
+.project-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.proj-item {
+  padding: 0.65rem 1rem;
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: background 0.12s, border-color 0.12s;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.proj-item:hover {
+  background: var(--surface2);
+}
+.proj-item.active {
+  background: var(--surface2);
+  border-left-color: var(--orange);
+}
+.proj-item.dimmed .pi-cod,
+.proj-item.dimmed .pi-nom,
+.proj-item.dimmed .pi-yr {
+  color: var(--muted) !important;
+  opacity: 0.45;
+}
+.pi-cod {
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+  transition: color 0.2s, opacity 0.2s;
+}
+.pi-nom {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--text);
+  line-height: 1.3;
+  transition: color 0.2s, opacity 0.2s;
+}
+.pi-yr {
+  font-size: 0.6rem;
+  color: var(--muted);
+  transition: color 0.2s, opacity 0.2s;
+}
+
+/* ─ DETALLE DE PROYECTO (6/7) ─ */
+.detail {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg);
+  position: relative;
+}
+
+.detail::-webkit-scrollbar { width: 5px; }
+.detail::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+
+/* Estado vacío */
+.detail-empty {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  color: var(--muted);
+}
+.detail-empty .de-logo {
+  font-family: 'Conthrax', sans-serif;
+  font-size: 1.4rem;
+  letter-spacing: 0.2em;
+  color: var(--border2);
+  text-transform: uppercase;
+}
+.detail-empty p {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Contenido del detalle */
+.detail-inner {
+  display: none;
+  padding: 2.5rem 3rem;
+  max-width: 1100px;
+}
+.detail-inner.visible { display: block; }
+
+/* Header del proyecto */
+.det-head {
+  margin-bottom: 2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.det-cod {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.5rem;
+}
+
+.det-nombre {
+  font-family: 'Conthrax', sans-serif;
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+
+.det-meta {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.det-meta-item {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.det-meta-item span {
+  color: var(--text);
+  margin-left: 0.3rem;
+}
+
+.det-estado {
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  letter-spacing: 0.08em;
+}
+.est-activo    { background: #122a1a; color: var(--green); }
+.est-pausa     { background: #2a2a12; color: var(--yellow); }
+.est-terminado { background: #12202a; color: var(--blue); }
+.est-archivo   { background: #1e1e1c; color: var(--muted); }
+
+/* Galería de imágenes */
+.det-gallery {
+  margin-bottom: 2rem;
+}
+
+.gallery-main {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  background: var(--surface);
+  display: block;
+  margin-bottom: 0.6rem;
+}
+
+.gallery-thumbs {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.gallery-thumb {
+  width: 80px;
+  height: 55px;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0.5;
+  border: 1px solid transparent;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+.gallery-thumb:hover { opacity: 0.8; }
+.gallery-thumb.active { opacity: 1; border-color: var(--orange); }
+
+/* Texto / memoria */
+.det-memoria {
+  font-size: 0.82rem;
+  line-height: 1.8;
+  color: var(--text);
+  max-width: 680px;
+  white-space: pre-wrap;
+}
+
+/* ── ANIMACIÓN ENTRADA DETALLE ── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.detail-inner.visible {
+  animation: slideIn 0.25s ease both;
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  .content { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    max-width: none;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  .project-list { display: flex; flex-direction: row; overflow-x: auto; overflow-y: hidden; padding: 0.4rem; }
+  .proj-item { flex-shrink: 0; min-width: 120px; border-left: none; border-bottom: 2px solid transparent; }
+  .proj-item.active { border-left: none; border-bottom-color: var(--orange); }
+  .detail-inner { padding: 1.5rem; }
+  .topbar-nav { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <a class="topbar-logo" href="index.html">
+      <img src="assets/images/LOGO-CMOF_-_Q-2023_-_ORIGINAL.png" alt="CMOF">
+      <span class="topbar-name">CMOF</span>
+    </a>
+    <div class="topbar-sep"></div>
+    <span class="topbar-section">Portfolio</span>
+    <nav class="topbar-nav">
+      <a href="index.html">Home</a>
+      <a href="portfolio.html" class="active">Portfolio</a>
+      <a href="estudio.html">Estudio</a>
+      <a href="publicaciones.html">Publicaciones</a>
+      <a href="cv.html">CV</a>
+      <a href="contacto.html">Contacto</a>
+    </nav>
+  </div>
+
+  <!-- CONTENIDO -->
+  <div class="content">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-head">
+        <h2>Proyectos</h2>
+        <div class="filters" id="filters">
+          <button class="filter-btn active" data-filter="all">Todos</button>
+          <button class="filter-btn" data-filter="H">Hotel</button>
+          <button class="filter-btn" data-filter="K">Casa</button>
+          <button class="filter-btn" data-filter="I">Ind.</button>
+          <button class="filter-btn" data-filter="O">Of.</button>
+        </div>
+      </div>
+      <div class="project-list" id="project-list">
+        <!-- Generado por JS -->
+      </div>
+    </div>
+
+    <!-- DETALLE -->
+    <div class="detail" id="detail">
+
+      <div class="detail-empty" id="detail-empty">
+        <div class="de-logo">CMOF</div>
+        <p>Seleccioná un proyecto</p>
+      </div>
+
+      <div class="detail-inner" id="detail-inner">
+        <div class="det-head">
+          <div class="det-cod" id="d-cod"></div>
+          <div class="det-nombre" id="d-nombre"></div>
+          <div class="det-meta">
+            <div class="det-meta-item">Año <span id="d-anio"></span></div>
+            <div class="det-meta-item">Tipología <span id="d-tipo"></span></div>
+            <div class="det-meta-item">Ubicación <span id="d-ciudad"></span></div>
+            <div class="det-estado" id="d-estado"></div>
+          </div>
+        </div>
+
+        <!-- Galería -->
+        <div class="det-gallery" id="d-gallery">
+          <img class="gallery-main" id="d-img-main" src="" alt="">
+          <div class="gallery-thumbs" id="d-thumbs"></div>
+        </div>
+
+        <!-- Memoria -->
+        <div class="det-memoria" id="d-memoria"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   PORTFOLIO — carga desde proyectos.js o proyectos.json
+   Si no existe el archivo, muestra datos de demo
+════════════════════════════════════════════ */
+
+var proyectos = [];
+var activeFilter = 'all';
+var activeId     = null;
+
+/* ── Tipologías ── */
+var tipoLabel = { H:'Hospitality', K:'Residencial', I:'Industrial', O:'Oficinas', C:'Comercial', M:'Medios', V:'Otros' };
+var estadoClass = { 'Activo':'est-activo', 'En obra':'est-activo', 'En pausa':'est-pausa', 'Construido':'est-terminado', 'Terminado':'est-terminado', 'Archivo':'est-archivo' };
+
+/* ── Cargar proyectos desde proyectos.js (exportado por admin) ── */
+function loadProyectos() {
+  // Intenta cargar el script proyectos.js; si no existe, usa demo
+  var s = document.createElement('script');
+  s.src = 'proyectos.js';
+  s.onload = function() {
+    if (typeof proyectosData !== 'undefined') {
+      proyectos = proyectosData;
+    }
+    renderSidebar();
+  };
+  s.onerror = function() {
+    // Sin archivo: usar datos de demo
+    proyectos = demoProyectos();
+    renderSidebar();
+  };
+  document.head.appendChild(s);
+}
+
+/* ── Demo (mientras no haya proyectos.js cargado) ── */
+function demoProyectos() {
+  return [
+    {
+      id: '1', codigo: 'H-BODEN-2019', nombre: 'Böden Hotel & SPA',
+      tipologia: 'H', estado: 'Construido',
+      anio_inicio: '2019', anio_fin: '2022',
+      ciudad: 'Villa General Belgrano', provincia: 'Córdoba',
+      memoria_es: 'El Böden Hotel & SPA nace de la voluntad de crear una experiencia de hospedaje que trasciende la comodidad convencional. El proyecto explora la relación entre la arquitectura, el paisaje serrano y la experiencia del huésped como una secuencia de descubrimientos.\n\nLa materialidad apela a lo tectónico local —piedra, madera, hormigón visto— componiéndose en un lenguaje contemporáneo que dialoga con la topografía del lugar.',
+      imagenes: ['img-01.jpg','img-02.jpg','img-03.jpg','img-04.jpg']
+    },
+    {
+      id: '2', codigo: 'K-EGLC-2020', nombre: 'Casa G&E.307',
+      tipologia: 'K', estado: 'Construido',
+      anio_inicio: '2020', anio_fin: '2023',
+      ciudad: 'Córdoba', provincia: 'Córdoba',
+      memoria_es: 'Vivienda unifamiliar en barrio privado. El proyecto articula los espacios de vida y descanso en torno a un patio central que organiza la circulación y la luz natural.',
+      imagenes: ['img-01.jpg','img-02.jpg']
+    },
+    {
+      id: '3', codigo: 'H-JMCP-2023', nombre: 'Hotel Carlos Paz',
+      tipologia: 'H', estado: 'Activo',
+      anio_inicio: '2023', anio_fin: '',
+      ciudad: 'Villa Carlos Paz', provincia: 'Córdoba',
+      memoria_es: '',
+      imagenes: ['img-01.jpg']
+    },
+  ];
+}
+
+/* ── Render sidebar ── */
+function renderSidebar() {
+  var list = document.getElementById('project-list');
+  var filtered = proyectos.filter(function(p) {
+    return activeFilter === 'all' || (p.codigo && p.codigo.charAt(0) === activeFilter);
+  });
+
+  list.innerHTML = '';
+  proyectos.forEach(function(p) {
+    var isFiltered = activeFilter === 'all' || (p.codigo && p.codigo.charAt(0) === activeFilter);
+    var item = document.createElement('div');
+    item.className = 'proj-item' + (p.id === activeId ? ' active' : '') + (!isFiltered ? ' dimmed' : '');
+    item.dataset.id = p.id;
+    item.innerHTML =
+      '<div class="pi-cod">' + xe(p.codigo) + '</div>' +
+      '<div class="pi-nom">' + xe(p.nombre) + '</div>' +
+      '<div class="pi-yr">' + xe(p.anio_inicio || '') + (p.anio_fin ? ' – ' + p.anio_fin : '') + '</div>';
+    item.addEventListener('click', function() { openProject(p.id); });
+    list.appendChild(item);
+  });
+}
+
+/* ── Abrir proyecto ── */
+function openProject(id) {
+  activeId = id;
+  var p = proyectos.find(function(x){ return x.id === id; });
+  if (!p) return;
+
+  // Sidebar: activar ítem
+  document.querySelectorAll('.proj-item').forEach(function(el) {
+    el.classList.toggle('active', el.dataset.id === id);
+  });
+
+  // Ocultar empty, mostrar detalle
+  document.getElementById('detail-empty').style.display = 'none';
+  var inner = document.getElementById('detail-inner');
+  inner.classList.remove('visible');
+  void inner.offsetWidth; // reflow para reiniciar animación
+  inner.classList.add('visible');
+
+  // Datos textuales
+  document.getElementById('d-cod').textContent    = p.codigo || '';
+  document.getElementById('d-nombre').textContent = p.nombre || '';
+  document.getElementById('d-anio').textContent   = p.anio_fin || p.anio_inicio || '—';
+  document.getElementById('d-tipo').textContent   = tipoLabel[p.tipologia] || p.tipologia || '—';
+  document.getElementById('d-ciudad').textContent = [p.ciudad, p.provincia].filter(Boolean).join(', ') || '—';
+  document.getElementById('d-memoria').textContent = p.web_es || p.memoria_es || '';
+
+  // Estado badge
+  var est = document.getElementById('d-estado');
+  est.textContent  = p.estado || '';
+  est.className    = 'det-estado ' + (estadoClass[p.estado] || 'est-archivo');
+
+  // Galería
+  var imgs = p.imagenes || [];
+  var basePath = 'projects/' + p.codigo + '/';
+  var mainImg  = document.getElementById('d-img-main');
+  var thumbsEl = document.getElementById('d-thumbs');
+  var gallery  = document.getElementById('d-gallery');
+
+  if (imgs.length > 0) {
+    gallery.style.display = '';
+    mainImg.src = basePath + imgs[0];
+    mainImg.onerror = function() { this.style.display = 'none'; };
+
+    thumbsEl.innerHTML = '';
+    imgs.forEach(function(imgName, i) {
+      var th = document.createElement('img');
+      th.className = 'gallery-thumb' + (i === 0 ? ' active' : '');
+      th.src = basePath + imgName;
+      th.onerror = function() { this.style.display = 'none'; };
+      th.addEventListener('click', function() {
+        mainImg.src = basePath + imgName;
+        document.querySelectorAll('.gallery-thumb').forEach(function(t){ t.classList.remove('active'); });
+        th.classList.add('active');
+      });
+      thumbsEl.appendChild(th);
+    });
+  } else {
+    gallery.style.display = 'none';
+  }
+
+  // Scroll al tope del detalle
+  document.getElementById('detail').scrollTop = 0;
+}
+
+/* ── Filtros ── */
+document.getElementById('filters').addEventListener('click', function(e) {
+  if (!e.target.classList.contains('filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+  e.target.classList.add('active');
+  activeFilter = e.target.dataset.filter;
+  renderSidebar();
+});
+
+/* ── Helpers ── */
+function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ── Init ── */
+loadProyectos();
+</script>
+</body>
+</html>
