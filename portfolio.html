@@ -151,15 +151,26 @@ html, body {
 }
 
 /* Filtros rápidos */
+.filter-label {
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.35rem;
+}
+.filter-label-year {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
+}
+
 .filters {
   display: flex;
   flex-wrap: wrap;
   gap: 0.3rem;
 }
 .filters-year {
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
-  border-top: 1px solid var(--border);
+  margin-top: 0;
 }
 .filter-btn {
   font-size: 0.58rem;
@@ -425,10 +436,12 @@ html, body {
     <div class="sidebar">
       <div class="sidebar-head">
         <h2>Proyectos</h2>
+        <div class="filter-label">Tipo</div>
         <div class="filters" id="filters">
           <button class="filter-btn active" data-filter="all">Todos</button>
           <!-- Generado por JS desde las tipologías presentes -->
         </div>
+        <div class="filter-label filter-label-year">Año</div>
         <div class="filters filters-year" id="filtersYear">
           <!-- Generado por JS desde los años presentes -->
         </div>
