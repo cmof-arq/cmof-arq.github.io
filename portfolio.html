@@ -156,6 +156,11 @@ html, body {
   flex-wrap: wrap;
   gap: 0.3rem;
 }
+.filters-year {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid var(--border);
+}
 .filter-btn {
   font-size: 0.58rem;
   letter-spacing: 0.1em;
@@ -171,6 +176,10 @@ html, body {
 .filter-btn:hover, .filter-btn.active {
   border-color: var(--orange);
   color: var(--orange);
+}
+.filter-btn.year-btn:hover, .filter-btn.year-btn.active {
+  border-color: #0E6BA8;
+  color: #8cd7f7;
 }
 
 /* Lista de proyectos */
@@ -418,10 +427,10 @@ html, body {
         <h2>Proyectos</h2>
         <div class="filters" id="filters">
           <button class="filter-btn active" data-filter="all">Todos</button>
-          <button class="filter-btn" data-filter="H">Hotel</button>
-          <button class="filter-btn" data-filter="K">Casa</button>
-          <button class="filter-btn" data-filter="I">Ind.</button>
-          <button class="filter-btn" data-filter="O">Of.</button>
+          <!-- Generado por JS desde las tipologías presentes -->
+        </div>
+        <div class="filters filters-year" id="filtersYear">
+          <!-- Generado por JS desde los años presentes -->
         </div>
       </div>
       <div class="project-list" id="project-list">
@@ -471,10 +480,21 @@ html, body {
 
 var proyectos = [];
 var activeFilter = 'all';
+var activeYear   = 'all';
 var activeId     = null;
 
-/* ── Tipologías ── */
+/* ── Tipologías (base + extras definidos en Studio Manager) ── */
 var tipoLabel = { H:'Hospitality', K:'Residencial', I:'Industrial', O:'Oficinas', C:'Comercial', M:'Medios', V:'Otros' };
+(function() {
+  try {
+    var cfg = JSON.parse(localStorage.getItem('cmof_cfg_v2')) || {};
+    if (cfg.tiposExtra && cfg.tiposExtra.length) {
+      cfg.tiposExtra.forEach(function(t) {
+        tipoLabel[t] = (cfg.tiposLabels && cfg.tiposLabels[t]) ? cfg.tiposLabels[t] : t;
+      });
+    }
+  } catch(e) {}
+})();
 var estadoClass = { 'Activo':'est-activo', 'En obra':'est-activo', 'En pausa':'est-pausa', 'Construido':'est-terminado', 'Terminado':'est-terminado', 'Archivo':'est-archivo' };
 
 /* ── Cargar proyectos desde proyectos.js (exportado por admin) ── */
@@ -486,14 +506,65 @@ function loadProyectos() {
     if (typeof proyectosData !== 'undefined') {
       proyectos = proyectosData;
     }
+    buildFilters();
     renderSidebar();
   };
   s.onerror = function() {
     // Sin archivo: usar datos de demo
     proyectos = demoProyectos();
+    buildFilters();
     renderSidebar();
   };
   document.head.appendChild(s);
+}
+
+/* ── Construir filtros dinámicamente a partir de los proyectos cargados ── */
+function buildFilters() {
+  // Tipologías presentes (orden: según aparecen en tipoLabel para mantener un orden estable)
+  var tiposPresentes = [];
+  Object.keys(tipoLabel).forEach(function(t) {
+    if (proyectos.some(function(p){ return p.codigo && p.codigo.charAt(0) === t; })) {
+      tiposPresentes.push(t);
+    }
+  });
+
+  var filtersEl = document.getElementById('filters');
+  var html = '<button class="filter-btn active" data-filter="all">Todos</button>';
+  tiposPresentes.forEach(function(t) {
+    html += '<button class="filter-btn" data-filter="' + t + '">' + xe(tipoLabel[t]) + '</button>';
+  });
+  filtersEl.innerHTML = html;
+
+  // Años presentes (usamos año de inicio; si no hay, año de fin)
+  var anios = [];
+  proyectos.forEach(function(p) {
+    var a = p.anio_inicio || p.anio_fin;
+    if (a && anios.indexOf(a) === -1) anios.push(a);
+  });
+  anios.sort(function(a,b){ return b.localeCompare(a); }); // más reciente primero
+
+  var yearEl = document.getElementById('filtersYear');
+  var yHtml = '<button class="filter-btn year-btn active" data-year="all">Todos los años</button>';
+  anios.forEach(function(a) {
+    yHtml += '<button class="filter-btn year-btn" data-year="' + xe(a) + '">' + xe(a) + '</button>';
+  });
+  yearEl.innerHTML = yHtml;
+
+  // Bind eventos (se vuelven a generar los botones, así que re-bindeamos)
+  filtersEl.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('filter-btn')) return;
+    filtersEl.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    e.target.classList.add('active');
+    activeFilter = e.target.dataset.filter;
+    renderSidebar();
+  });
+  yearEl.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('filter-btn')) return;
+    yearEl.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    e.target.classList.add('active');
+    activeYear = e.target.dataset.year;
+    renderSidebar();
+  });
 }
 
 /* ── Demo (mientras no haya proyectos.js cargado) ── */
@@ -527,15 +598,19 @@ function demoProyectos() {
 }
 
 /* ── Render sidebar ── */
+function matchesFilters(p) {
+  var matchTipo = activeFilter === 'all' || (p.codigo && p.codigo.charAt(0) === activeFilter);
+  var anio = p.anio_inicio || p.anio_fin;
+  var matchYear = activeYear === 'all' || anio === activeYear;
+  return matchTipo && matchYear;
+}
+
 function renderSidebar() {
   var list = document.getElementById('project-list');
-  var filtered = proyectos.filter(function(p) {
-    return activeFilter === 'all' || (p.codigo && p.codigo.charAt(0) === activeFilter);
-  });
 
   list.innerHTML = '';
   proyectos.forEach(function(p) {
-    var isFiltered = activeFilter === 'all' || (p.codigo && p.codigo.charAt(0) === activeFilter);
+    var isFiltered = matchesFilters(p);
     var item = document.createElement('div');
     item.className = 'proj-item' + (p.id === activeId ? ' active' : '') + (!isFiltered ? ' dimmed' : '');
     item.dataset.id = p.id;
@@ -611,15 +686,6 @@ function openProject(id) {
   // Scroll al tope del detalle
   document.getElementById('detail').scrollTop = 0;
 }
-
-/* ── Filtros ── */
-document.getElementById('filters').addEventListener('click', function(e) {
-  if (!e.target.classList.contains('filter-btn')) return;
-  document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
-  e.target.classList.add('active');
-  activeFilter = e.target.dataset.filter;
-  renderSidebar();
-});
 
 /* ── Helpers ── */
 function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
