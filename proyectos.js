@@ -1,11 +1,11 @@
-// Generado por CMOF Admin — 18/6/2026, 6:28:00 p.m.
+// Generado por CMOF Admin — 20/6/2026, 12:51:06 p.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
     "codigo": "H-BÖDN",
     "nombre": "BÖDEN HOTEL & SPA",
-    "tipologia": "Hospitality",
-    "estado": "Proyecto",
+    "tipologia": "H",
+    "estado": "Construido",
     "anio_inicio": "2017",
     "anio_fin": "2021",
     "superficie": "5579",
@@ -34,8 +34,11 @@ var proyectosData = [
       "H-BÖDN-10.png",
       "H-BÖDN-11.png",
       "H-BÖDN-12.png",
-      "H-BÖDN-13.png"
-    ]
+      "H-BÖDN-13.png",
+      "P-01-01 - BODEN HOTEL Y SPA-01.jpg"
+    ],
+    "web_es": "BÖDEN HOTEL & SPA\nSskfljoe lllkjflp,. kmoilmokspop lm,;m",
+    "web_en": ""
   },
   {
     "id": "p1780987781964",
@@ -121,7 +124,7 @@ var proyectosData = [
     "id": "p1781033858892",
     "codigo": "K-EGLR.302",
     "nombre": "Casa ELENA & GUILLERMO - LR",
-    "tipologia": "Residential",
+    "tipologia": "H",
     "estado": "Construido",
     "anio_inicio": "2012",
     "anio_fin": "2013",
@@ -146,7 +149,9 @@ var proyectosData = [
       "K-EGLR.202-05.png",
       "K-EGLR.202-06.png",
       "K-GELC.307-01.png"
-    ]
+    ],
+    "web_es": "",
+    "web_en": ""
   },
   {
     "id": "p1781037475837",
