@@ -336,7 +336,6 @@ html, body {
 .detail-inner {
   display: none;
   padding: 2.5rem 3rem;
-  max-width: 1100px;
 }
 .detail-inner.visible { display: block; }
 
@@ -422,8 +421,17 @@ html, body {
 .est-proyecto  { background: #1e1a2a; color: #b08cf7; }
 
 /* Galería de imágenes */
+/* Cuerpo: galería 4/5 + memoria 1/5 */
+.det-body {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
 .det-gallery {
-  margin-bottom: 2rem;
+  flex: 0 0 80%;
+  max-width: 80%;
+  margin-bottom: 0;
 }
 
 .gallery-thumbs-row {
@@ -488,11 +496,13 @@ html, body {
 
 /* Texto / memoria */
 .det-memoria {
-  font-size: 0.82rem;
-  line-height: 1.8;
+  flex: 0 0 20%;
+  max-width: 20%;
+  font-size: 0.78rem;
+  line-height: 1.75;
   color: var(--text);
-  max-width: 680px;
   white-space: pre-wrap;
+  padding-top: 0.2rem;
 }
 
 /* ── ANIMACIÓN ENTRADA DETALLE ── */
@@ -521,6 +531,8 @@ html, body {
   .topbar-nav { display: none; }
   .sidebar-toggle { display: none; }
   .content.collapsed .sidebar { width: 100%; min-width: 0; opacity: 1; pointer-events: auto; }
+  .det-body { flex-direction: column; }
+  .det-gallery, .det-memoria { flex: 1 1 100%; max-width: 100%; }
 }
 </style>
 </head>
@@ -608,22 +620,27 @@ html, body {
           </div>
         </div>
 
-        <!-- Galería -->
-        <div class="det-gallery" id="d-gallery">
-          <div class="gallery-thumbs-row">
-            <button class="gallery-arrow left disabled" id="d-arrow-left" title="Anteriores">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-            </button>
-            <div class="gallery-thumbs" id="d-thumbs"></div>
-            <button class="gallery-arrow right" id="d-arrow-right" title="Siguientes">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
-          </div>
-          <img class="gallery-main" id="d-img-main" src="" alt="">
-        </div>
+        <!-- Cuerpo: galería (4/5) + memoria (1/5) -->
+        <div class="det-body">
 
-        <!-- Memoria -->
-        <div class="det-memoria" id="d-memoria"></div>
+          <!-- Galería -->
+          <div class="det-gallery" id="d-gallery">
+            <div class="gallery-thumbs-row">
+              <button class="gallery-arrow left disabled" id="d-arrow-left" title="Anteriores">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+              </button>
+              <div class="gallery-thumbs" id="d-thumbs"></div>
+              <button class="gallery-arrow right" id="d-arrow-right" title="Siguientes">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+              </button>
+            </div>
+            <img class="gallery-main" id="d-img-main" src="" alt="">
+          </div>
+
+          <!-- Memoria -->
+          <div class="det-memoria" id="d-memoria"></div>
+
+        </div>
       </div>
 
     </div>
