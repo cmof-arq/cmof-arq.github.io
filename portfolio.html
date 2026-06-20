@@ -787,6 +787,13 @@ function openProject(id) {
   var p = proyectos.find(function(x){ return x.id === id; });
   if (!p) return;
 
+  // Colapsar sidebar automáticamente para liberar espacio
+  var content = document.querySelector('.content');
+  if (content && !content.classList.contains('collapsed')) {
+    content.classList.add('collapsed');
+    content.classList.remove('expanded');
+  }
+
   // Sidebar: activar ítem
   document.querySelectorAll('.proj-item').forEach(function(el) {
     el.classList.toggle('active', el.dataset.id === id);
