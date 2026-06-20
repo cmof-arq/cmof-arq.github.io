@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 20/6/2026, 7:20:13 p.m.
+// Generado por CMOF Admin — 20/6/2026, 7:43:47 p.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -36,7 +36,7 @@ var proyectosData = [
       "P-01-06 - BODEN HOTEL Y SPA-11.jpg",
       "P-01-07 - BODEN HOTEL Y SPA-12.jpg"
     ],
-    "web_es": "BÖDEN HOTEL & SPA\nSskfljoe lllkjflp,. kmoilmokspop lm,;m",
+    "web_es": "BÖDEN HOTEL & SPA es un proyecto de hospitalidad concebido a partir de una relación sensible entre arquitectura, paisaje y bienestar. Implantado en las sierras de Córdoba, el edificio busca integrarse con el entorno natural mediante una arquitectura contemporánea, serena y atemporal, donde la experiencia del huésped se construye tanto desde los espacios como desde las atmósferas.\n\nLa organización del conjunto y la secuencia de sus ambientes fueron pensadas para favorecer la calma, la contemplación y la conexión con el lugar. La materialidad, la luz natural y las visuales hacia el paisaje se convierten en parte esencial de la experiencia, mientras que los espacios de encuentro, gastronomía y spa refuerzan una propuesta orientada al descanso y al disfrute.\n\nMás que un hotel, BÖDEN plantea una forma de habitar temporalmente el paisaje. Una arquitectura que entiende que el valor de la hospitalidad no se mide solamente en metros cuadrados, sino en la capacidad de crear recuerdos, emociones y una experiencia perdurable.",
     "web_en": ""
   },
   {
