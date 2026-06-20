@@ -321,6 +321,12 @@ html, body {
   align-items: center;
   gap: 1.2rem;
   flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+.det-meta-loc {
+  margin-bottom: 0;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border);
 }
 .det-meta-item {
   font-size: 0.65rem;
@@ -333,6 +339,27 @@ html, body {
   margin-left: 0.3rem;
 }
 
+.det-map-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  color: #8cd7f7;
+  text-decoration: none;
+  border: 1px solid #0E6BA8;
+  border-radius: 50%;
+  transition: background 0.15s, transform 0.15s;
+  margin-left: -0.4rem;
+}
+.det-map-link:hover {
+  background: #0E6BA8;
+  color: #fff;
+  transform: scale(1.08);
+}
+.det-map-link svg { width: 12px; height: 12px; }
+.det-map-link.hidden { display: none; }
+
 .det-estado {
   font-size: 0.6rem;
   padding: 2px 8px;
@@ -343,6 +370,7 @@ html, body {
 .est-pausa     { background: #2a2a12; color: var(--yellow); }
 .est-terminado { background: #12202a; color: var(--blue); }
 .est-archivo   { background: #1e1e1c; color: var(--muted); }
+.est-proyecto  { background: #1e1a2a; color: #b08cf7; }
 
 /* Galería de imágenes */
 .det-gallery {
@@ -467,11 +495,27 @@ html, body {
         <div class="det-head">
           <div class="det-cod" id="d-cod"></div>
           <div class="det-nombre" id="d-nombre"></div>
+
+          <!-- Renglón 1: datos del proyecto -->
           <div class="det-meta">
-            <div class="det-meta-item">Año <span id="d-anio"></span></div>
             <div class="det-meta-item">Tipología <span id="d-tipo"></span></div>
-            <div class="det-meta-item">Ubicación <span id="d-ciudad"></span></div>
+            <div class="det-meta-item">Inicio <span id="d-anio-ini"></span></div>
+            <div class="det-meta-item">Finalizado <span id="d-anio-fin"></span></div>
+            <div class="det-meta-item" id="d-sup-wrap">Superficie <span id="d-sup"></span></div>
             <div class="det-estado" id="d-estado"></div>
+          </div>
+
+          <!-- Renglón 2: ubicación -->
+          <div class="det-meta det-meta-loc">
+            <div class="det-meta-item">Ubicación <span id="d-ciudad"></span></div>
+            <div class="det-meta-item" id="d-coords-wrap">Coordenadas <span id="d-coords"></span></div>
+            <div class="det-meta-item" id="d-alt-wrap">Altitud <span id="d-alt"></span></div>
+            <a class="det-map-link" id="d-map-link" href="#" target="_blank" title="Ver ubicación en el mapa">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+            </a>
           </div>
         </div>
 
@@ -512,7 +556,7 @@ var tipoLabel = { H:'Hospitality', K:'Residencial', I:'Industrial', O:'Oficinas'
     }
   } catch(e) {}
 })();
-var estadoClass = { 'Activo':'est-activo', 'En obra':'est-activo', 'En pausa':'est-pausa', 'Construido':'est-terminado', 'Terminado':'est-terminado', 'Archivo':'est-archivo' };
+var estadoClass = { 'Proyecto':'est-proyecto', 'Activo':'est-activo', 'En obra':'est-activo', 'En pausa':'est-pausa', 'Construido':'est-terminado', 'Terminado':'est-terminado', 'Archivo':'est-archivo' };
 
 /* ── Cargar proyectos desde proyectos.js (exportado por admin) ── */
 function loadProyectos() {
@@ -661,10 +705,45 @@ function openProject(id) {
   // Datos textuales
   document.getElementById('d-cod').textContent    = p.codigo || '';
   document.getElementById('d-nombre').textContent = p.nombre || '';
-  document.getElementById('d-anio').textContent   = p.anio_fin || p.anio_inicio || '—';
+  document.getElementById('d-anio-ini').textContent = p.anio_inicio || '—';
+  document.getElementById('d-anio-fin').textContent = p.anio_fin || '—';
   document.getElementById('d-tipo').textContent   = tipoLabel[p.tipologia] || p.tipologia || '—';
-  document.getElementById('d-ciudad').textContent = [p.ciudad, p.provincia].filter(Boolean).join(', ') || '—';
+  document.getElementById('d-ciudad').textContent = [p.ciudad, p.provincia, p.pais].filter(Boolean).join(', ') || '—';
   document.getElementById('d-memoria').textContent = p.web_es || p.memoria_es || '';
+
+  // Superficie (ocultar el renglón completo si no hay dato)
+  var supWrap = document.getElementById('d-sup-wrap');
+  if (p.superficie) {
+    document.getElementById('d-sup').textContent = p.superficie + ' m²';
+    supWrap.style.display = '';
+  } else {
+    supWrap.style.display = 'none';
+  }
+
+  // Coordenadas + altitud + link a mapa
+  var lat = dmsToDecimal(p.lat, p.lat_hem);
+  var lon = dmsToDecimal(p.lon, p.lon_hem);
+  var coordsWrap = document.getElementById('d-coords-wrap');
+  var altWrap    = document.getElementById('d-alt-wrap');
+  var mapLink    = document.getElementById('d-map-link');
+
+  if (lat !== null && lon !== null) {
+    document.getElementById('d-coords').textContent =
+      Math.abs(lat).toFixed(5) + '° ' + (p.lat_hem||'') + ', ' + Math.abs(lon).toFixed(5) + '° ' + (p.lon_hem||'');
+    coordsWrap.style.display = '';
+    mapLink.href = 'https://www.google.com/maps?q=' + lat + ',' + lon;
+    mapLink.classList.remove('hidden');
+  } else {
+    coordsWrap.style.display = 'none';
+    mapLink.classList.add('hidden');
+  }
+
+  if (p.altitud) {
+    document.getElementById('d-alt').textContent = p.altitud + ' m';
+    altWrap.style.display = '';
+  } else {
+    altWrap.style.display = 'none';
+  }
 
   // Estado badge
   var est = document.getElementById('d-estado');
@@ -706,6 +785,17 @@ function openProject(id) {
 
 /* ── Helpers ── */
 function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+// Convierte "grados minutos segundos" (string) + hemisferio a decimal con signo
+function dmsToDecimal(dms, hem) {
+  if (!dms) return null;
+  var parts = dms.trim().split(/\s+/).map(Number);
+  if (parts.length < 1 || isNaN(parts[0])) return null;
+  var g = parts[0] || 0, m = parts[1] || 0, s = parts[2] || 0;
+  var dec = g + (m / 60) + (s / 3600);
+  if (hem === 'S' || hem === 'W') dec = -dec;
+  return dec;
+}
 
 /* ── Init ── */
 loadProyectos();

@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CMOF Admin — Gestión de Proyectos</title>
+<style>
+:root {
+  --bg:#111110; --surface:#1a1a18; --surface2:#222220;
+  --orange:#ff6600; --blue:#8cd7f7; --green:#4caf82;
+  --red:#e05555; --text:#e8e6e0; --muted:#888880;
+  --border:#2a2a28; --border2:#333330;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;}
+.app{display:flex;height:100vh;overflow:hidden;}
+
+/* SIDEBAR */
+.sidebar{width:280px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sb-head{padding:1.2rem 1rem 1rem;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:0.8rem;}
+.sb-logo{font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);}
+.sb-logo span{color:var(--orange);}
+.sb-head h2{font-size:13px;font-weight:500;}
+.btn-nuevo{display:flex;align-items:center;gap:0.5rem;padding:0.55rem 0.9rem;background:var(--orange);color:#fff;border:none;border-radius:3px;font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;}
+.btn-nuevo:hover{opacity:0.85;}
+.plist{flex:1;overflow-y:auto;padding:0.5rem 0;}
+.pitem{padding:0.7rem 1rem;cursor:pointer;border-left:2px solid transparent;transition:background 0.15s,border-color 0.15s;display:flex;flex-direction:column;gap:2px;}
+.pitem:hover{background:var(--surface2);}
+.pitem.active{background:var(--surface2);border-left-color:var(--orange);}
+.pitem .pi-cod{font-size:10px;color:var(--orange);letter-spacing:0.1em;text-transform:uppercase;}
+.pitem .pi-nom{font-size:13px;font-weight:500;}
+.pitem .pi-met{font-size:11px;color:var(--muted);}
+.pi-est{font-size:10px;padding:1px 6px;border-radius:10px;display:inline-block;margin-top:2px;}
+.est-p{background:#2a2a1a;color:#c8b84a;}
+.est-o{background:#1a2a2a;color:#4ab8c8;}
+.est-c{background:#1a2a1a;color:#4ac87a;}
+.est-a{background:#222220;color:#888880;}
+.est-x{background:#1e1a2a;color:#b08cf7;}
+.sb-foot{padding:0.8rem 1rem;border-top:1px solid var(--border);display:flex;flex-direction:column;gap:0.5rem;}
+.btn-sec{display:flex;align-items:center;justify-content:center;gap:0.5rem;padding:0.55rem;border-radius:3px;font-size:12px;cursor:pointer;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);text-decoration:none;transition:border-color 0.15s;}
+.btn-sec:hover{border-color:var(--text);color:var(--text);}
+.btn-exp{color:var(--blue);}
+.btn-exp:hover{border-color:var(--blue) !important;color:var(--blue) !important;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:2rem;}
+.empty{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1rem;color:var(--muted);text-align:center;}
+
+/* FORM */
+.fhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.8rem;padding-bottom:1rem;border-bottom:1px solid var(--border);}
+.fhead h2{font-size:16px;font-weight:500;}
+.cod-badge{font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--orange);background:#1a1200;padding:3px 10px;border-radius:2px;}
+.faction{display:flex;gap:0.6rem;align-items:center;}
+.btn-save{padding:0.5rem 1.2rem;background:var(--orange);color:#fff;border:none;border-radius:3px;font-size:12px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;cursor:pointer;}
+.btn-save:hover{opacity:0.85;}
+.btn-del{padding:0.5rem 1rem;background:transparent;color:var(--red);border:1px solid var(--border2);border-radius:3px;font-size:12px;cursor:pointer;}
+.btn-del:hover{border-color:var(--red);}
+
+.fsec{margin-bottom:1.5rem;padding:1.2rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;}
+.fsec h3{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--orange);margin-bottom:1rem;}
+.fsec-web{border-color:#0E6BA8;background:#0e1a22;}
+.fsec-web h3{color:#8cd7f7;}
+.fsec-tag{display:inline-block;margin-left:0.6rem;font-size:9px;letter-spacing:0.12em;padding:2px 6px;border-radius:2px;background:#0E6BA8;color:#fff;vertical-align:middle;text-transform:uppercase;font-family:inherit;}
+
+/* GitHub publish panel */
+.gh-panel{margin-top:0.6rem;border:1px solid var(--border2);border-radius:3px;overflow:hidden;}
+.gh-head{display:flex;align-items:center;justify-content:space-between;padding:0.55rem 0.7rem;background:var(--surface2);cursor:pointer;font-size:11px;letter-spacing:0.06em;color:var(--text);}
+.gh-head:hover{background:#272725;}
+.gh-chev{transition:transform 0.2s;color:var(--muted);}
+.gh-chev.open{transform:rotate(180deg);}
+.gh-body{padding:0.8rem;background:var(--bg);}
+.gh-body .fld label{font-size:10px;color:var(--muted);display:block;margin-bottom:0.3rem;letter-spacing:0.05em;text-transform:uppercase;}
+.gh-body .fld input[type=text],.gh-body .fld input[type=password]{width:100%;padding:0.5rem 0.6rem;background:var(--surface);border:1px solid var(--border2);border-radius:3px;color:var(--text);font-size:12px;}
+.gh-body .fld input:focus{outline:none;border-color:#0E6BA8;}
+.btn-publish{width:100%;background:#0E6BA8;color:#fff;border:none;font-weight:600;}
+.btn-publish:hover{opacity:0.88;}
+.btn-publish:disabled{opacity:0.4;cursor:not-allowed;}
+.gh-log{margin-top:0.6rem;max-height:140px;overflow-y:auto;font-size:10.5px;font-family:monospace;line-height:1.5;}
+.gh-log div{padding:2px 0;border-bottom:1px solid var(--border);color:var(--muted);}
+.gh-log div.ok{color:var(--green);}
+.gh-log div.err{color:var(--red);}
+.gh-log div.run{color:#8cd7f7;}
+.fg{display:grid;gap:0.9rem;}
+.fg2{grid-template-columns:1fr 1fr;}
+.fg3{grid-template-columns:1fr 1fr 1fr;}
+.fg4{grid-template-columns:1fr 1fr 1fr 1fr;}
+.fld{display:flex;flex-direction:column;gap:0.35rem;}
+.fld label{font-size:11px;color:var(--muted);letter-spacing:0.05em;}
+.fld input,.fld select,.fld textarea{background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:3px;padding:0.5rem 0.7rem;font-size:13px;font-family:inherit;outline:none;transition:border-color 0.15s;width:100%;}
+.fld input:focus,.fld select:focus,.fld textarea:focus{border-color:var(--orange);}
+.fld textarea{resize:vertical;min-height:90px;line-height:1.5;}
+.coord-row{display:flex;gap:0.4rem;}
+.coord-row input{flex:1;}
+.coord-row select{width:58px;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:3px;padding:0.5rem 0.3rem;font-size:13px;outline:none;}
+.alt-row{display:flex;gap:0.4rem;align-items:center;}
+.alt-row input{flex:1;}
+.alt-suf{font-size:12px;color:var(--muted);white-space:nowrap;}
+
+/* LANG TABS */
+.ltabs{display:flex;margin-bottom:1rem;border-bottom:1px solid var(--border);}
+.ltab{padding:0.4rem 1rem;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color 0.15s,border-color 0.15s;}
+.ltab.active{color:var(--orange);border-bottom-color:var(--orange);}
+.lpanel{display:none;}
+.lpanel.active{display:block;}
+
+/* IMAGES */
+.ilist{display:flex;flex-direction:column;gap:0.4rem;margin-bottom:0.8rem;}
+.irow{display:flex;align-items:center;gap:0.5rem;background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:0.4rem 0.6rem;}
+.inum{font-size:11px;color:var(--muted);width:24px;flex-shrink:0;}
+.iname{flex:1;font-size:12px;font-family:monospace;}
+.ibtn{background:none;border:none;cursor:pointer;padding:0 3px;font-size:15px;line-height:1;transition:color 0.15s;}
+.ibtn-del{color:var(--muted);}
+.ibtn-del:hover{color:var(--red);}
+.ibtn-mv{color:var(--muted);}
+.ibtn-mv:hover{color:var(--blue);}
+.iadd{display:flex;gap:0.5rem;margin-top:0.3rem;}
+.iadd input{flex:1;background:var(--surface2);border:1px solid var(--border2);color:var(--text);border-radius:3px;padding:0.45rem 0.7rem;font-size:12px;font-family:monospace;outline:none;}
+.iadd input:focus{border-color:var(--orange);}
+.btn-isel{display:flex;align-items:center;gap:0.4rem;padding:0.45rem 0.9rem;background:var(--surface2);border:1px solid var(--border2);color:var(--blue);border-radius:3px;font-size:12px;cursor:pointer;white-space:nowrap;}
+.btn-isel:hover{border-color:var(--blue);}
+.btn-iadd{padding:0.45rem 0.9rem;background:var(--surface2);border:1px solid var(--border2);color:var(--muted);border-radius:3px;font-size:12px;cursor:pointer;}
+.btn-iadd:hover{border-color:var(--text);color:var(--text);}
+
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:0.7rem 1.2rem;border-radius:4px;font-size:13px;font-weight:500;opacity:0;transform:translateY(8px);transition:opacity 0.3s,transform 0.3s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateY(0);}
+.tok{background:#1a2a1a;border:1px solid #4ac87a;color:#4ac87a;}
+.terr{background:#2a1a1a;border:1px solid var(--red);color:var(--red);}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar">
+    <div class="sb-head">
+      <div class="sb-logo">CMOF <span>Admin</span></div>
+      <h2>Gestión de Proyectos</h2>
+      <button class="btn-nuevo" id="btnNuevo">+ Nuevo proyecto</button>
+    </div>
+    <div class="plist" id="plist"></div>
+    <div class="sb-foot">
+      <div id="sm-status" style="font-size:10px;letter-spacing:0.08em;padding:0.4rem 0.2rem 0.6rem;text-align:center;"></div>
+      <button class="btn-sec btn-exp" id="btnExportar">↓ Generar y descargar archivos</button>
+      <a class="btn-sec" href="https://github.com/cmof-arq/cmof-arq.github.io" target="_blank">⇗ Abrir GitHub</a>
+      <label class="btn-sec" style="cursor:pointer;">
+        ↑ Importar proyectos.json
+        <input type="file" accept=".json" id="fileImport" style="display:none">
+      </label>
+
+      <div class="gh-panel" id="gh-panel">
+        <div class="gh-head" id="ghToggle">
+          <span>⇪ Publicar a GitHub</span>
+          <span class="gh-chev" id="ghChev">▾</span>
+        </div>
+        <div class="gh-body" id="ghBody" style="display:none">
+          <div class="fld" style="margin-bottom:0.6rem">
+            <label>Personal Access Token</label>
+            <input type="password" id="ghToken" placeholder="ghp_xxxxxxxxxxxx">
+          </div>
+          <div class="fg2" style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;margin-bottom:0.6rem">
+            <div class="fld"><label>Owner</label><input type="text" id="ghOwner" value="cmof-arq"></div>
+            <div class="fld"><label>Repo</label><input type="text" id="ghRepo" value="cmof-arq.github.io"></div>
+          </div>
+          <label style="display:flex;align-items:center;gap:0.4rem;font-size:11px;color:var(--muted);margin-bottom:0.7rem;cursor:pointer;">
+            <input type="checkbox" id="ghRemember"> Recordar token en este navegador
+          </label>
+          <div id="ghPendingInfo" style="font-size:11px;color:var(--muted);margin-bottom:0.6rem;"></div>
+          <button class="btn-sec btn-publish" id="btnPublish">⇪ Publicar proyectos.js + imágenes</button>
+          <div id="ghLog" class="gh-log"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main" id="main">
+    <div class="empty">
+      <p>Seleccioná un proyecto<br>o creá uno nuevo.</p>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var DB_KEY = 'cmof_proyectos_v2';
+var proyectos = [];
+var activo = null;
+
+/* ── TIPOS DE PROYECTO (integración con Studio Manager) ──
+   Lee cmof_cfg_v2 del localStorage (compartido con Studio Manager
+   cuando ambos archivos están en la misma carpeta).
+   Si no encuentra datos del SM, usa los tipos base. */
+var TIPOS_BASE  = ['H','K','I','O','C','M','V'];
+var TLBL_BASE   = {H:'Hospitality',K:'Residencial',I:'Industrial',O:'Oficinas',C:'Comercial',M:'Medios',V:'Otros'};
+
+function getTipos() {
+  var codigos = TIPOS_BASE.slice();
+  var labels  = TIPOS_BASE.map(function(t){ return TLBL_BASE[t]; });
+  try {
+    var cfg = JSON.parse(localStorage.getItem('cmof_cfg_v2')) || {};
+    if (cfg.tiposExtra && cfg.tiposExtra.length) {
+      cfg.tiposExtra.forEach(function(t) {
+        if (codigos.indexOf(t) < 0) {
+          codigos.push(t);
+          labels.push((cfg.tiposLabels && cfg.tiposLabels[t]) ? cfg.tiposLabels[t] : t);
+        }
+      });
+    }
+  } catch(e) {}
+  return { codigos: codigos, labels: labels };
+}
+
+/* ── DB ── */
+function dbLoad() {
+  try { proyectos = JSON.parse(localStorage.getItem(DB_KEY)) || []; } catch(e) { proyectos = []; }
+}
+function dbSave() {
+  localStorage.setItem(DB_KEY, JSON.stringify(proyectos));
+}
+
+/* ── INIT ── */
+function init() {
+  dbLoad();
+  renderSidebar();
+  document.getElementById('btnNuevo').addEventListener('click', nuevoProyecto);
+  document.getElementById('btnExportar').addEventListener('click', exportar);
+  document.getElementById('fileImport').addEventListener('change', importarJSON);
+  // Indicar si Studio Manager está conectado (comparte localStorage)
+  var smStatus = document.getElementById('sm-status');
+  if (smStatus) {
+    try {
+      var cfg = JSON.parse(localStorage.getItem('cmof_cfg_v2'));
+      if (cfg) {
+        var extras = (cfg.tiposExtra || []).length;
+        smStatus.textContent = 'Studio Manager conectado' + (extras ? ' · ' + extras + ' tipo(s) extra' : '');
+        smStatus.style.color = 'var(--green, #4ac87a)';
+      } else {
+        smStatus.textContent = 'Studio Manager no detectado — usar desde la misma carpeta';
+        smStatus.style.color = 'var(--muted)';
+      }
+    } catch(e) {
+      smStatus.textContent = 'Studio Manager no detectado';
+      smStatus.style.color = 'var(--muted)';
+    }
+  }
+  initGithubPanel();
+}
+
+/* ── SIDEBAR ── */
+function renderSidebar() {
+  var el = document.getElementById('plist');
+  if (!proyectos.length) {
+    el.innerHTML = '<div style="padding:1rem;color:var(--muted);font-size:12px;text-align:center">Sin proyectos aún.</div>';
+    return;
+  }
+  var html = '';
+  for (var i = 0; i < proyectos.length; i++) {
+    var p = proyectos[i];
+    var ecls = p.estado === 'Proyecto' ? 'est-x' : (p.estado === 'En obra' || p.estado === 'Activo') ? 'est-o' : p.estado === 'Construido' ? 'est-c' : p.estado === 'En pausa' ? 'est-p' : 'est-a';
+    var act  = activo && activo.id === p.id ? ' active' : '';
+    html += '<div class="pitem' + act + '" data-idx="' + i + '">' +
+      '<span class="pi-cod">' + xe(p.codigo) + '</span>' +
+      '<span class="pi-nom">' + xe(p.nombre) + '</span>' +
+      '<span class="pi-met">' + xe(p.tipologia) + ' · ' + xe(p.anio_inicio) + (p.anio_fin ? '–' + xe(p.anio_fin) : '') + '</span>' +
+      '<span class="pi-est ' + ecls + '">' + xe(p.estado) + '</span>' +
+    '</div>';
+  }
+  el.innerHTML = html;
+  var items = el.querySelectorAll('.pitem');
+  for (var j = 0; j < items.length; j++) {
+    items[j].addEventListener('click', function() {
+      var idx = parseInt(this.getAttribute('data-idx'));
+      activo = JSON.parse(JSON.stringify(proyectos[idx]));
+      renderSidebar();
+      renderForm(false);
+    });
+  }
+}
+
+/* ── NUEVO ── */
+function nuevoProyecto() {
+  activo = {
+    id: 'p' + Date.now(),
+    codigo:'', nombre:'', tipologia:'H', estado:'Activo',
+    anio_inicio:'', anio_fin:'', superficie:'',
+    ciudad:'', provincia:'', pais:'Argentina',
+    lat:'', lat_hem:'S', lon:'', lon_hem:'W', altitud:'',
+    memoria_es:'', memoria_en:'', concepto_es:'', concepto_en:'',
+    web_es:'', web_en:'',
+    imagenes:[]
+  };
+  renderSidebar();
+  renderForm(true);
+}
+
+/* ── FORM ── */
+function renderForm(esNuevo) {
+  var p = activo;
+  var delBtn = esNuevo ? '' : '<button class="btn-del" id="btnDel">Eliminar</button>';
+  var html =
+    '<div class="fhead">' +
+      '<h2>' + (esNuevo ? 'Nuevo proyecto' : 'Editar proyecto') + '</h2>' +
+      '<div class="faction">' +
+        (p.codigo ? '<span class="cod-badge">' + xe(p.codigo) + '</span>' : '') +
+        delBtn +
+        '<button class="btn-save" id="btnSave">Guardar</button>' +
+      '</div>' +
+    '</div>' +
+
+    // Identificación
+    '<div class="fsec"><h3>Identificación</h3>' +
+      '<div class="fg fg2">' +
+        fld('Código', 'f_codigo', p.codigo, 'H-BÖDN') +
+        fld('Nombre del proyecto', 'f_nombre', p.nombre, 'BÖDEN HOTEL &amp; SPA') +
+      '</div>' +
+      '<div class="fg fg3" style="margin-top:0.9rem">' +
+        (function(){ var t=getTipos(); return fsel('Tipolog\u00eda','f_tipo',p.tipologia,t.codigos,t.labels); })() +
+        fsel('Estado', 'f_estado', p.estado, ['Proyecto','Activo','En obra','En pausa','Construido','Archivo']) +
+        fld('Superficie (m²)', 'f_sup', p.superficie, '5579') +
+      '</div>' +
+    '</div>' +
+
+    // Cronología
+    '<div class="fsec"><h3>Cronología</h3>' +
+      '<div class="fg fg2">' +
+        fld('Año inicio', 'f_ai', p.anio_inicio, '2017') +
+        fld('Año finalización', 'f_af', p.anio_fin, '2021') +
+      '</div>' +
+    '</div>' +
+
+    // Ubicación
+    '<div class="fsec"><h3>Ubicación</h3>' +
+      '<div class="fg fg3">' +
+        fld('Ciudad', 'f_ciudad', p.ciudad, 'Villa General Belgrano') +
+        fld('Provincia', 'f_prov', p.provincia, 'Córdoba') +
+        fld('País', 'f_pais', p.pais, 'Argentina') +
+      '</div>' +
+      '<div class="fg fg3" style="margin-top:0.9rem">' +
+        fcoord('Latitud', 'f_lat', p.lat, 'f_lath', p.lat_hem, ['S','N'], 2) +
+        fcoord('Longitud', 'f_lon', p.lon, 'f_lonh', p.lon_hem, ['W','E'], 3) +
+        falt('Altitud', 'f_alt', p.altitud) +
+      '</div>' +
+    '</div>' +
+
+    // Memoria
+    '<div class="fsec"><h3>Memoria descriptiva</h3>' +
+      '<div class="ltabs">' +
+        '<div class="ltab active" data-group="mem" data-lang="es">Español</div>' +
+        '<div class="ltab" data-group="mem" data-lang="en">English</div>' +
+      '</div>' +
+      '<div class="lpanel active" id="mem_es"><div class="fld"><label>Español</label><textarea id="f_mem_es">' + xe(p.memoria_es) + '</textarea></div></div>' +
+      '<div class="lpanel" id="mem_en"><div class="fld"><label>English</label><textarea id="f_mem_en">' + xe(p.memoria_en) + '</textarea></div></div>' +
+    '</div>' +
+
+    // Concepto
+    '<div class="fsec"><h3>Texto de concepto</h3>' +
+      '<div class="ltabs">' +
+        '<div class="ltab active" data-group="con" data-lang="es">Español</div>' +
+        '<div class="ltab" data-group="con" data-lang="en">English</div>' +
+      '</div>' +
+      '<div class="lpanel active" id="con_es"><div class="fld"><label>Español</label><textarea id="f_con_es">' + xe(p.concepto_es) + '</textarea></div></div>' +
+      '<div class="lpanel" id="con_en"><div class="fld"><label>English</label><textarea id="f_con_en">' + xe(p.concepto_en) + '</textarea></div></div>' +
+    '</div>' +
+
+    // Memoria Website
+    '<div class="fsec fsec-web"><h3>Memoria Website <span class="fsec-tag">Publicado en portfolio</span></h3>' +
+      '<div class="ltabs">' +
+        '<div class="ltab active" data-group="web" data-lang="es">Español</div>' +
+        '<div class="ltab" data-group="web" data-lang="en">English</div>' +
+      '</div>' +
+      '<div class="lpanel active" id="web_es"><div class="fld"><label>Texto que aparece en el portfolio (ES)</label><textarea id="f_web_es" style="min-height:120px">' + xe(p.web_es||'') + '</textarea></div></div>' +
+      '<div class="lpanel" id="web_en"><div class="fld"><label>Texto que aparece en el portfolio (EN)</label><textarea id="f_web_en" style="min-height:120px">' + xe(p.web_en||'') + '</textarea></div></div>' +
+    '</div>' +
+
+    // Imágenes
+    '<div class="fsec"><h3>Imágenes</h3>' +
+      '<div class="ilist" id="ilist">' + renderImgs(p.imagenes) + '</div>' +
+      '<div class="iadd">' +
+        '<label class="btn-isel">' +
+          '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>' +
+          'Seleccionar archivos' +
+          '<input type="file" accept="image/*" multiple id="fileImgs" style="display:none">' +
+        '</label>' +
+        '<input type="text" id="iinput" placeholder="o escribí el nombre: H-BODN-01.png">' +
+        '<button class="btn-iadd" id="btnIadd">+ Agregar</button>' +
+      '</div>' +
+      '<p style="margin-top:0.6rem;font-size:11px;color:var(--muted)">El selector toma solo los nombres. Formato: CODIGO-NN.png</p>' +
+    '</div>';
+
+  document.getElementById('main').innerHTML = html;
+
+  // Eventos form
+  document.getElementById('btnSave').addEventListener('click', guardar);
+  if (!esNuevo) document.getElementById('btnDel').addEventListener('click', eliminar);
+
+  // Lang tabs
+  var tabs = document.querySelectorAll('.ltab');
+  for (var i = 0; i < tabs.length; i++) {
+    tabs[i].addEventListener('click', function() {
+      var g = this.getAttribute('data-group');
+      var l = this.getAttribute('data-lang');
+      var allTabs = document.querySelectorAll('.ltab[data-group="' + g + '"]');
+      for (var k = 0; k < allTabs.length; k++) allTabs[k].classList.remove('active');
+      this.classList.add('active');
+      document.getElementById(g + '_es').classList.remove('active');
+      document.getElementById(g + '_en').classList.remove('active');
+      document.getElementById(g + '_' + l).classList.add('active');
+    });
+  }
+
+  // Img events
+  document.getElementById('fileImgs').addEventListener('change', function(e) {
+    var files = Array.from(e.target.files);
+    files.sort(function(a,b){ return a.name.localeCompare(b.name, undefined, {numeric:true}); });
+    files.forEach(function(f){
+      if (activo.imagenes.indexOf(f.name) === -1) activo.imagenes.push(f.name);
+      // Guardamos el archivo real en memoria para poder subirlo a GitHub
+      window._pendingFiles = window._pendingFiles || {};
+      window._pendingFiles[activo.codigo + '/' + f.name] = f;
+    });
+    document.getElementById('ilist').innerHTML = renderImgs(activo.imagenes);
+    e.target.value = '';
+    toast('ok', files.length + ' imagen(es) agregada(s). Se subirán al publicar.');
+    refreshPublishStatus();
+  });
+
+  document.getElementById('btnIadd').addEventListener('click', addImgManual);
+  document.getElementById('iinput').addEventListener('keydown', function(e){ if(e.key==='Enter') addImgManual(); });
+}
+
+/* ── IMGS ── */
+function renderImgs(imgs) {
+  if (!imgs || !imgs.length) return '<p style="font-size:12px;color:var(--muted);padding:0.3rem 0">Sin imágenes cargadas.</p>';
+  var html = '';
+  for (var i = 0; i < imgs.length; i++) {
+    html += '<div class="irow">' +
+      '<span class="inum">' + String(i+1).padStart(2,'0') + '</span>' +
+      '<span class="iname">' + xe(imgs[i]) + '</span>' +
+      '<button class="ibtn ibtn-mv" data-action="up" data-i="' + i + '">↑</button>' +
+      '<button class="ibtn ibtn-mv" data-action="dn" data-i="' + i + '">↓</button>' +
+      '<button class="ibtn ibtn-del" data-action="del" data-i="' + i + '">×</button>' +
+    '</div>';
+  }
+  // bind after render
+  setTimeout(function(){
+    var btns = document.querySelectorAll('.ibtn');
+    for (var b = 0; b < btns.length; b++) {
+      btns[b].addEventListener('click', function(){
+        var action = this.getAttribute('data-action');
+        var idx = parseInt(this.getAttribute('data-i'));
+        if (action === 'del') {
+          activo.imagenes.splice(idx, 1);
+        } else {
+          var ni = action === 'up' ? idx-1 : idx+1;
+          if (ni >= 0 && ni < activo.imagenes.length) {
+            var tmp = activo.imagenes[idx]; activo.imagenes[idx] = activo.imagenes[ni]; activo.imagenes[ni] = tmp;
+          }
+        }
+        document.getElementById('ilist').innerHTML = renderImgs(activo.imagenes);
+      });
+    }
+  }, 0);
+  return html;
+}
+
+function addImgManual() {
+  var inp = document.getElementById('iinput');
+  var v = inp.value.trim();
+  if (!v) return;
+  if (activo.imagenes.indexOf(v) === -1) activo.imagenes.push(v);
+  inp.value = '';
+  document.getElementById('ilist').innerHTML = renderImgs(activo.imagenes);
+  inp.focus();
+}
+
+/* ── GUARDAR ── */
+function guardar() {
+  var p = activo;
+  p.codigo      = gv('f_codigo');
+  p.nombre      = gv('f_nombre');
+  p.tipologia   = gv('f_tipo');
+  p.estado      = gv('f_estado');
+  p.superficie  = gv('f_sup');
+  p.anio_inicio = gv('f_ai');
+  p.anio_fin    = gv('f_af');
+  p.ciudad      = gv('f_ciudad');
+  p.provincia   = gv('f_prov');
+  p.pais        = gv('f_pais');
+  p.lat         = [gv('f_lat_g'), gv('f_lat_m'), gv('f_lat_s')].join(' ').trim();
+  p.lat_hem     = gv('f_lath');
+  p.lon         = [gv('f_lon_g'), gv('f_lon_m'), gv('f_lon_s')].join(' ').trim();
+  p.lon_hem     = gv('f_lonh');
+  p.altitud     = gv('f_alt');
+  p.memoria_es  = gv('f_mem_es');
+  p.memoria_en  = gv('f_mem_en');
+  p.concepto_es = gv('f_con_es');
+  p.concepto_en = gv('f_con_en');
+  p.web_es      = gv('f_web_es');
+  p.web_en      = gv('f_web_en');
+
+  if (!p.codigo || !p.nombre) { toast('err','Código y nombre son obligatorios.'); return; }
+
+  var idx = -1;
+  for (var i = 0; i < proyectos.length; i++) { if (proyectos[i].id === p.id) { idx = i; break; } }
+  if (idx >= 0) proyectos[idx] = JSON.parse(JSON.stringify(p));
+  else proyectos.push(JSON.parse(JSON.stringify(p)));
+
+  dbSave();
+  activo = JSON.parse(JSON.stringify(p));
+  renderSidebar();
+  renderForm(false);
+  toast('ok','Proyecto guardado. Descargando backup...');
+  // Auto-backup al guardar
+  setTimeout(function(){
+    var jsonStr = JSON.stringify(proyectos, null, 2);
+    dl('proyectos.json', jsonStr, 'application/json');
+  }, 600);
+}
+
+/* ── ELIMINAR ── */
+function eliminar() {
+  if (!confirm('¿Eliminar "' + activo.nombre + '"? Esta acción no se puede deshacer.')) return;
+  proyectos = proyectos.filter(function(x){ return x.id !== activo.id; });
+  dbSave();
+  activo = null;
+  renderSidebar();
+  document.getElementById('main').innerHTML = '<div class="empty"><p>Proyecto eliminado.</p></div>';
+  toast('ok','Proyecto eliminado.');
+}
+
+/* ── EXPORTAR ── */
+function exportar() {
+  if (!proyectos.length) { toast('err','No hay proyectos para exportar.'); return; }
+  var jsonStr = JSON.stringify(proyectos, null, 2);
+  dl('proyectos.json', jsonStr, 'application/json');
+  setTimeout(function(){
+    var jsStr = '// Generado por CMOF Admin \u2014 ' + new Date().toLocaleString() + '\nvar proyectosData = ' + jsonStr + ';\n';
+    dl('proyectos.js', jsStr, 'text/javascript');
+  }, 400);
+  toast('ok','Archivos generados. Sub\u00ed proyectos.js a GitHub.');
+}
+
+function dl(nombre, contenido, tipo) {
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([contenido], {type:tipo}));
+  a.download = nombre;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+/* ── IMPORTAR ── */
+function importarJSON(e) {
+  var file = e.target.files[0]; if (!file) return;
+  var r = new FileReader();
+  r.onload = function(ev) {
+    try {
+      var data = JSON.parse(ev.target.result);
+      if (Array.isArray(data)) { proyectos = data; dbSave(); renderSidebar(); toast('ok', data.length + ' proyectos importados.'); }
+      else toast('err','Formato inválido.');
+    } catch(ex) { toast('err','Error al leer el archivo.'); }
+  };
+  r.readAsText(file);
+  e.target.value = '';
+}
+
+/* ── HELPERS ── */
+function gv(id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; }
+function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function fld(label, id, val, ph) {
+  return '<div class="fld"><label>' + label + '</label><input type="text" id="' + id + '" value="' + xe(val||'') + '" placeholder="' + xe(ph||'') + '"></div>';
+}
+function fsel(label, id, val, opts, labels) {
+  var o = opts.map(function(v, i){ var lbl = (labels && labels[i]) ? labels[i] : v; return '<option value="'+xe(v)+'"'+(v===val?' selected':'')+'>'+xe(lbl)+'</option>'; }).join('');
+  return '<div class="fld"><label>'+label+'</label><select id="'+id+'">'+o+'</select></div>';
+}
+function fcoord(label, idBase, valRaw, idH, valH, hems, ndg) {
+  var parts = (valRaw||'').split(' ');
+  var vg = parts[0]||'', vm = parts[1]||'', vs = parts[2]||'';
+  var wG = ndg===3 ? '52px' : '44px';
+  var phG = ndg===3 ? '064' : '31';
+  var o = hems.map(function(h){ return '<option'+(h===valH?' selected':'')+'>'+h+'</option>'; }).join('');
+  return '<div class="fld"><label>'+label+'</label>' +
+    '<div class="coord-row">' +
+      '<input type="text" id="'+idBase+'_g" value="'+xe(vg)+'" placeholder="'+phG+'" style="width:'+wG+';flex:none;text-align:center" title="Grados">' +
+      '<span style="color:var(--muted);font-size:13px;padding:0 2px">\u00b0</span>' +
+      '<input type="text" id="'+idBase+'_m" value="'+xe(vm)+'" placeholder="57" style="width:36px;flex:none;text-align:center" title="Minutos">' +
+      '<span style="color:var(--muted);font-size:13px;padding:0 2px">\'</span>' +
+      '<input type="text" id="'+idBase+'_s" value="'+xe(vs)+'" placeholder="32" style="width:36px;flex:none;text-align:center" title="Segundos">' +
+      '<span style="color:var(--muted);font-size:13px;padding:0 2px">"</span>' +
+      '<select id="'+idH+'">'+o+'</select>' +
+    '</div></div>';
+}
+function falt(label, id, val) {
+  return '<div class="fld"><label>'+label+'</label><div class="alt-row"><input type="text" id="'+id+'" value="'+xe(val||'')+'" placeholder="787"><span class="alt-suf">msnm</span></div></div>';
+}
+
+function toast(type, msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type==='ok'?'tok':'terr') + ' show';
+  clearTimeout(t._timer);
+  t._timer = setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+/* ══════════════════════════════════════════════════
+   PUBLICACIÓN A GITHUB
+   Sube proyectos.js + imágenes pendientes via API
+   El token se guarda solo en localStorage (opcional)
+══════════════════════════════════════════════════ */
+
+var GH_TOKEN_KEY = 'cmof_gh_token';
+
+function initGithubPanel() {
+  var head = document.getElementById('ghToggle');
+  var body = document.getElementById('ghBody');
+  var chev = document.getElementById('ghChev');
+  if (!head) return;
+
+  head.addEventListener('click', function() {
+    var open = body.style.display !== 'none';
+    body.style.display = open ? 'none' : 'block';
+    chev.classList.toggle('open', !open);
+    if (!open) refreshPublishStatus();
+  });
+
+  // Restaurar token guardado si existe
+  var saved = localStorage.getItem(GH_TOKEN_KEY);
+  if (saved) {
+    document.getElementById('ghToken').value = saved;
+    document.getElementById('ghRemember').checked = true;
+  }
+
+  document.getElementById('ghRemember').addEventListener('change', function(e) {
+    if (!e.target.checked) localStorage.removeItem(GH_TOKEN_KEY);
+  });
+
+  document.getElementById('btnPublish').addEventListener('click', publicarAGithub);
+
+  refreshPublishStatus();
+}
+
+function refreshPublishStatus() {
+  var info = document.getElementById('ghPendingInfo');
+  if (!info) return;
+  var pending = window._pendingFiles ? Object.keys(window._pendingFiles).length : 0;
+  info.textContent = pending > 0
+    ? pending + ' imagen(es) nueva(s) pendiente(s) de subir.'
+    : 'Sin imágenes nuevas pendientes (se subirá solo proyectos.js).';
+}
+
+function ghLog(msg, cls) {
+  var log = document.getElementById('ghLog');
+  var line = document.createElement('div');
+  line.className = cls || '';
+  line.textContent = msg;
+  log.appendChild(line);
+  log.scrollTop = log.scrollHeight;
+}
+
+function fileToBase64(file) {
+  return new Promise(function(resolve, reject) {
+    var r = new FileReader();
+    r.onload = function() {
+      // result viene como "data:image/png;base64,XXXX" — nos quedamos solo con XXXX
+      var b64 = r.result.split(',')[1];
+      resolve(b64);
+    };
+    r.onerror = reject;
+    r.readAsDataURL(file);
+  });
+}
+
+function strToBase64Utf8(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+// Sube o actualiza un archivo en GitHub via Contents API
+function ghPutFile(owner, repo, token, path, base64Content, message) {
+  var url = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+  return fetch(url, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
+    .then(function(res) { return res.ok ? res.json() : null; })
+    .catch(function() { return null; })
+    .then(function(existing) {
+      var body = {
+        message: message,
+        content: base64Content
+      };
+      if (existing && existing.sha) body.sha = existing.sha; // necesario para actualizar un archivo existente
+      return fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+    });
+}
+
+function publicarAGithub() {
+  var token = gv('ghToken');
+  var owner = gv('ghOwner') || 'cmof-arq';
+  var repo  = gv('ghRepo')  || 'cmof-arq.github.io';
+
+  if (!token) { toast('err','Pegá tu Personal Access Token primero.'); return; }
+  if (!proyectos.length) { toast('err','No hay proyectos cargados para publicar.'); return; }
+
+  if (document.getElementById('ghRemember').checked) {
+    localStorage.setItem(GH_TOKEN_KEY, token);
+  }
+
+  var btn = document.getElementById('btnPublish');
+  btn.disabled = true;
+  document.getElementById('ghLog').innerHTML = '';
+  ghLog('Iniciando publicación…', 'run');
+
+  var pending = window._pendingFiles || {};
+  var pendingKeys = Object.keys(pending);
+
+  // 1) Subir proyectos.js
+  var jsonStr = JSON.stringify(proyectos, null, 2);
+  var jsStr = '// Generado por CMOF Admin — ' + new Date().toLocaleString() + '\nvar proyectosData = ' + jsonStr + ';\n';
+  var jsB64 = strToBase64Utf8(jsStr);
+
+  ghPutFile(owner, repo, token, 'proyectos.js', jsB64, 'Actualizar proyectos.js desde CMOF Admin')
+    .then(function(res) {
+      if (!res.ok) return res.json().then(function(err){ throw new Error('proyectos.js: ' + (err.message || res.status)); });
+      ghLog('✓ proyectos.js subido correctamente.', 'ok');
+      return subirImagenesEnSecuencia(pendingKeys, pending, owner, repo, token);
+    })
+    .then(function() {
+      ghLog('Publicación completa. El sitio se actualizará en GitHub Pages en 1-2 minutos.', 'ok');
+      toast('ok','Publicado correctamente en GitHub.');
+      window._pendingFiles = {};
+      refreshPublishStatus();
+    })
+    .catch(function(err) {
+      ghLog('✗ Error: ' + err.message, 'err');
+      toast('err','Error al publicar. Revisá el log.');
+    })
+    .finally(function() {
+      btn.disabled = false;
+    });
+}
+
+// Sube imágenes una por una (la API de GitHub no soporta lotes en un solo request)
+function subirImagenesEnSecuencia(keys, pending, owner, repo, token) {
+  if (!keys.length) return Promise.resolve();
+  var i = 0;
+  function next() {
+    if (i >= keys.length) return Promise.resolve();
+    var key = keys[i]; // formato "CODIGO/nombre.png"
+    var file = pending[key];
+    ghLog('Subiendo ' + key + '…', 'run');
+    return fileToBase64(file)
+      .then(function(b64) {
+        return ghPutFile(owner, repo, token, 'projects/' + key, b64, 'Subir imagen ' + key + ' desde CMOF Admin');
+      })
+      .then(function(res) {
+        if (!res.ok) return res.json().then(function(err){ throw new Error(key + ': ' + (err.message || res.status)); });
+        ghLog('✓ ' + key, 'ok');
+        i++;
+        return next();
+      });
+  }
+  return next();
+}
+
+init();
+</script>
+</body>
+</html>
