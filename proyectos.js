@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 20/6/2026, 12:51:06 p.m.
+// Generado por CMOF Admin — 20/6/2026, 7:18:09 p.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -14,7 +14,7 @@ var proyectosData = [
     "pais": "Argentina",
     "lat": "31 57 32",
     "lat_hem": "S",
-    "lon": "064 57 32",
+    "lon": "064 33 12",
     "lon_hem": "W",
     "altitud": "787",
     "memoria_es": "",
