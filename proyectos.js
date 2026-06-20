@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 20/6/2026, 7:18:09 p.m.
+// Generado por CMOF Admin — 20/6/2026, 7:20:13 p.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -22,20 +22,19 @@ var proyectosData = [
     "concepto_es": "",
     "concepto_en": "",
     "imagenes": [
-      "H-BÖDN-01.png",
-      "H-BÖDN-02.png",
-      "H-BÖDN-03.png",
-      "H-BÖDN-04.png",
-      "H-BÖDN-05.png",
-      "H-BÖDN-06.png",
-      "H-BÖDN-07.png",
-      "H-BÖDN-08.png",
-      "H-BÖDN-09.png",
-      "H-BÖDN-10.png",
-      "H-BÖDN-11.png",
-      "H-BÖDN-12.png",
-      "H-BÖDN-13.png",
-      "P-01-01 - BODEN HOTEL Y SPA-01.jpg"
+      "P-01-01 - BODEN HOTEL Y SPA-01.jpg",
+      "P-01-02 - BODEN HOTEL Y SPA-02.jpg",
+      "P-01-03 - BODEN HOTEL Y SPA-02.jpg",
+      "P-01-03 - BODEN HOTEL Y SPA-03.jpg",
+      "P-01-04 - BODEN HOTEL Y SPA-06.jpg",
+      "P-01-04 - BODEN HOTEL Y SPA-07.jpg",
+      "P-01-05 - BODEN HOTEL Y SPA-12.jpg",
+      "P-01-05 - BODEN HOTEL Y SPA-14.jpg",
+      "P-01-05 - BODEN HOTEL Y SPA-15.jpg",
+      "P-01-05 - BODEN HOTEL Y SPA-16.jpg",
+      "P-01-05 - BODEN HOTEL Y SPA-18.jpg",
+      "P-01-06 - BODEN HOTEL Y SPA-11.jpg",
+      "P-01-07 - BODEN HOTEL Y SPA-12.jpg"
     ],
     "web_es": "BÖDEN HOTEL & SPA\nSskfljoe lllkjflp,. kmoilmokspop lm,;m",
     "web_en": ""
