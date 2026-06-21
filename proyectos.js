@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 21/6/2026, 1:22:54 a.m.
+// Generado por CMOF Admin — 21/6/2026, 1:38:10 a.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -207,7 +207,7 @@ var proyectosData = [
   },
   {
     "id": "p1782012017621",
-    "codigo": "H-EF.CP",
+    "codigo": "H-EFVCP",
     "nombre": "SPA HOTEL EL FARO",
     "tipologia": "H",
     "estado": "Activo",
