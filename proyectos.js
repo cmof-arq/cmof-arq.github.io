@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 21/6/2026, 12:33:42 a.m.
+// Generado por CMOF Admin — 21/6/2026, 12:36:45 a.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -229,14 +229,7 @@ var proyectosData = [
     "web_es": "",
     "web_en": "",
     "imagenes": [
-      "P-08-03 - H-JMCP-SPA-005-Escena 18_1.png",
-      "P-08-04 - H-JMCP-SPA-005-Escena 26_1.png",
-      "P-08-05 - H-JMCP-SPA-005-Escena 20_1.png",
-      "P-08-06 - H-JMCP-SPA-005-Escena 22_1.png",
-      "P-08-07 - H-JMCP-SPA-005-Escena 2_2.png",
-      "P-08-08 - H-JMCP-SPA-005-Escena 19_1.png",
-      "P-08-09 - H-JMCP-SPA-005-Escena 002-29_1.png",
-      "P-08-10 - H-JMCP-SPA-005-Escena 10_2.png"
+      "P-08-01-ALT-720.png"
     ]
   }
 ];
