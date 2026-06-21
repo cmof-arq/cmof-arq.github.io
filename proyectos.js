@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 21/6/2026, 1:23:36 p.m.
+// Generado por CMOF Admin — 21/6/2026, 1:26:49 p.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -196,8 +196,8 @@ var proyectosData = [
     "concepto_es": "",
     "concepto_en": "",
     "imagenes": [
-      "P-03-01 - K-EGLA-307 - PREVIOS - 02.jpg",
-      "P-03-02 - K-307 - IMG- 501.jpg"
+      "K-EGLC-307-01.jpg",
+      "K-EGLC-307-02.jpg"
     ],
     "web_es": "",
     "web_en": ""
