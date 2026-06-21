@@ -475,7 +475,22 @@ function addImgManual() {
 /* ── GUARDAR ── */
 function guardar() {
   var p = activo;
-  p.codigo      = gv('f_codigo');
+  var codigoViejo = p.codigo;
+  var codigoNuevo = gv('f_codigo');
+
+  // Si el código cambió, migrar las claves de archivos pendientes (imágenes aún no publicadas)
+  if (codigoViejo && codigoNuevo && codigoViejo !== codigoNuevo && window._pendingFiles) {
+    var prefix = codigoViejo + '/';
+    Object.keys(window._pendingFiles).forEach(function(key) {
+      if (key.indexOf(prefix) === 0) {
+        var newKey = codigoNuevo + '/' + key.slice(prefix.length);
+        window._pendingFiles[newKey] = window._pendingFiles[key];
+        delete window._pendingFiles[key];
+      }
+    });
+  }
+
+  p.codigo      = codigoNuevo;
   p.nombre      = gv('f_nombre');
   p.tipologia   = gv('f_tipo');
   p.estado      = gv('f_estado');
@@ -641,10 +656,19 @@ function initGithubPanel() {
 function refreshPublishStatus() {
   var info = document.getElementById('ghPendingInfo');
   if (!info) return;
-  var pending = window._pendingFiles ? Object.keys(window._pendingFiles).length : 0;
-  info.textContent = pending > 0
-    ? pending + ' imagen(es) nueva(s) pendiente(s) de subir.'
-    : 'Sin imágenes nuevas pendientes (se subirá solo proyectos.js).';
+  var keys = window._pendingFiles ? Object.keys(window._pendingFiles) : [];
+  if (keys.length === 0) {
+    info.textContent = 'Sin imágenes nuevas pendientes (se subirá solo proyectos.js).';
+    return;
+  }
+  // Agrupar por código de proyecto para detectar a simple vista a qué carpeta van
+  var porCodigo = {};
+  keys.forEach(function(k) {
+    var cod = k.split('/')[0];
+    porCodigo[cod] = (porCodigo[cod] || 0) + 1;
+  });
+  var detalle = Object.keys(porCodigo).map(function(c){ return c + ' (' + porCodigo[c] + ')'; }).join(', ');
+  info.textContent = keys.length + ' imagen(es) pendiente(s) → ' + detalle;
 }
 
 function ghLog(msg, cls) {
