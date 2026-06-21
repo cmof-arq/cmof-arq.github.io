@@ -409,13 +409,19 @@ function renderForm(esNuevo) {
 
   // Img events
   document.getElementById('fileImgs').addEventListener('change', function(e) {
+    var codigoActual = gv('f_codigo');
+    if (!codigoActual) {
+      toast('err','Completá y guardá el Código del proyecto antes de cargar imágenes.');
+      e.target.value = '';
+      return;
+    }
     var files = Array.from(e.target.files);
     files.sort(function(a,b){ return a.name.localeCompare(b.name, undefined, {numeric:true}); });
     files.forEach(function(f){
       if (activo.imagenes.indexOf(f.name) === -1) activo.imagenes.push(f.name);
       // Guardamos el archivo real en memoria para poder subirlo a GitHub
       window._pendingFiles = window._pendingFiles || {};
-      window._pendingFiles[activo.codigo + '/' + f.name] = f;
+      window._pendingFiles[codigoActual + '/' + f.name] = f;
     });
     document.getElementById('ilist').innerHTML = renderImgs(activo.imagenes);
     e.target.value = '';
@@ -742,6 +748,15 @@ function publicarAGithub() {
 
   var pending = window._pendingFiles || {};
   var pendingKeys = Object.keys(pending);
+
+  // Detectar y descartar keys huérfanas (sin código de proyecto válido, ej: "/archivo.png")
+  var keysValidas = pendingKeys.filter(function(k) { return k.split('/')[0] !== ''; });
+  var huerfanas   = pendingKeys.filter(function(k) { return k.split('/')[0] === ''; });
+  if (huerfanas.length) {
+    ghLog('⚠ ' + huerfanas.length + ' imagen(es) sin código de proyecto fueron descartadas: ' + huerfanas.join(', '), 'err');
+    huerfanas.forEach(function(k){ delete pending[k]; });
+  }
+  pendingKeys = keysValidas;
 
   // 1) Subir proyectos.js
   var jsonStr = JSON.stringify(proyectos, null, 2);
