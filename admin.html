@@ -675,7 +675,9 @@ function strToBase64Utf8(str) {
 
 // Sube o actualiza un archivo en GitHub via Contents API
 function ghPutFile(owner, repo, token, path, base64Content, message) {
-  var url = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + path;
+  // Codificamos cada segmento del path por separado (preservamos las barras "/")
+  var encodedPath = path.split('/').map(encodeURIComponent).join('/');
+  var url = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + encodedPath;
   return fetch(url, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
     .then(function(res) { return res.ok ? res.json() : null; })
     .catch(function() { return null; })
