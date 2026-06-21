@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 21/6/2026, 12:20:00 p.m.
+// Generado por CMOF Admin — 21/6/2026, 1:04:31 p.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -43,7 +43,7 @@ var proyectosData = [
     "id": "p1780987781964",
     "codigo": "K-EGSC",
     "nombre": "Casa ELENA & GUILLERMO",
-    "tipologia": "Residential",
+    "tipologia": "H",
     "estado": "En obra",
     "anio_inicio": "2023",
     "anio_fin": "2026",
@@ -60,7 +60,23 @@ var proyectosData = [
     "memoria_en": "",
     "concepto_es": "",
     "concepto_en": "",
-    "imagenes": []
+    "imagenes": [
+      "K-EGSC-001.jpg",
+      "K-EGSC-002.jpg",
+      "K-EGSC-003.jpg",
+      "K-EGSC-004.jpg",
+      "K-EGSC-008.jpg",
+      "K-EGSC-010.jpg",
+      "K-EGSC-014.jpg",
+      "K-EGSC-018.jpg",
+      "K-EGSC-020.jpg",
+      "K-EGSC-021.jpg",
+      "K-EGSC-023.jpg",
+      "K-EGSC-024.jpg",
+      "K-EGSC-025.jpg"
+    ],
+    "web_es": "",
+    "web_en": ""
   },
   {
     "id": "p1780988025043",
