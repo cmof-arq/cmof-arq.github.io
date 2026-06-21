@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 21/6/2026, 1:12:00 p.m.
+// Generado por CMOF Admin — 21/6/2026, 1:19:28 p.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -178,7 +178,7 @@ var proyectosData = [
     "id": "p1781037475837",
     "codigo": "K-GELC.307",
     "nombre": "Casa GLENDA & ELADIO",
-    "tipologia": "Residential",
+    "tipologia": "H",
     "estado": "Construido",
     "anio_inicio": "2021",
     "anio_fin": "2022",
@@ -196,9 +196,11 @@ var proyectosData = [
     "concepto_es": "",
     "concepto_en": "",
     "imagenes": [
-      "K-GELC.307-01.png",
-      "K-GELC.307-02.png"
-    ]
+      "P-03-01 - K-EGLA-307 - PREVIOS - 02.jpg",
+      "P-03-02 - K-307 - IMG- 501.jpg"
+    ],
+    "web_es": "",
+    "web_en": ""
   },
   {
     "id": "p1781039870192",
