@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 20/6/2026, 10:53:31 p.m.
+// Generado por CMOF Admin — 21/6/2026, 12:29:15 a.m.
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -203,6 +203,41 @@ var proyectosData = [
       "M-JQEP-01.png",
       "M-JQEP-02.png",
       "M-JQEP-03.png"
+    ]
+  },
+  {
+    "id": "p1782012017621",
+    "codigo": "H-EF.CP",
+    "nombre": "SPA HOTEL EL FARO",
+    "tipologia": "H",
+    "estado": "Activo",
+    "anio_inicio": "2026",
+    "anio_fin": "2026",
+    "superficie": "365",
+    "ciudad": "Villa Carlos Paz",
+    "provincia": "Córdoba",
+    "pais": "Argentina",
+    "lat": "31 24 15",
+    "lat_hem": "S",
+    "lon": "064 29 59",
+    "lon_hem": "W",
+    "altitud": "690",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "",
+    "web_en": "",
+    "imagenes": [
+      "P-08-01 - H-JMCP-SPA-005-EXT-04-INGRESO.png",
+      "P-08-03 - H-JMCP-SPA-005-Escena 18_1.png",
+      "P-08-04 - H-JMCP-SPA-005-Escena 26_1.png",
+      "P-08-05 - H-JMCP-SPA-005-Escena 20_1.png",
+      "P-08-06 - H-JMCP-SPA-005-Escena 22_1.png",
+      "P-08-07 - H-JMCP-SPA-005-Escena 2_2.png",
+      "P-08-08 - H-JMCP-SPA-005-Escena 19_1.png",
+      "P-08-09 - H-JMCP-SPA-005-Escena 002-29_1.png",
+      "P-08-10 - H-JMCP-SPA-005-Escena 10_2.png"
     ]
   }
 ];
