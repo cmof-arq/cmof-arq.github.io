@@ -420,7 +420,7 @@ html, body {
 .est-archivo   { background: #1e1e1c; color: var(--muted); }
 .est-proyecto  { background: #1e1a2a; color: #b08cf7; }
 
-/* Galería de imágenes */
+/* Carrusel de imágenes */
 /* Cuerpo: galería 4/5 + memoria 1/5 */
 .det-body {
   display: flex;
@@ -434,76 +434,99 @@ html, body {
   margin-bottom: 0;
 }
 
-.gallery-thumbs-row {
+.carousel {
   position: relative;
-  display: flex;
-  align-items: center;
-  margin-bottom: 0.6rem;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--surface);
+  overflow: hidden;
+  border-radius: 2px;
 }
 
-.gallery-thumbs {
-  display: flex;
-  gap: 0.4rem;
-  overflow-x: auto;
-  scroll-behavior: smooth;
-  flex: 1;
-  scrollbar-width: none;
-  padding: 2px 0;
+.carousel-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
-.gallery-thumbs::-webkit-scrollbar { display: none; }
 
-.gallery-thumb {
-  width: 86px;
-  height: 58px;
+.carousel-slide {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  cursor: pointer;
-  opacity: 0.5;
-  border: 1px solid transparent;
-  transition: opacity 0.15s, border-color 0.15s;
-  flex-shrink: 0;
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
 }
-.gallery-thumb:hover { opacity: 0.8; }
-.gallery-thumb.active { opacity: 1; border-color: var(--orange); }
+.carousel-slide.active {
+  opacity: 1;
+  pointer-events: auto;
+}
 
-.gallery-arrow {
-  flex-shrink: 0;
-  width: 26px;
-  height: 58px;
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface);
-  border: 1px solid var(--border2);
-  color: var(--muted);
+  background: rgba(17,17,16,0.55);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  color: #e8e6e0;
   cursor: pointer;
-  transition: color 0.15s, border-color 0.15s, opacity 0.15s;
-  z-index: 2;
+  z-index: 3;
+  transition: background 0.2s, border-color 0.2s;
+  backdrop-filter: blur(2px);
 }
-.gallery-arrow:hover { color: var(--orange); border-color: var(--orange); }
-.gallery-arrow.left  { margin-right: 0.4rem; }
-.gallery-arrow.right { margin-left: 0.4rem; }
-.gallery-arrow svg { width: 14px; height: 14px; }
-.gallery-arrow.disabled { opacity: 0.25; pointer-events: none; }
+.carousel-arrow:hover { background: rgba(255,102,0,0.75); border-color: var(--orange); }
+.carousel-arrow.left  { left: 12px; }
+.carousel-arrow.right { right: 12px; }
+.carousel-arrow svg { width: 16px; height: 16px; }
+.carousel-arrow.hidden { display: none; }
 
-.gallery-main {
-  width: 100%;
-  aspect-ratio: 16/9;
-  object-fit: cover;
-  background: var(--surface);
-  display: block;
-  cursor: zoom-in;
+.carousel-dots {
+  position: absolute;
+  bottom: 12px;
+  left: 0; right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  z-index: 3;
 }
+.carousel-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.35);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+.carousel-dot:hover { background: rgba(255,255,255,0.7); }
+.carousel-dot.active { background: #fff; transform: scale(1.3); }
 
 /* Texto / memoria */
 .det-memoria {
   flex: 0 0 20%;
   max-width: 20%;
+  max-height: calc(100vh - 280px);
+  overflow-y: auto;
   font-size: 0.78rem;
   line-height: 1.75;
   color: var(--text);
   white-space: pre-wrap;
   padding-top: 0.2rem;
+  padding-right: 0.6rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
 }
+.det-memoria::-webkit-scrollbar { width: 4px; }
+.det-memoria::-webkit-scrollbar-track { background: transparent; }
+.det-memoria::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.det-memoria::-webkit-scrollbar-thumb:hover { background: #0E6BA8; }
 
 /* ── ANIMACIÓN ENTRADA DETALLE ── */
 @keyframes slideIn {
@@ -623,18 +646,18 @@ html, body {
         <!-- Cuerpo: galería (4/5) + memoria (1/5) -->
         <div class="det-body">
 
-          <!-- Galería -->
+          <!-- Galería: carrusel -->
           <div class="det-gallery" id="d-gallery">
-            <div class="gallery-thumbs-row">
-              <button class="gallery-arrow left disabled" id="d-arrow-left" title="Anteriores">
+            <div class="carousel" id="d-carousel">
+              <div class="carousel-track" id="d-track"></div>
+              <button class="carousel-arrow left" id="d-arrow-left" title="Anterior">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
               </button>
-              <div class="gallery-thumbs" id="d-thumbs"></div>
-              <button class="gallery-arrow right" id="d-arrow-right" title="Siguientes">
+              <button class="carousel-arrow right" id="d-arrow-right" title="Siguiente">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
               </button>
+              <div class="carousel-dots" id="d-dots"></div>
             </div>
-            <img class="gallery-main" id="d-img-main" src="" alt="">
           </div>
 
           <!-- Memoria -->
@@ -871,49 +894,75 @@ function openProject(id) {
   est.textContent  = p.estado || '';
   est.className    = 'det-estado ' + (estadoClass[p.estado] || 'est-archivo');
 
-  // Galería
-  var imgs = p.imagenes || [];
+  // Galería: carrusel
+  var imgs = (p.imagenes || []).slice();
   var basePath = 'projects/' + p.codigo + '/';
-  var mainImg  = document.getElementById('d-img-main');
-  var thumbsEl = document.getElementById('d-thumbs');
   var gallery  = document.getElementById('d-gallery');
+  var track    = document.getElementById('d-track');
+  var dotsEl   = document.getElementById('d-dots');
   var arrowL   = document.getElementById('d-arrow-left');
   var arrowR   = document.getElementById('d-arrow-right');
 
+  // Limpiar timer de un carrusel anterior, si existía
+  if (window._carouselTimer) { clearInterval(window._carouselTimer); window._carouselTimer = null; }
+
   if (imgs.length > 0) {
     gallery.style.display = '';
-    mainImg.src = basePath + imgs[0];
-    mainImg.onerror = function() { this.style.display = 'none'; };
+    track.innerHTML = '';
+    dotsEl.innerHTML = '';
 
-    thumbsEl.innerHTML = '';
-    thumbsEl.scrollLeft = 0;
+    var slides = [];
+    var current = 0;
+
     imgs.forEach(function(imgName, i) {
-      var th = document.createElement('img');
-      th.className = 'gallery-thumb' + (i === 0 ? ' active' : '');
-      th.src = basePath + imgName;
-      th.onerror = function() { this.style.display = 'none'; };
-      th.addEventListener('click', function() {
-        mainImg.src = basePath + imgName;
-        document.querySelectorAll('.gallery-thumb').forEach(function(t){ t.classList.remove('active'); });
-        th.classList.add('active');
-      });
-      thumbsEl.appendChild(th);
+      var img = document.createElement('img');
+      img.className = 'carousel-slide' + (i === 0 ? ' active' : '');
+      img.src = basePath + imgName;
+      img.alt = '';
+      // Si una imagen falla, la sacamos de la rotación sin romper el carrusel
+      img.onerror = function() {
+        img.style.display = 'none';
+      };
+      track.appendChild(img);
+      slides.push(img);
+
+      var dot = document.createElement('div');
+      dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+      dot.addEventListener('click', function() { goTo(i); restartAutoplay(); });
+      dotsEl.appendChild(dot);
     });
 
-    updateArrows();
+    var dots = dotsEl.querySelectorAll('.carousel-dot');
+
+    function goTo(i) {
+      current = (i + imgs.length) % imgs.length;
+      slides.forEach(function(s, idx){ s.classList.toggle('active', idx === current); });
+      dots.forEach(function(d, idx){ d.classList.toggle('active', idx === current); });
+    }
+
+    function next() { goTo(current + 1); }
+    function prev() { goTo(current - 1); }
+
+    function restartAutoplay() {
+      if (window._carouselTimer) clearInterval(window._carouselTimer);
+      if (imgs.length > 1) {
+        window._carouselTimer = setInterval(next, 2000);
+      }
+    }
+
+    // Mostrar flechas solo si hay más de una imagen
+    var multi = imgs.length > 1;
+    arrowL.classList.toggle('hidden', !multi);
+    arrowR.classList.toggle('hidden', !multi);
+    dotsEl.style.display = multi ? '' : 'none';
+
+    arrowL.onclick = function() { prev(); restartAutoplay(); };
+    arrowR.onclick = function() { next(); restartAutoplay(); };
+
+    restartAutoplay();
   } else {
     gallery.style.display = 'none';
   }
-
-  function updateArrows() {
-    var atStart = thumbsEl.scrollLeft <= 2;
-    var atEnd   = thumbsEl.scrollLeft >= (thumbsEl.scrollWidth - thumbsEl.clientWidth - 2);
-    arrowL.classList.toggle('disabled', atStart);
-    arrowR.classList.toggle('disabled', atEnd || thumbsEl.scrollWidth <= thumbsEl.clientWidth);
-  }
-  thumbsEl.onscroll = updateArrows;
-  arrowL.onclick = function() { thumbsEl.scrollLeft -= 180; };
-  arrowR.onclick = function() { thumbsEl.scrollLeft += 180; };
 
   // Scroll al tope del detalle
   document.getElementById('detail').scrollTop = 0;
