@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="CMOF Architecture Office — Estudio, equipo y trayectoria. César Ortiz Ferrer, arquitecto.">
+<title>Estudio | CMOF Architecture Office</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<style>
+@font-face {
+  font-family: 'Conthrax';
+  src: url('assets/fonts/CONTHRAX-SEMIBOLD.OTF') format('opentype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_BOLD.TTF') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_ROMAN.TTF') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+
+:root {
+  --bg:      #111110;
+  --surface: #1a1a18;
+  --surface2:#222220;
+  --orange:  #ff6600;
+  --blue:    #8cd7f7;
+  --muted:   #888880;
+  --border:  #2a2a28;
+  --border2: #333330;
+  --text:    #e8e6e0;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Square721BT', sans-serif;
+}
+
+/* ── TOPBAR (idéntico al resto del sitio) ── */
+.topbar {
+  height: 48px;
+  display: flex;
+  align-items: center;
+  padding: 0 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  gap: 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.topbar-logo { display: flex; align-items: center; gap: 0.8rem; text-decoration: none; }
+.topbar-logo img { height: 28px; width: auto; }
+.topbar-name {
+  font-family: 'Conthrax', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+}
+.topbar-sep { width: 1px; height: 20px; background: var(--border2); }
+.topbar-section {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+.topbar-nav { margin-left: auto; display: flex; align-items: center; gap: 1.5rem; }
+.topbar-nav a {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #0E6BA8;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.topbar-nav a:hover { opacity: 0.75; }
+.topbar-nav a.active { opacity: 1; color: var(--orange); }
+
+/* ── CONTENIDO ── */
+.page-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 3.5rem 2rem 5rem;
+}
+
+/* Texto institucional */
+.estudio-intro {
+  margin-bottom: 4rem;
+  max-width: 780px;
+}
+.estudio-kicker {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 0.8rem;
+}
+.estudio-title {
+  font-family: 'Conthrax', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 1.6rem;
+  line-height: 1.2;
+}
+.estudio-text {
+  font-size: 0.92rem;
+  line-height: 1.9;
+  color: var(--text);
+  white-space: pre-wrap;
+}
+.estudio-text.loading { color: var(--muted); font-style: italic; }
+
+/* Sección equipo */
+.team-section-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--orange);
+  margin-bottom: 1.8rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2.2rem;
+}
+
+.team-card {
+  display: flex;
+  flex-direction: column;
+}
+.team-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  background: var(--surface);
+  margin-bottom: 0.9rem;
+  filter: grayscale(0.15);
+}
+.team-photo-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--surface);
+  margin-bottom: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--border2);
+  font-family: 'Conthrax', sans-serif;
+  font-size: 1.6rem;
+  letter-spacing: 0.1em;
+}
+.team-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.2rem;
+}
+.team-role {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8cd7f7;
+  margin-bottom: 0.7rem;
+}
+.team-bio {
+  font-size: 0.78rem;
+  line-height: 1.65;
+  color: var(--muted);
+  margin-bottom: 0.6rem;
+  flex: 1;
+}
+.team-email {
+  font-size: 0.72rem;
+  color: var(--orange);
+  text-decoration: none;
+  word-break: break-all;
+}
+.team-email:hover { text-decoration: underline; }
+
+.team-empty {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-style: italic;
+}
+
+@media (max-width: 600px) {
+  .topbar-nav { display: none; }
+  .page-content { padding: 2rem 1.2rem 3rem; }
+  .team-grid { grid-template-columns: 1fr 1fr; gap: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="index.html">
+    <img src="LOGO-CMOF - Q-2023 - ORIGINAL.png" alt="CMOF">
+    <span class="topbar-name">CMOF</span>
+  </a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-section">Estudio</span>
+  <nav class="topbar-nav">
+    <a href="index.html">Home</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="web-estudio.html" class="active">Estudio</a>
+    <a href="publicaciones.html">Publicaciones</a>
+    <a href="web-contacto.html">Contacto</a>
+  </nav>
+</div>
+
+<!-- CONTENIDO -->
+<div class="page-content">
+
+  <div class="estudio-intro">
+    <div class="estudio-kicker">CMOF Architecture Office</div>
+    <h1 class="estudio-title">El Estudio</h1>
+    <div class="estudio-text loading" id="estudio-texto">Cargando...</div>
+  </div>
+
+  <div class="team-section-title">Equipo</div>
+  <div class="team-grid" id="team-grid">
+    <div class="team-empty">Cargando equipo...</div>
+  </div>
+
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   ESTUDIO — carga datos desde estudio-data.js
+   (generado por web-publicaciones-blog-mgr no — por
+   el panel de Estudio local; ver web-estudio-admin)
+══════════════════════════════════════════════════ */
+
+function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function demoEstudioData() {
+  return {
+    texto: 'CMOF Architecture Office es un estudio de arquitectura fundado en 1997 en Córdoba, Argentina, especializado en proyectos de hospitality boutique, residencial de alta gama, industrial y oficinas.\n\nNuestro trabajo parte de una convicción simple: la estrategia es el camino hacia el diseño, no un fin en sí mismo. Cada proyecto se piensa de la mano entre la dirección creativa y la viabilidad real de construirlo y operarlo.',
+    equipo: [
+      { nombre: 'César Ortiz Ferrer', rol: 'Arquitecto — Fundador', bio: 'Director de proyecto y diseño. Especializado en hotelería boutique y arquitectura residencial.', email: 'cmof2@hotmail.com', foto: '' }
+    ]
+  };
+}
+
+function renderEstudio(data) {
+  var textoEl = document.getElementById('estudio-texto');
+  textoEl.textContent = data.texto || '';
+  textoEl.classList.remove('loading');
+
+  var grid = document.getElementById('team-grid');
+  var equipo = data.equipo || [];
+  if (equipo.length === 0) {
+    grid.innerHTML = '<div class="team-empty">Equipo en construcción.</div>';
+    return;
+  }
+  grid.innerHTML = '';
+  equipo.forEach(function(m) {
+    var card = document.createElement('div');
+    card.className = 'team-card';
+    var fotoHtml = m.foto
+      ? '<img class="team-photo" src="' + xe(m.foto) + '" alt="' + xe(m.nombre) + '" onerror="this.outerHTML=\'<div class=&quot;team-photo-placeholder&quot;>' + xe((m.nombre||'?').charAt(0)) + '</div>\'">'
+      : '<div class="team-photo-placeholder">' + xe((m.nombre||'?').charAt(0)) + '</div>';
+    card.innerHTML =
+      fotoHtml +
+      '<div class="team-name">' + xe(m.nombre) + '</div>' +
+      '<div class="team-role">' + xe(m.rol) + '</div>' +
+      '<div class="team-bio">' + xe(m.bio) + '</div>' +
+      (m.email ? '<a class="team-email" href="mailto:' + xe(m.email) + '">' + xe(m.email) + '</a>' : '');
+    grid.appendChild(card);
+  });
+}
+
+function loadEstudio() {
+  var s = document.createElement('script');
+  s.src = 'estudio-data.js';
+  s.onload = function() {
+    if (typeof estudioData !== 'undefined') {
+      renderEstudio(estudioData);
+    } else {
+      renderEstudio(demoEstudioData());
+    }
+  };
+  s.onerror = function() { renderEstudio(demoEstudioData()); };
+  document.head.appendChild(s);
+}
+
+loadEstudio();
+</script>
+</body>
+</html>
