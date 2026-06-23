@@ -1,4 +1,4 @@
-// Generado por CMOF Admin Estudio — 23/6/2026, 4:22:08 p.m.
+// Generado por CMOF Admin Estudio — 23/6/2026, 4:25:23 p.m.
 var estudioData = {
   "texto": "",
   "equipo": [
