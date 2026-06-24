@@ -110,15 +110,41 @@ html, body {
   gap: 1.5rem;
 }
 .topbar-nav a {
-  font-size: 0.62rem;
-  letter-spacing: 0.15em;
+  font-family: 'Square721BT', sans-serif;
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: #0E6BA8;
   text-decoration: none;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.topbar-nav a:hover { opacity: 0.75; }
+.topbar-nav a.active { opacity: 1; color: var(--orange); }
+
+/* Selector de idioma (idéntico en todas las páginas) */
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-left: 0.6rem;
+  padding-left: 1.2rem;
+  border-left: 1px solid var(--border2);
+}
+.lang-btn {
+  font-family: 'Square721BT', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  padding: 0;
   transition: color 0.2s;
 }
-.topbar-nav a:hover { color: var(--orange); }
-.topbar-nav a.active { color: var(--orange); }
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { color: var(--orange); }
+.lang-sep { color: var(--border2); font-size: 0.6rem; }
 
 /* ─ CONTENIDO PRINCIPAL ─ */
 .content {
@@ -607,8 +633,12 @@ html, body {
       <a href="portfolio.html" class="active">Portfolio</a>
       <a href="web-estudio.html">Estudio</a>
       <a href="web-publicaciones.html">Publicaciones</a>
-      <a href="cv.html">CV</a>
-      <a href="contacto.html">Contacto</a>
+      <a href="web-contacto.html">Contacto</a>
+      <div class="lang-switch" id="lang-switch">
+        <button class="lang-btn active" data-lang="es">ESP</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" data-lang="en">ENG</button>
+      </div>
     </nav>
   </div>
 
@@ -1051,6 +1081,18 @@ function dmsToDecimal(dms, hem) {
   toggle.addEventListener('click', function() {
     var collapsed = content.classList.toggle('collapsed');
     content.classList.toggle('expanded', !collapsed);
+  });
+})();
+
+/* ── Selector de idioma (placeholder visual; integración completa de textos pendiente) ── */
+(function() {
+  var sw = document.getElementById('lang-switch');
+  if (!sw) return;
+  sw.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('lang-btn')) return;
+    sw.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
+    e.target.classList.add('active');
+    document.documentElement.setAttribute('data-lang', e.target.dataset.lang);
   });
 })();
 

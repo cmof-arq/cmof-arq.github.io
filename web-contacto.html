@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Contacto — CMOF Architecture Office. Escribinos para tu próximo proyecto.">
+<title>Contacto | CMOF Architecture Office</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<style>
+@font-face {
+  font-family: 'Conthrax';
+  src: url('assets/fonts/CONTHRAX-SEMIBOLD.OTF') format('opentype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_BOLD.TTF') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_ROMAN.TTF') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+
+:root {
+  --bg: #111110; --surface: #1a1a18; --surface2: #222220;
+  --orange: #ff6600; --blue: #8cd7f7; --muted: #888880;
+  --border: #2a2a28; --border2: #333330; --text: #e8e6e0;
+  --green: #4ac87a; --red: #e05252;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { min-height:100%; background: var(--bg); color: var(--text); font-family:'Square721BT', sans-serif; }
+
+/* TOPBAR */
+.topbar { height:48px; display:flex; align-items:center; padding:0 1.5rem; border-bottom:1px solid var(--border); background:var(--bg); gap:1.5rem; position:sticky; top:0; z-index:10; }
+.topbar-logo { display:flex; align-items:center; gap:0.8rem; text-decoration:none; }
+.topbar-logo img { height:28px; width:auto; }
+.topbar-name { font-family:'Conthrax', sans-serif; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color: var(--text); }
+.topbar-sep { width:1px; height:20px; background: var(--border2); }
+.topbar-section { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: var(--orange); }
+.topbar-nav { margin-left:auto; display:flex; align-items:center; gap:1.5rem; }
+.topbar-nav a { font-family:'Square721BT', sans-serif; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:#0E6BA8; text-decoration:none; transition:opacity 0.2s; white-space:nowrap; }
+.topbar-nav a:hover { opacity:0.75; }
+.topbar-nav a.active { opacity:1; color: var(--orange); }
+.lang-switch { display:flex; align-items:center; gap:0.4rem; margin-left:0.6rem; padding-left:1.2rem; border-left:1px solid var(--border2); }
+.lang-btn { font-family:'Square721BT', sans-serif; font-size:0.62rem; letter-spacing:0.1em; background:none; border:none; color: var(--muted); cursor:pointer; padding:0; transition:color 0.2s; }
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { color: var(--orange); }
+.lang-sep { color: var(--border2); font-size:0.6rem; }
+
+/* CONTENIDO */
+.wrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 4rem 2rem 5rem;
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 4rem;
+}
+
+.intro-kicker { font-size:0.65rem; letter-spacing:0.25em; text-transform:uppercase; color: var(--orange); margin-bottom:0.8rem; }
+.intro-title { font-family:'Conthrax', sans-serif; font-size: clamp(1.6rem, 3vw, 2.3rem); letter-spacing:0.04em; text-transform:uppercase; line-height:1.2; margin-bottom:1.4rem; }
+.intro-text { font-size:0.86rem; line-height:1.85; color: var(--muted); margin-bottom: 2.2rem; max-width: 380px; }
+
+.intro-direct { display:flex; flex-direction:column; gap:0.9rem; }
+.direct-item { display:flex; align-items:center; gap:0.7rem; font-size:0.82rem; color: var(--text); text-decoration:none; }
+.direct-item svg { width:16px; height:16px; color: var(--orange); flex-shrink:0; }
+.direct-item:hover { color: var(--orange); }
+
+/* Formulario */
+.form-card { background: var(--surface); border:1px solid var(--border); border-radius:4px; padding: 2.2rem; }
+.fld { margin-bottom: 1.3rem; }
+.fld label {
+  display:block; font-size:0.62rem; letter-spacing:0.12em; text-transform:uppercase;
+  color: var(--muted); margin-bottom:0.5rem;
+}
+.fld label .req { color: var(--orange); }
+.fld input, .fld textarea {
+  width:100%; padding:0.7rem 0.8rem; background: var(--bg); border:1px solid var(--border2);
+  border-radius:3px; color: var(--text); font-size:0.86rem; font-family:inherit;
+}
+.fld textarea { min-height: 110px; resize:vertical; }
+.fld input:focus, .fld textarea:focus { outline:none; border-color: var(--orange); }
+.fg2 { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+
+.btn-enviar {
+  width:100%; padding:0.9rem; background: var(--orange); color:#fff; border:none;
+  border-radius:3px; font-weight:700; font-size:0.78rem; letter-spacing:0.1em; text-transform:uppercase;
+  cursor:pointer; transition: opacity 0.2s;
+}
+.btn-enviar:hover { opacity:0.9; }
+.btn-enviar:disabled { opacity:0.5; cursor:not-allowed; }
+
+.form-msg { margin-top:1rem; font-size:0.8rem; padding:0.8rem 1rem; border-radius:3px; display:none; }
+.form-msg.show { display:block; }
+.form-msg.ok { background: rgba(74,200,122,0.12); border:1px solid var(--green); color: var(--green); }
+.form-msg.err { background: rgba(224,82,82,0.12); border:1px solid var(--red); color: var(--red); }
+
+/* iframe oculto para envío silencioso al Google Form */
+.hidden-frame { display:none; }
+
+@media (max-width: 768px) {
+  .topbar-nav { display:none; }
+  .wrap { grid-template-columns:1fr; gap:2.5rem; padding: 2rem 1.2rem 3rem; }
+  .fg2 { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="topbar-logo" href="index.html">
+    <img src="LOGO-CMOF - Q-2023 - ORIGINAL.png" alt="CMOF">
+    <span class="topbar-name">CMOF</span>
+  </a>
+  <div class="topbar-sep"></div>
+  <span class="topbar-section">Contacto</span>
+  <nav class="topbar-nav">
+    <a href="index.html">Home</a>
+    <a href="portfolio.html">Portfolio</a>
+    <a href="web-estudio.html">Estudio</a>
+    <a href="web-publicaciones.html">Publicaciones</a>
+    <a href="web-contacto.html" class="active">Contacto</a>
+    <div class="lang-switch" id="lang-switch">
+      <button class="lang-btn active" data-lang="es">ESP</button>
+      <span class="lang-sep">/</span>
+      <button class="lang-btn" data-lang="en">ENG</button>
+    </div>
+  </nav>
+</div>
+
+<div class="wrap">
+
+  <!-- Columna izquierda: intro + contacto directo -->
+  <div>
+    <div class="intro-kicker">CMOF Architecture Office</div>
+    <h1 class="intro-title">Hablemos de tu proyecto</h1>
+    <p class="intro-text">Contanos brevemente qué estás pensando — un proyecto de hospitality, una vivienda, un desarrollo. Te respondemos a la brevedad.</p>
+
+    <div class="intro-direct">
+      <a class="direct-item" href="mailto:cmof2@hotmail.com">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+        cmof2@hotmail.com
+      </a>
+      <a class="direct-item" href="https://www.instagram.com/cmof.arq" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/></svg>
+        @cmof.arq
+      </a>
+      <a class="direct-item" href="https://www.linkedin.com/in/ortizferrer" target="_blank">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        ortizferrer
+      </a>
+    </div>
+  </div>
+
+  <!-- Columna derecha: formulario -->
+  <div class="form-card">
+    <form id="contactForm">
+      <div class="fg2">
+        <div class="fld">
+          <label>Nombre <span class="req">*</span></label>
+          <input type="text" name="nombre" id="f_nombre" required>
+        </div>
+        <div class="fld">
+          <label>Apellido <span class="req">*</span></label>
+          <input type="text" name="apellido" id="f_apellido" required>
+        </div>
+      </div>
+      <div class="fg2">
+        <div class="fld">
+          <label>Email</label>
+          <input type="email" name="email" id="f_email">
+        </div>
+        <div class="fld">
+          <label>Tel / WhatsApp</label>
+          <input type="text" name="telefono" id="f_telefono">
+        </div>
+      </div>
+      <div class="fld">
+        <label>Instagram</label>
+        <input type="text" name="instagram" id="f_instagram" placeholder="@usuario">
+      </div>
+      <div class="fld">
+        <label>Mensaje <span class="req">*</span></label>
+        <textarea name="mensaje" id="f_mensaje" required></textarea>
+      </div>
+      <button type="submit" class="btn-enviar" id="btnEnviar">Enviar</button>
+      <div class="form-msg" id="formMsg"></div>
+    </form>
+  </div>
+
+</div>
+
+<!-- iframe oculto: recibe el submit del Google Form sin redirigir al usuario -->
+<iframe name="hidden_iframe" id="hidden_iframe" class="hidden-frame"></iframe>
+
+<!-- Form oculto que efectivamente envía a Google Forms -->
+<form id="googleForm"
+      action="https://docs.google.com/forms/u/0/d/e/1FAIpQLSe5UGwlzCjF80T_gqMQ2bksvl-IzYMfEJuFb6AtG_ptprUbZQ/formResponse"
+      method="POST" target="hidden_iframe" class="hidden-frame">
+  <input type="text" name="entry.727754971" id="g_nombre">
+  <input type="text" name="entry.1509190662" id="g_apellido">
+  <input type="text" name="entry.539135092" id="g_email">
+  <input type="text" name="entry.463742181" id="g_telefono">
+  <input type="text" name="entry.821346781" id="g_mensaje">
+  <input type="text" name="entry.88828496" id="g_instagram">
+</form>
+
+<script>
+/* ══════════════════════════════════════════════════
+   FORMULARIO DE CONTACTO
+   Envío silencioso a Google Forms via iframe oculto
+   (sin redirigir al usuario fuera del sitio)
+══════════════════════════════════════════════════ */
+
+var form = document.getElementById('contactForm');
+var btn  = document.getElementById('btnEnviar');
+var msg  = document.getElementById('formMsg');
+var submittedOnce = false;
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  // Copiar valores al form oculto que apunta a Google
+  document.getElementById('g_nombre').value    = document.getElementById('f_nombre').value;
+  document.getElementById('g_apellido').value  = document.getElementById('f_apellido').value;
+  document.getElementById('g_email').value     = document.getElementById('f_email').value;
+  document.getElementById('g_telefono').value  = document.getElementById('f_telefono').value;
+  document.getElementById('g_mensaje').value   = document.getElementById('f_mensaje').value;
+  document.getElementById('g_instagram').value = document.getElementById('f_instagram').value;
+
+  btn.disabled = true;
+  btn.textContent = 'Enviando...';
+
+  document.getElementById('googleForm').submit();
+
+  // El iframe no expone si Google confirmó realmente, así que asumimos éxito
+  // tras un breve delay (patrón estándar para este tipo de integración).
+  setTimeout(function() {
+    msg.textContent = 'Mensaje enviado. Te responderemos a la brevedad.';
+    msg.className = 'form-msg show ok';
+    form.reset();
+    btn.disabled = false;
+    btn.textContent = 'Enviar';
+  }, 900);
+});
+
+(function() {
+  var sw = document.getElementById('lang-switch');
+  if (!sw) return;
+  sw.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('lang-btn')) return;
+    sw.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
+    e.target.classList.add('active');
+    document.documentElement.setAttribute('data-lang', e.target.dataset.lang);
+  });
+})();
+</script>
+</body>
+</html>

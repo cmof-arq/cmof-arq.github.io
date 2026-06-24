@@ -46,9 +46,14 @@ html, body { height:100%; background: var(--bg); color: var(--text); font-family
 .topbar-sep { width:1px; height:20px; background: var(--border2); }
 .topbar-section { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: var(--orange); }
 .topbar-nav { margin-left:auto; display:flex; align-items:center; gap:1.5rem; }
-.topbar-nav a { font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color:#0E6BA8; text-decoration:none; transition:opacity 0.2s; }
+.topbar-nav a { font-family:'Square721BT', sans-serif; font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase; color:#0E6BA8; text-decoration:none; transition:opacity 0.2s; white-space:nowrap; }
 .topbar-nav a:hover { opacity:0.75; }
 .topbar-nav a.active { opacity:1; color: var(--orange); }
+.lang-switch { display:flex; align-items:center; gap:0.4rem; margin-left:0.6rem; padding-left:1.2rem; border-left:1px solid var(--border2); }
+.lang-btn { font-family:'Square721BT', sans-serif; font-size:0.62rem; letter-spacing:0.1em; background:none; border:none; color: var(--muted); cursor:pointer; padding:0; transition:color 0.2s; }
+.lang-btn:hover { color: var(--text); }
+.lang-btn.active { color: var(--orange); }
+.lang-sep { color: var(--border2); font-size:0.6rem; }
 
 .page { display:flex; flex-direction:column; height:100vh; }
 
@@ -141,19 +146,25 @@ html, body { height:100%; background: var(--bg); color: var(--text); font-family
       <a href="web-estudio.html">Estudio</a>
       <a href="web-publicaciones.html" class="active">Publicaciones</a>
       <a href="web-contacto.html">Contacto</a>
+      <div class="lang-switch" id="lang-switch">
+        <button class="lang-btn active" data-lang="es">ESP</button>
+        <span class="lang-sep">/</span>
+        <button class="lang-btn" data-lang="en">ENG</button>
+      </div>
     </nav>
   </div>
 
   <!-- TABS -->
   <div class="section-tabs">
-    <div class="section-tab active" data-tab="pub">Publicaciones, Concursos & Premios</div>
+    <div class="section-tab active" data-tab="pub">Publicaciones</div>
+    <div class="section-tab" data-tab="concursos">Concursos</div>
     <div class="section-tab" data-tab="blog">Blog</div>
   </div>
 
   <!-- PANEL: PUBLICACIONES -->
   <div class="section-panel active" id="panel-pub">
     <div class="sidebar">
-      <div class="sidebar-head"><h2>Listado</h2></div>
+      <div class="sidebar-head"><h2>Publicaciones</h2></div>
       <div class="pub-list" id="pub-list"></div>
     </div>
     <div class="detail" id="pub-detail">
@@ -167,6 +178,27 @@ html, body { height:100%; background: var(--bg); color: var(--text); font-family
         <div class="det-cat" id="p-cat"></div>
         <div class="det-fotos" id="p-fotos"></div>
         <div class="det-text" id="p-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: CONCURSOS -->
+  <div class="section-panel" id="panel-concursos">
+    <div class="sidebar">
+      <div class="sidebar-head"><h2>Concursos</h2></div>
+      <div class="pub-list" id="concurso-list"></div>
+    </div>
+    <div class="detail" id="concurso-detail">
+      <div class="detail-empty" id="concurso-empty">
+        <div class="de-logo">CMOF</div>
+        <p>Seleccioná un concurso</p>
+      </div>
+      <div class="detail-inner" id="concurso-inner">
+        <div class="det-yr" id="c-yr"></div>
+        <div class="det-title" id="c-title"></div>
+        <div class="det-cat" id="c-cat"></div>
+        <div class="det-fotos" id="c-fotos"></div>
+        <div class="det-text" id="c-text"></div>
       </div>
     </div>
   </div>
@@ -199,16 +231,21 @@ html, body { height:100%; background: var(--bg); color: var(--text); font-family
    Carga desde publicaciones-data.js (admin local)
 ══════════════════════════════════════════════════ */
 
-var pubs = [];
+var pubs = [];      // categoria: Publicación, Conferencia, Otro
+var concursos = [];  // categoria: Concurso, Premio, Mención
 var posts = [];
 var activePubId = null;
+var activeConcursoId = null;
+
+var CATEGORIAS_CONCURSO = ['Concurso', 'Premio', 'Mención'];
 
 function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function demoData() {
   return {
     publicaciones: [
-      { id:'p1', anio:'2024', titulo:'Premio Hábitat — Mención Hospitality', categoria:'Premio', texto:'El proyecto Böden Hotel & SPA recibió mención especial en la categoría hospitality boutique.', fotos:[] }
+      { id:'p1', anio:'2024', titulo:'Nota en revista de arquitectura', categoria:'Publicación', texto:'Artículo sobre el proceso de diseño del Böden Hotel & SPA.', fotos:[] },
+      { id:'p2', anio:'2024', titulo:'Premio Hábitat — Mención Hospitality', categoria:'Premio', texto:'El proyecto Böden Hotel & SPA recibió mención especial en la categoría hospitality boutique.', fotos:[] }
     ],
     posts: [
       { id:'b1', anio:'2024', fecha:'12/03/2024', titulo:'Pensar antes de medir', excerpt:'Sobre el rol del boceto manual como acto de pausa antes del diseño técnico.', texto:'El boceto a mano alzada no es un paso previo al proyecto: es el proyecto pensándose a sí mismo antes de volverse medible.\n\nEn una época donde el software permite saltar directo a la precisión, vale la pena detenerse en ese instante intermedio donde la idea todavía es maleable.', fotos:[] }
@@ -229,9 +266,12 @@ function loadData() {
 }
 
 function init(d) {
-  pubs  = (d.publicaciones || []).slice().sort(function(a,b){ return (b.anio||'').localeCompare(a.anio||''); });
-  posts = (d.posts || []).slice().sort(function(a,b){ return (b.anio||'').localeCompare(a.anio||''); });
+  var todas = (d.publicaciones || []).slice().sort(function(a,b){ return (b.anio||'').localeCompare(a.anio||''); });
+  pubs      = todas.filter(function(p){ return CATEGORIAS_CONCURSO.indexOf(p.categoria) === -1; });
+  concursos = todas.filter(function(p){ return CATEGORIAS_CONCURSO.indexOf(p.categoria) !== -1; });
+  posts     = (d.posts || []).slice().sort(function(a,b){ return (b.anio||'').localeCompare(a.anio||''); });
   renderPubList();
+  renderConcursoList();
   renderBlogList();
 }
 
@@ -245,45 +285,62 @@ document.querySelectorAll('.section-tab').forEach(function(tab) {
   });
 });
 
-/* ── PUBLICACIONES ── */
-function renderPubList() {
-  var list = document.getElementById('pub-list');
-  if (pubs.length === 0) { list.innerHTML = '<div class="empty-msg">Sin publicaciones cargadas.</div>'; return; }
+/* ── Helper genérico: render de una lista tipo sidebar (pub/concurso) ── */
+function renderListaGenerica(items, listId, activeId, onClick) {
+  var list = document.getElementById(listId);
+  if (items.length === 0) { list.innerHTML = '<div class="empty-msg">Sin elementos cargados.</div>'; return; }
   list.innerHTML = '';
-  pubs.forEach(function(p) {
+  items.forEach(function(p) {
     var item = document.createElement('div');
-    item.className = 'pub-item' + (p.id === activePubId ? ' active' : '');
+    item.className = 'pub-item' + (p.id === activeId ? ' active' : '');
     item.innerHTML = '<div class="pi-yr">' + xe(p.anio) + '</div><div class="pi-title">' + xe(p.titulo) + '</div><div class="pi-cat">' + xe(p.categoria||'') + '</div>';
-    item.addEventListener('click', function(){ openPub(p.id); });
+    item.addEventListener('click', function(){ onClick(p.id); });
     list.appendChild(item);
   });
 }
+
+function abrirDetalleGenerico(item, prefix, folderBase, scrollContainerId) {
+  document.getElementById(prefix + '-empty').style.display = 'none';
+  var inner = document.getElementById(prefix + '-inner');
+  inner.classList.remove('visible'); void inner.offsetWidth; inner.classList.add('visible');
+
+  document.getElementById(prefix === 'pub' ? 'p-yr' : 'c-yr').textContent = item.anio || '';
+  document.getElementById(prefix === 'pub' ? 'p-title' : 'c-title').textContent = item.titulo || '';
+  document.getElementById(prefix === 'pub' ? 'p-cat' : 'c-cat').textContent = item.categoria || '';
+  document.getElementById(prefix === 'pub' ? 'p-text' : 'c-text').textContent = item.texto || '';
+
+  var fotosEl = document.getElementById(prefix === 'pub' ? 'p-fotos' : 'c-fotos');
+  fotosEl.innerHTML = '';
+  (item.fotos || []).forEach(function(f) {
+    var img = document.createElement('img');
+    img.src = folderBase + '/' + item.id + '/' + f;
+    img.onerror = function(){ this.style.display = 'none'; };
+    fotosEl.appendChild(img);
+  });
+
+  document.getElementById(scrollContainerId).scrollTop = 0;
+}
+
+/* ── PUBLICACIONES ── */
+function renderPubList() { renderListaGenerica(pubs, 'pub-list', activePubId, openPub); }
 
 function openPub(id) {
   activePubId = id;
   var p = pubs.find(function(x){ return x.id === id; });
   if (!p) return;
-  document.querySelectorAll('.pub-item').forEach(function(el, i){ el.classList.toggle('active', pubs[i] && pubs[i].id === id); });
+  renderPubList();
+  abrirDetalleGenerico(p, 'pub', 'publicaciones', 'pub-detail');
+}
 
-  document.getElementById('pub-empty').style.display = 'none';
-  var inner = document.getElementById('pub-inner');
-  inner.classList.remove('visible'); void inner.offsetWidth; inner.classList.add('visible');
+/* ── CONCURSOS ── */
+function renderConcursoList() { renderListaGenerica(concursos, 'concurso-list', activeConcursoId, openConcurso); }
 
-  document.getElementById('p-yr').textContent = p.anio || '';
-  document.getElementById('p-title').textContent = p.titulo || '';
-  document.getElementById('p-cat').textContent = p.categoria || '';
-  document.getElementById('p-text').textContent = p.texto || '';
-
-  var fotosEl = document.getElementById('p-fotos');
-  fotosEl.innerHTML = '';
-  (p.fotos || []).forEach(function(f) {
-    var img = document.createElement('img');
-    img.src = 'publicaciones/' + p.id + '/' + f;
-    img.onerror = function(){ this.style.display = 'none'; };
-    fotosEl.appendChild(img);
-  });
-
-  document.getElementById('pub-detail').scrollTop = 0;
+function openConcurso(id) {
+  activeConcursoId = id;
+  var p = concursos.find(function(x){ return x.id === id; });
+  if (!p) return;
+  renderConcursoList();
+  abrirDetalleGenerico(p, 'concurso', 'publicaciones', 'concurso-detail');
 }
 
 /* ── BLOG ── */
@@ -365,6 +422,17 @@ document.getElementById('blog-pdf-btn').addEventListener('click', function() {
   var filename = (currentPost.titulo || 'articulo').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '.pdf';
   doc.save(filename);
 });
+
+(function() {
+  var sw = document.getElementById('lang-switch');
+  if (!sw) return;
+  sw.addEventListener('click', function(e) {
+    if (!e.target.classList.contains('lang-btn')) return;
+    sw.querySelectorAll('.lang-btn').forEach(function(b){ b.classList.remove('active'); });
+    e.target.classList.add('active');
+    document.documentElement.setAttribute('data-lang', e.target.dataset.lang);
+  });
+})();
 
 loadData();
 </script>
