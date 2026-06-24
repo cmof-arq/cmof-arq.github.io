@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Publicaciones, concursos, premios y blog de CMOF Architecture Office.">
+<title>Publicaciones & Blog | CMOF Architecture Office</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+
+<!-- jsPDF para exportar artículos del blog a PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<style>
+@font-face {
+  font-family: 'Conthrax';
+  src: url('assets/fonts/CONTHRAX-SEMIBOLD.OTF') format('opentype');
+  font-weight: 600; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_BOLD.TTF') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Square721BT';
+  src: url('assets/fonts/SQUARE721_BT_ROMAN.TTF') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+
+:root {
+  --bg: #111110; --surface: #1a1a18; --surface2: #222220;
+  --orange: #ff6600; --blue: #8cd7f7; --muted: #888880;
+  --border: #2a2a28; --border2: #333330; --text: #e8e6e0;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { height:100%; background: var(--bg); color: var(--text); font-family:'Square721BT', sans-serif; overflow:hidden; }
+
+/* TOPBAR */
+.topbar { flex-shrink:0; height:48px; display:flex; align-items:center; padding:0 1.5rem; border-bottom:1px solid var(--border); background:var(--bg); gap:1.5rem; position:relative; z-index:10; }
+.topbar-logo { display:flex; align-items:center; gap:0.8rem; text-decoration:none; }
+.topbar-logo img { height:28px; width:auto; }
+.topbar-name { font-family:'Conthrax', sans-serif; font-size:0.7rem; letter-spacing:0.12em; text-transform:uppercase; color: var(--text); }
+.topbar-sep { width:1px; height:20px; background: var(--border2); }
+.topbar-section { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: var(--orange); }
+.topbar-nav { margin-left:auto; display:flex; align-items:center; gap:1.5rem; }
+.topbar-nav a { font-size:0.62rem; letter-spacing:0.15em; text-transform:uppercase; color:#0E6BA8; text-decoration:none; transition:opacity 0.2s; }
+.topbar-nav a:hover { opacity:0.75; }
+.topbar-nav a.active { opacity:1; color: var(--orange); }
+
+.page { display:flex; flex-direction:column; height:100vh; }
+
+/* TABS principales */
+.section-tabs { flex-shrink:0; display:flex; gap:0; border-bottom:1px solid var(--border); background: var(--surface); }
+.section-tab { padding:0.9rem 1.8rem; font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color: var(--muted); cursor:pointer; border-bottom:2px solid transparent; transition: color 0.2s, border-color 0.2s; }
+.section-tab:hover { color: var(--text); }
+.section-tab.active { color: var(--orange); border-bottom-color: var(--orange); }
+
+.section-panel { display:none; flex:1; overflow:hidden; }
+.section-panel.active { display:flex; }
+
+/* ══ PUBLICACIONES: sidebar 1/7 + detalle 6/7 (igual patrón Portfolio) ══ */
+.sidebar { width: calc(100% / 7); min-width:160px; max-width:220px; flex-shrink:0; background: var(--surface); border-right:1px solid var(--border); display:flex; flex-direction:column; overflow:hidden; }
+.sidebar-head { padding:0.9rem 1rem 0.7rem; border-bottom:1px solid var(--border); flex-shrink:0; }
+.sidebar-head h2 { font-size:0.6rem; letter-spacing:0.2em; text-transform:uppercase; color: var(--orange); }
+.pub-list { flex:1; overflow-y:auto; padding:0.4rem 0; }
+.pub-item { padding:0.65rem 1rem; cursor:pointer; border-left:2px solid transparent; transition: background 0.12s, border-color 0.12s; }
+.pub-item:hover { background: var(--surface2); }
+.pub-item.active { background: var(--surface2); border-left-color: var(--orange); }
+.pi-yr { font-size:0.58rem; letter-spacing:0.12em; color: var(--orange); }
+.pi-title { font-size:0.78rem; color: var(--text); line-height:1.35; margin-top:2px; }
+.pi-cat { font-size:0.62rem; color: var(--muted); margin-top:2px; }
+
+.detail { flex:1; overflow-y:auto; background: var(--bg); }
+.detail-empty { height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.8rem; color: var(--muted); }
+.detail-empty .de-logo { font-family:'Conthrax', sans-serif; font-size:1.4rem; letter-spacing:0.2em; color: var(--border2); text-transform:uppercase; }
+.detail-inner { display:none; padding:2.5rem 3rem; max-width:900px; }
+.detail-inner.visible { display:block; animation: slideIn 0.25s ease both; }
+@keyframes slideIn { from { opacity:0; transform: translateX(12px); } to { opacity:1; transform: translateX(0); } }
+
+.det-yr { font-size:0.65rem; letter-spacing:0.2em; text-transform:uppercase; color: var(--orange); margin-bottom:0.5rem; }
+.det-title { font-family:'Conthrax', sans-serif; font-size:clamp(1.2rem, 2.2vw, 1.8rem); letter-spacing:0.04em; line-height:1.25; margin-bottom:0.6rem; }
+.det-cat { font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; color: var(--blue); margin-bottom:1.8rem; }
+.det-fotos { display:flex; gap:0.6rem; flex-wrap:wrap; margin-bottom:1.8rem; }
+.det-fotos img { width: 220px; height:150px; object-fit:cover; background: var(--surface); }
+.det-text { font-size:0.86rem; line-height:1.85; color: var(--text); white-space:pre-wrap; max-width:680px; }
+
+/* ══ BLOG: lista ancha de artículos ══ */
+.blog-wrap { flex:1; overflow-y:auto; padding: 2.5rem 3rem; }
+.blog-list { max-width: 880px; margin:0 auto; display:flex; flex-direction:column; gap:0; }
+.blog-item { padding: 1.6rem 0; border-bottom:1px solid var(--border); cursor:pointer; }
+.blog-item:hover .blog-title { color: var(--orange); }
+.blog-yr { font-size:0.6rem; letter-spacing:0.18em; text-transform:uppercase; color: var(--blue); margin-bottom:0.4rem; }
+.blog-title { font-family:'Conthrax', sans-serif; font-size:1.1rem; letter-spacing:0.02em; color: var(--text); transition: color 0.2s; margin-bottom:0.4rem; }
+.blog-excerpt { font-size:0.8rem; color: var(--muted); line-height:1.6; }
+
+/* Artículo de blog abierto: overlay full */
+.blog-article-overlay { display:none; position:fixed; inset:0; background: var(--bg); z-index:30; overflow-y:auto; }
+.blog-article-overlay.visible { display:block; }
+.blog-article-top { display:flex; align-items:center; justify-content:space-between; padding:1rem 2rem; border-bottom:1px solid var(--border); position:sticky; top:0; background: var(--bg); z-index:2; }
+.blog-back { font-size:0.7rem; letter-spacing:0.1em; text-transform:uppercase; color: var(--muted); cursor:pointer; }
+.blog-back:hover { color: var(--orange); }
+.blog-pdf-btn { display:flex; align-items:center; gap:0.5rem; font-size:0.65rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.5rem 1rem; border:1px solid #0E6BA8; color:#8cd7f7; background:transparent; border-radius:3px; cursor:pointer; transition: background 0.2s; }
+.blog-pdf-btn:hover { background: rgba(14,107,168,0.15); }
+.blog-article-body { max-width: 760px; margin: 0 auto; padding: 3rem 2rem 5rem; }
+.blog-article-body .det-yr { }
+.blog-article-body .det-title { font-size: clamp(1.4rem, 3vw, 2.2rem); margin-bottom:1.2rem; }
+.blog-article-body .det-fotos img { width:100%; max-width:760px; height:auto; max-height:420px; object-fit:cover; }
+.blog-article-body .det-fotos { flex-direction:column; }
+
+.empty-msg { color: var(--muted); font-size:0.8rem; font-style:italic; text-align:center; padding:3rem; }
+
+@media (max-width: 768px) {
+  .topbar-nav { display:none; }
+  .sidebar { width:100%; max-width:none; height:200px; border-right:none; border-bottom:1px solid var(--border); }
+  .pub-list { display:flex; flex-direction:row; overflow-x:auto; overflow-y:hidden; padding:0.4rem; }
+  .pub-item { flex-shrink:0; min-width:140px; border-left:none; border-bottom:2px solid transparent; }
+  .pub-item.active { border-left:none; border-bottom-color: var(--orange); }
+  .section-panel.active { flex-direction:column; }
+  .detail-inner { padding:1.5rem; max-width:100%; }
+  .blog-wrap { padding: 1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <a class="topbar-logo" href="index.html">
+      <img src="LOGO-CMOF - Q-2023 - ORIGINAL.png" alt="CMOF">
+      <span class="topbar-name">CMOF</span>
+    </a>
+    <div class="topbar-sep"></div>
+    <span class="topbar-section">Publicaciones & Blog</span>
+    <nav class="topbar-nav">
+      <a href="index.html">Home</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="web-estudio.html">Estudio</a>
+      <a href="web-publicaciones.html" class="active">Publicaciones</a>
+      <a href="web-contacto.html">Contacto</a>
+    </nav>
+  </div>
+
+  <!-- TABS -->
+  <div class="section-tabs">
+    <div class="section-tab active" data-tab="pub">Publicaciones, Concursos & Premios</div>
+    <div class="section-tab" data-tab="blog">Blog</div>
+  </div>
+
+  <!-- PANEL: PUBLICACIONES -->
+  <div class="section-panel active" id="panel-pub">
+    <div class="sidebar">
+      <div class="sidebar-head"><h2>Listado</h2></div>
+      <div class="pub-list" id="pub-list"></div>
+    </div>
+    <div class="detail" id="pub-detail">
+      <div class="detail-empty" id="pub-empty">
+        <div class="de-logo">CMOF</div>
+        <p>Seleccioná una publicación</p>
+      </div>
+      <div class="detail-inner" id="pub-inner">
+        <div class="det-yr" id="p-yr"></div>
+        <div class="det-title" id="p-title"></div>
+        <div class="det-cat" id="p-cat"></div>
+        <div class="det-fotos" id="p-fotos"></div>
+        <div class="det-text" id="p-text"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: BLOG -->
+  <div class="section-panel" id="panel-blog">
+    <div class="blog-wrap">
+      <div class="blog-list" id="blog-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Artículo de blog abierto (overlay full screen) -->
+<div class="blog-article-overlay" id="blog-overlay">
+  <div class="blog-article-top">
+    <span class="blog-back" id="blog-back">← Volver al Blog</span>
+    <button class="blog-pdf-btn" id="blog-pdf-btn">⇩ Descargar PDF</button>
+  </div>
+  <div class="blog-article-body">
+    <div class="det-yr" id="b-yr"></div>
+    <div class="det-title" id="b-title"></div>
+    <div class="det-fotos" id="b-fotos"></div>
+    <div class="det-text" id="b-text"></div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════
+   PUBLICACIONES & BLOG
+   Carga desde publicaciones-data.js (admin local)
+══════════════════════════════════════════════════ */
+
+var pubs = [];
+var posts = [];
+var activePubId = null;
+
+function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function demoData() {
+  return {
+    publicaciones: [
+      { id:'p1', anio:'2024', titulo:'Premio Hábitat — Mención Hospitality', categoria:'Premio', texto:'El proyecto Böden Hotel & SPA recibió mención especial en la categoría hospitality boutique.', fotos:[] }
+    ],
+    posts: [
+      { id:'b1', anio:'2024', fecha:'12/03/2024', titulo:'Pensar antes de medir', excerpt:'Sobre el rol del boceto manual como acto de pausa antes del diseño técnico.', texto:'El boceto a mano alzada no es un paso previo al proyecto: es el proyecto pensándose a sí mismo antes de volverse medible.\n\nEn una época donde el software permite saltar directo a la precisión, vale la pena detenerse en ese instante intermedio donde la idea todavía es maleable.', fotos:[] }
+    ]
+  };
+}
+
+/* ── Carga ── */
+function loadData() {
+  var s = document.createElement('script');
+  s.src = 'publicaciones-data.js';
+  s.onload = function() {
+    var d = (typeof publicacionesData !== 'undefined') ? publicacionesData : demoData();
+    init(d);
+  };
+  s.onerror = function() { init(demoData()); };
+  document.head.appendChild(s);
+}
+
+function init(d) {
+  pubs  = (d.publicaciones || []).slice().sort(function(a,b){ return (b.anio||'').localeCompare(a.anio||''); });
+  posts = (d.posts || []).slice().sort(function(a,b){ return (b.anio||'').localeCompare(a.anio||''); });
+  renderPubList();
+  renderBlogList();
+}
+
+/* ── TABS ── */
+document.querySelectorAll('.section-tab').forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.section-tab').forEach(function(t){ t.classList.remove('active'); });
+    document.querySelectorAll('.section-panel').forEach(function(p){ p.classList.remove('active'); });
+    tab.classList.add('active');
+    document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+  });
+});
+
+/* ── PUBLICACIONES ── */
+function renderPubList() {
+  var list = document.getElementById('pub-list');
+  if (pubs.length === 0) { list.innerHTML = '<div class="empty-msg">Sin publicaciones cargadas.</div>'; return; }
+  list.innerHTML = '';
+  pubs.forEach(function(p) {
+    var item = document.createElement('div');
+    item.className = 'pub-item' + (p.id === activePubId ? ' active' : '');
+    item.innerHTML = '<div class="pi-yr">' + xe(p.anio) + '</div><div class="pi-title">' + xe(p.titulo) + '</div><div class="pi-cat">' + xe(p.categoria||'') + '</div>';
+    item.addEventListener('click', function(){ openPub(p.id); });
+    list.appendChild(item);
+  });
+}
+
+function openPub(id) {
+  activePubId = id;
+  var p = pubs.find(function(x){ return x.id === id; });
+  if (!p) return;
+  document.querySelectorAll('.pub-item').forEach(function(el, i){ el.classList.toggle('active', pubs[i] && pubs[i].id === id); });
+
+  document.getElementById('pub-empty').style.display = 'none';
+  var inner = document.getElementById('pub-inner');
+  inner.classList.remove('visible'); void inner.offsetWidth; inner.classList.add('visible');
+
+  document.getElementById('p-yr').textContent = p.anio || '';
+  document.getElementById('p-title').textContent = p.titulo || '';
+  document.getElementById('p-cat').textContent = p.categoria || '';
+  document.getElementById('p-text').textContent = p.texto || '';
+
+  var fotosEl = document.getElementById('p-fotos');
+  fotosEl.innerHTML = '';
+  (p.fotos || []).forEach(function(f) {
+    var img = document.createElement('img');
+    img.src = 'publicaciones/' + p.id + '/' + f;
+    img.onerror = function(){ this.style.display = 'none'; };
+    fotosEl.appendChild(img);
+  });
+
+  document.getElementById('pub-detail').scrollTop = 0;
+}
+
+/* ── BLOG ── */
+function renderBlogList() {
+  var list = document.getElementById('blog-list');
+  if (posts.length === 0) { list.innerHTML = '<div class="empty-msg">Sin artículos publicados todavía.</div>'; return; }
+  list.innerHTML = '';
+  posts.forEach(function(post) {
+    var item = document.createElement('div');
+    item.className = 'blog-item';
+    item.innerHTML = '<div class="blog-yr">' + xe(post.anio) + (post.fecha ? ' — ' + xe(post.fecha) : '') + '</div>' +
+      '<div class="blog-title">' + xe(post.titulo) + '</div>' +
+      '<div class="blog-excerpt">' + xe(post.excerpt || '') + '</div>';
+    item.addEventListener('click', function(){ openPost(post.id); });
+    list.appendChild(item);
+  });
+}
+
+var currentPost = null;
+
+function openPost(id) {
+  var post = posts.find(function(x){ return x.id === id; });
+  if (!post) return;
+  currentPost = post;
+
+  document.getElementById('b-yr').textContent = (post.anio||'') + (post.fecha ? ' — ' + post.fecha : '');
+  document.getElementById('b-title').textContent = post.titulo || '';
+  document.getElementById('b-text').textContent = post.texto || '';
+
+  var fotosEl = document.getElementById('b-fotos');
+  fotosEl.innerHTML = '';
+  (post.fotos || []).forEach(function(f) {
+    var img = document.createElement('img');
+    img.src = 'blog/' + post.id + '/' + f;
+    img.onerror = function(){ this.style.display = 'none'; };
+    fotosEl.appendChild(img);
+  });
+
+  document.getElementById('blog-overlay').classList.add('visible');
+  document.getElementById('blog-overlay').scrollTop = 0;
+}
+
+document.getElementById('blog-back').addEventListener('click', function() {
+  document.getElementById('blog-overlay').classList.remove('visible');
+});
+
+/* ── Descarga PDF del artículo (texto; las imágenes se referencian por nombre) ── */
+document.getElementById('blog-pdf-btn').addEventListener('click', function() {
+  if (!currentPost || typeof jspdf === 'undefined') return;
+  var doc = new jspdf.jsPDF({ unit: 'mm', format: 'a4' });
+  var marginX = 20, marginTop = 25, maxWidth = 170, y = marginTop;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8);
+  doc.setTextColor(255, 102, 0);
+  doc.text('CMOF ARCHITECTURE OFFICE', marginX, 15);
+
+  doc.setFontSize(18);
+  doc.setTextColor(20, 20, 20);
+  var titleLines = doc.splitTextToSize(currentPost.titulo || '', maxWidth);
+  doc.text(titleLines, marginX, y);
+  y += titleLines.length * 8 + 4;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(120, 120, 120);
+  doc.text((currentPost.anio||'') + (currentPost.fecha ? ' — ' + currentPost.fecha : ''), marginX, y);
+  y += 10;
+
+  doc.setFontSize(11);
+  doc.setTextColor(40, 40, 40);
+  var bodyLines = doc.splitTextToSize(currentPost.texto || '', maxWidth);
+  bodyLines.forEach(function(line) {
+    if (y > 280) { doc.addPage(); y = marginTop; }
+    doc.text(line, marginX, y);
+    y += 6;
+  });
+
+  var filename = (currentPost.titulo || 'articulo').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') + '.pdf';
+  doc.save(filename);
+});
+
+loadData();
+</script>
+</body>
+</html>

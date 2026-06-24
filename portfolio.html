@@ -195,19 +195,12 @@ html, body {
   flex-shrink: 0;
 }
 
-.sidebar-head-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5rem;
-}
-
 .sidebar-head h2 {
   font-size: 0.6rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--orange);
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
 }
 
 .sort-btn {
@@ -238,10 +231,17 @@ html, body {
   color: var(--muted);
   margin-bottom: 0.35rem;
 }
-.filter-label-year {
+.filter-label-year-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 0.6rem;
   padding-top: 0.6rem;
   border-top: 1px solid var(--border);
+  margin-bottom: 0.35rem;
+}
+.filter-label-year-row .filter-label {
+  margin-bottom: 0;
 }
 
 .filters {
@@ -606,7 +606,7 @@ html, body {
       <a href="index.html">Home</a>
       <a href="portfolio.html" class="active">Portfolio</a>
       <a href="web-estudio.html">Estudio</a>
-      <a href="publicaciones.html">Publicaciones</a>
+      <a href="web-publicaciones.html">Publicaciones</a>
       <a href="cv.html">CV</a>
       <a href="contacto.html">Contacto</a>
     </nav>
@@ -623,19 +623,19 @@ html, body {
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
       <div class="sidebar-head">
-        <div class="sidebar-head-top">
-          <h2>Proyectos</h2>
-          <button class="sort-btn" id="sortYearBtn" title="Ordenar por año">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h6M3 12h4M3 17h2M16 4v16M16 4l-3 3M16 4l3 3"/></svg>
-            Año ↓
-          </button>
-        </div>
+        <h2>Proyectos</h2>
         <div class="filter-label">Tipo</div>
         <div class="filters" id="filters">
           <button class="filter-btn active" data-filter="all">Todos</button>
           <!-- Generado por JS desde las tipologías presentes -->
         </div>
-        <div class="filter-label filter-label-year">Año</div>
+        <div class="filter-label-year-row">
+          <div class="filter-label">Año</div>
+          <button class="sort-btn" id="sortYearBtn" title="Ordenar por año">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h6M3 12h4M3 17h2M16 4v16M16 4l-3 3M16 4l3 3"/></svg>
+            Ordenar
+          </button>
+        </div>
         <div class="filters filters-year" id="filtersYear">
           <!-- Generado por JS desde los años presentes -->
         </div>
