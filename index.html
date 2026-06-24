@@ -221,15 +221,11 @@ html, body {
   flex-shrink: 0;
   margin-right: 3px;
   display: block;
-}
-
-/* Capa color: se revela solo en el centro via mask, definida inline por JS */
-.layer-color {
-  z-index: 2;
-}
-.layer-bw {
-  z-index: 1;
   filter: grayscale(1) contrast(1.05);
+  transition: filter 0.5s ease;
+}
+.filmstrip-layer img.hovered {
+  filter: grayscale(0) contrast(1);
 }
 
 /* ─── FAJA FOOTER (1/32) ─── */
@@ -324,7 +320,7 @@ html, body {
 
   <!-- ═══ BANDA 2: CINTA 1 ═══ -->
   <div class="filmstrip-wrap" id="strip-wrap-1">
-    <div class="filmstrip-layer layer-color" id="strip-1">
+    <div class="filmstrip-layer" id="strip-1">
       <img src="cintas/cinta-1/img-01.png" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-1/img-02.png" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-1/img-03.png" alt="" onerror="this.style.display='none'">
@@ -342,7 +338,7 @@ html, body {
 
   <!-- ═══ BANDA 3: CINTA 2 ═══ -->
   <div class="filmstrip-wrap" id="strip-wrap-2">
-    <div class="filmstrip-layer layer-color" id="strip-2">
+    <div class="filmstrip-layer" id="strip-2">
       <img src="cintas/cinta-2/img-01.png" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-2/img-02.png" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-2/img-03.png" alt="" onerror="this.style.display='none'">
@@ -360,7 +356,7 @@ html, body {
 
   <!-- ═══ BANDA 4: CINTA 3 ═══ -->
   <div class="filmstrip-wrap" id="strip-wrap-3">
-    <div class="filmstrip-layer layer-color" id="strip-3">
+    <div class="filmstrip-layer" id="strip-3">
       <img src="cintas/cinta-3/img-01.png" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-3/img-02.png" alt="" onerror="this.style.display='none'">
       <img src="cintas/cinta-3/img-03.png" alt="" onerror="this.style.display='none'">
@@ -445,96 +441,71 @@ html, body {
   var MAX_MULT = 2;
 
   configs.forEach(function(cfg) {
-    var wrap      = document.getElementById(cfg.wrapId);
-    var colorLayer = document.getElementById(cfg.stripId);
-    if (!wrap || !colorLayer) return;
+    var wrap  = document.getElementById(cfg.wrapId);
+    var strip = document.getElementById(cfg.stripId);
+    if (!wrap || !strip) return;
 
     var mouseX  = -1;
+    var mouseY  = -1;
     var speed   = cfg.baseSpeed;
     var absBase = Math.abs(cfg.baseSpeed);
-
-    // ── Crear capa B/N duplicando la capa de color ──
-    var bwLayer = colorLayer.cloneNode(true);
-    bwLayer.id = '';
-    bwLayer.className = 'filmstrip-layer layer-bw';
-    wrap.insertBefore(bwLayer, colorLayer);
-
-    // La capa de color se revela solo donde la máscara es opaca (blanco = visible)
-    colorLayer.style.webkitMaskRepeat = 'no-repeat';
-    colorLayer.style.maskRepeat = 'no-repeat';
-    colorLayer.style.webkitMaskSize = '100% 100%';
-    colorLayer.style.maskSize = '100% 100%';
-
-    function applyMask(relX) {
-      var w = wrap.offsetWidth;
-      if (relX < 0) {
-        // Sin mouse: todo en B/N (oculta capa color por completo)
-        colorLayer.style.webkitMaskImage = 'linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0))';
-        colorLayer.style.maskImage = 'linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0))';
-        return;
-      }
-      var third  = w / 3;
-      var cx     = Math.max(third * 0.5, Math.min(w - third * 0.5, relX));
-      var fadeW  = third * 0.6;
-      var p0 = Math.max(0, cx - fadeW);
-      var p1 = cx;
-      var p2 = cx;
-      var p3 = Math.min(w, cx + fadeW);
-      var pct = function(px) { return (px / w * 100).toFixed(2) + '%'; };
-
-      var grad = 'linear-gradient(to right,' +
-        ' rgba(0,0,0,0) 0%,' +
-        ' rgba(0,0,0,0) ' + pct(p0) + ',' +
-        ' rgba(0,0,0,1) ' + pct(p1) + ',' +
-        ' rgba(0,0,0,1) ' + pct(p2) + ',' +
-        ' rgba(0,0,0,0) ' + pct(p3) + ',' +
-        ' rgba(0,0,0,0) 100%)';
-
-      colorLayer.style.webkitMaskImage = grad;
-      colorLayer.style.maskImage = grad;
-    }
-
-    // Estado inicial: todo B/N (sin mouse)
-    applyMask(-1);
+    var currentHovered = null;
 
     // ── Loop de imágenes: duplicar contenido para scroll infinito ──
-    function ensureLoop(layer) {
-      var imgs = layer.querySelectorAll('img');
+    function ensureLoop() {
+      var imgs = strip.querySelectorAll('img');
       var visible = Array.from(imgs).filter(function(i){ return i.style.display !== 'none'; });
-      if (visible.length === 0 || layer.dataset.looped) return;
+      if (visible.length === 0 || strip.dataset.looped) return;
       visible.forEach(function(img) {
-        layer.appendChild(img.cloneNode(true));
+        strip.appendChild(img.cloneNode(true));
       });
-      layer.dataset.looped = '1';
+      strip.dataset.looped = '1';
     }
 
-    [colorLayer, bwLayer].forEach(function(layer) {
-      var imgs = layer.querySelectorAll('img');
-      var loaded = 0;
-      if (imgs.length === 0) { ensureLoop(layer); return; }
+    var imgs = strip.querySelectorAll('img');
+    var loaded = 0;
+    if (imgs.length === 0) { ensureLoop(); }
+    else {
       imgs.forEach(function(img) {
-        if (img.complete) { loaded++; if (loaded >= imgs.length) ensureLoop(layer); }
+        if (img.complete) { loaded++; if (loaded >= imgs.length) ensureLoop(); }
         else {
-          img.addEventListener('load',  function(){ loaded++; if (loaded >= imgs.length) ensureLoop(layer); });
-          img.addEventListener('error', function(){ loaded++; if (loaded >= imgs.length) ensureLoop(layer); });
+          img.addEventListener('load',  function(){ loaded++; if (loaded >= imgs.length) ensureLoop(); });
+          img.addEventListener('error', function(){ loaded++; if (loaded >= imgs.length) ensureLoop(); });
         }
       });
-    });
+    }
 
     // ── Mouse / touch ──
-    wrap.addEventListener('mouseenter', function(e) { mouseX = e.clientX; });
-    wrap.addEventListener('mousemove',  function(e) { mouseX = e.clientX; });
-    wrap.addEventListener('mouseleave', function()  { mouseX = -1; });
-    wrap.addEventListener('touchmove', function(e) { mouseX = e.touches[0].clientX; }, {passive: true});
-    wrap.addEventListener('touchend',  function()   { mouseX = -1; }, {passive: true});
+    wrap.addEventListener('mouseenter', function(e) { mouseX = e.clientX; mouseY = e.clientY; });
+    wrap.addEventListener('mousemove',  function(e) { mouseX = e.clientX; mouseY = e.clientY; });
+    wrap.addEventListener('mouseleave', function()  {
+      mouseX = -1; mouseY = -1;
+      if (currentHovered) { currentHovered.classList.remove('hovered'); currentHovered = null; }
+    });
+    wrap.addEventListener('touchmove', function(e) { mouseX = e.touches[0].clientX; mouseY = e.touches[0].clientY; }, {passive: true});
+    wrap.addEventListener('touchend',  function()   {
+      mouseX = -1; mouseY = -1;
+      if (currentHovered) { currentHovered.classList.remove('hovered'); currentHovered = null; }
+    }, {passive: true});
+
+    // ── Detecta qué imagen está exactamente bajo el cursor y le aplica color ──
+    function updateHoveredImage() {
+      if (mouseX < 0) return;
+      var el = document.elementFromPoint(mouseX, mouseY);
+      var img = (el && el.tagName === 'IMG' && el.closest('#' + cfg.stripId)) ? el : null;
+      if (img !== currentHovered) {
+        if (currentHovered) currentHovered.classList.remove('hovered');
+        if (img) img.classList.add('hovered');
+        currentHovered = img;
+      }
+    }
 
     // ── RAF loop ──
     (function tick() {
-      var halfW = colorLayer.scrollWidth / 2;
+      var halfW = strip.scrollWidth / 2;
 
       if (mouseX < 0) {
         speed = cfg.baseSpeed;
-        applyMask(-1);
       } else {
         var rect   = wrap.getBoundingClientRect();
         var relX   = mouseX - rect.left;
@@ -542,11 +513,10 @@ html, body {
         var norm   = Math.max(-1, Math.min(1, (relX - center) / center)); // -1…+1, 0 en el centro
 
         // Curva suave: 0 en el centro, hasta MAX_MULT en los extremos.
-        // Se usa norm^2 con signo para una aceleración gradual (no lineal abrupta).
         var curved = Math.sign(norm) * Math.pow(Math.abs(norm), 1.6);
         speed = curved * absBase * MAX_MULT * Math.sign(cfg.baseSpeed || 1);
 
-        applyMask(relX);
+        updateHoveredImage();
       }
 
       cfg.pos -= speed;
@@ -555,8 +525,7 @@ html, body {
         if (cfg.pos > 0)       cfg.pos -= halfW;
       }
 
-      colorLayer.style.transform = 'translateX(' + cfg.pos + 'px)';
-      bwLayer.style.transform    = 'translateX(' + cfg.pos + 'px)';
+      strip.style.transform = 'translateX(' + cfg.pos + 'px)';
       requestAnimationFrame(tick);
     })();
 
