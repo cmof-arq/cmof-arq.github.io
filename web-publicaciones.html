@@ -191,17 +191,25 @@ html, body { height:100%; background: var(--bg); color: var(--text); font-family
       <div class="sidebar-head"><h2>Publicaciones</h2></div>
       <div class="pub-list" id="pub-list"></div>
     </div>
-    <div class="detail" id="pub-detail">
+    <div class="concurso-detail-wrap" id="pub-detail">
       <div class="detail-empty" id="pub-empty">
         <div class="de-logo">CMOF</div>
         <p>Seleccioná una publicación</p>
       </div>
-      <div class="detail-inner" id="pub-inner">
-        <div class="det-yr" id="p-yr"></div>
-        <div class="det-title" id="p-title"></div>
-        <div class="det-cat" id="p-cat"></div>
-        <div class="det-fotos" id="p-fotos"></div>
-        <div class="det-text" id="p-text"></div>
+      <div class="concurso-inner" id="pub-inner">
+        <div class="concurso-head">
+          <div class="det-yr" id="p-yr"></div>
+          <div class="det-title" id="p-title"></div>
+          <div class="det-cat" id="p-cat"></div>
+        </div>
+        <div class="concurso-cols">
+          <div class="concurso-col concurso-col-text" id="p-text-col">
+            <div class="det-text" id="p-text"></div>
+          </div>
+          <div class="concurso-col concurso-col-fotos" id="p-fotos-col">
+            <div class="concurso-fotos" id="p-fotos"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -331,17 +339,19 @@ function renderListaGenerica(items, listId, activeId, onClick) {
   });
 }
 
-function abrirDetalleGenerico(item, prefix, folderBase, scrollContainerId) {
+/* ── Abre el detalle en el layout de 2 columnas (usado por Publicaciones y Concursos) ── */
+function abrirDetalleSplit(item, prefix, folderBase) {
   document.getElementById(prefix + '-empty').style.display = 'none';
   var inner = document.getElementById(prefix + '-inner');
   inner.classList.remove('visible'); void inner.offsetWidth; inner.classList.add('visible');
 
-  document.getElementById('p-yr').textContent = item.anio || '';
-  document.getElementById('p-title').textContent = item.titulo || '';
-  document.getElementById('p-cat').textContent = item.categoria || '';
-  document.getElementById('p-text').textContent = item.texto || '';
+  var letra = prefix === 'pub' ? 'p' : 'c';
+  document.getElementById(letra + '-yr').textContent = item.anio || '';
+  document.getElementById(letra + '-title').textContent = item.titulo || '';
+  document.getElementById(letra + '-cat').textContent = item.categoria || '';
+  document.getElementById(letra + '-text').textContent = item.texto || '';
 
-  var fotosEl = document.getElementById('p-fotos');
+  var fotosEl = document.getElementById(letra + '-fotos');
   fotosEl.innerHTML = '';
   (item.fotos || []).forEach(function(f) {
     var img = document.createElement('img');
@@ -350,7 +360,9 @@ function abrirDetalleGenerico(item, prefix, folderBase, scrollContainerId) {
     fotosEl.appendChild(img);
   });
 
-  document.getElementById(scrollContainerId).scrollTop = 0;
+  // Resetear scroll de ambas columnas al abrir un nuevo ítem
+  document.getElementById(letra + '-text-col').scrollTop = 0;
+  document.getElementById(letra + '-fotos-col').scrollTop = 0;
 }
 
 /* ── PUBLICACIONES ── */
@@ -361,7 +373,7 @@ function openPub(id) {
   var p = pubs.find(function(x){ return x.id === id; });
   if (!p) return;
   renderPubList();
-  abrirDetalleGenerico(p, 'pub', 'publicaciones', 'pub-detail');
+  abrirDetalleSplit(p, 'pub', 'publicaciones');
 }
 
 /* ── CONCURSOS ── */
@@ -372,28 +384,7 @@ function openConcurso(id) {
   var p = concursos.find(function(x){ return x.id === id; });
   if (!p) return;
   renderConcursoList();
-
-  document.getElementById('concurso-empty').style.display = 'none';
-  var inner = document.getElementById('concurso-inner');
-  inner.classList.remove('visible'); void inner.offsetWidth; inner.classList.add('visible');
-
-  document.getElementById('c-yr').textContent = p.anio || '';
-  document.getElementById('c-title').textContent = p.titulo || '';
-  document.getElementById('c-cat').textContent = p.categoria || '';
-  document.getElementById('c-text').textContent = p.texto || '';
-
-  var fotosEl = document.getElementById('c-fotos');
-  fotosEl.innerHTML = '';
-  (p.fotos || []).forEach(function(f) {
-    var img = document.createElement('img');
-    img.src = 'publicaciones/' + p.id + '/' + f;
-    img.onerror = function(){ this.style.display = 'none'; };
-    fotosEl.appendChild(img);
-  });
-
-  // Resetear scroll de ambas columnas al abrir un nuevo concurso
-  document.getElementById('c-text-col').scrollTop = 0;
-  document.getElementById('c-fotos-col').scrollTop = 0;
+  abrirDetalleSplit(p, 'concurso', 'publicaciones');
 }
 
 /* ── BLOG ── */
