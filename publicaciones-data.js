@@ -1,4 +1,4 @@
-// Generado por CMOF Admin Publicaciones & Blog — 24/6/2026, 11:18:04 p.m.
+// Generado por CMOF Admin Publicaciones & Blog — 24/6/2026, 11:37:14 p.m.
 var publicacionesData = {
   "publicaciones": [
     {
@@ -13,7 +13,14 @@ var publicacionesData = {
         "TOMIHIRO-003-gemini2.png",
         "TOMIHIRO-004.png",
         "TOMIHIRO-004-b.png",
-        "TOMIHIRO-006.png"
+        "TOMIHIRO-006.png",
+        "TOMIHIRO-SKETCH-001-b.png",
+        "TOMIHIRO-SKETCH-002-b.png",
+        "TOMIHIRO-SKETCH-003-b.png",
+        "TOMIHIRO-SKETCH-004-b.png",
+        "TOMIHIRO-SKETCH-005-b.png",
+        "TOMIHIRO-SKETCH-006-b.png",
+        "TOMIHIRO-SKETCH-007-b.png"
       ]
     },
     {
