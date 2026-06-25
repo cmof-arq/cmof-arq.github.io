@@ -1,4 +1,4 @@
-// Generado por CMOF Admin Publicaciones & Blog — 25/6/2026, 12:45:16 a.m.
+// Generado por CMOF Admin Publicaciones & Blog — 25/6/2026, 12:45:34 a.m.
 var publicacionesData = {
   "publicaciones": [
     {
@@ -41,7 +41,7 @@ var publicacionesData = {
     },
     {
       "id": "pub_1782355737452_qvt7w",
-      "anio": "2026",
+      "anio": "2023",
       "titulo": "PREMIO BIENAL OBRA CONSTRUIDA  -  CAPC  (2023)",
       "categoria": "Concurso",
       "texto": "Premio Bienal Obra Construida\n\nEl Colegio de Arquitectos de la Provincia de Córdoba crea este\npremio bienal para reconocer, promover y estimular el aporte que\nlas realizaciones de los profesionales de la arquitectura hacen a\nnuestro contexto cultural, social, urbano y rural. La iniciativa surge\ncon el objeto de valorar aquellas obras e intervenciones que han\ncontribuido, por su calidad y compromiso, a mejorar la calidad de\nvida de nuestra comunidad, a partir de su relación con nuestro\nentorno, el medio ambiente, la historia y la geografía de nuestro\npaisaje provincial.\n\nCategoría:  4. EDIFICIOS ESPECIALES (institucionales, educativos,\ncomerciales, industriales, recreativos, comunitarios, etc.)\n____________________________________________________________________\n\n\nHotel 5 estrellas desarrollado en un terreno de 20.028 m² sobre la Av. San Martín en el acceso a Villa General Belgrano (acceso desde Los Reartes).\n\nCuenta con una superficie cubierta de 5.578 m² distribuida en 3 niveles “TERRA” (Ingreso, Lobby, Restó, Terraza y Habitaciones), “AQUA” (un piso abajo con el Spa, Habitaciones, Jardines y Piscina tipo playa) y “CIELO” (nivel superior con Habitaciones) . Son 70 habitaciones y áreas comunes  a lo que se agregan terrazas que al igual que las habitaciones cuentan con privilegiadas panorámicas.\n\nLas áreas de lobby, living y restaurante tienen una excepcional espacialidad dadas por una morfología exterior e interior que hace alusión a una caverna modelada en listones de madera de 7 especies diferentes, que combinada con la piedra gris andina traída especialmente de la provincia de Mendoza generan un ambiente de calidez y armonía.\n  \nTodas las habitaciones cuentan con balcones - terrazas de generosas dimensiones y al igual que los espacios públicos tienen destacas vistas hacia la Sierra Morena (este), los jardines parquizados y la pileta tipo playa con su sector de living bajo el nivel del agua y las Sierras Grandes (Co. Champaquí) al oe",
