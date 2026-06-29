@@ -165,7 +165,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:-apple-
           <label style="display:flex;align-items:center;gap:0.4rem;font-size:11px;color:var(--muted);margin-bottom:0.7rem;cursor:pointer;">
             <input type="checkbox" id="ghRemember"> Recordar token en este navegador
           </label>
-          <div id="ghPendingInfo" style="font-size:11px;color:var(--muted);margin-bottom:0.6rem;"></div>
+          <div id="ghPendingInfo" style="font-size:11px;color:var(--muted);margin-bottom:0.4rem;"></div>
+          <button class="btn-sec" id="btnClearPending" style="font-size:10px;padding:0.3rem 0.5rem;margin-bottom:0.6rem;">✕ Limpiar imágenes pendientes</button>
           <button class="btn-sec btn-publish" id="btnPublish">⇪ Publicar proyectos.js + imágenes</button>
           <div id="ghLog" class="gh-log"></div>
         </div>
@@ -454,7 +455,19 @@ function renderImgs(imgs) {
         var action = this.getAttribute('data-action');
         var idx = parseInt(this.getAttribute('data-i'));
         if (action === 'del') {
+          var nombreEliminado = activo.imagenes[idx];
           activo.imagenes.splice(idx, 1);
+          // Si la imagen ya estaba publicada en GitHub (no es un pendiente sin publicar),
+          // la registramos para borrarla realmente al publicar.
+          var keyPendiente = activo.codigo + '/' + nombreEliminado;
+          if (window._pendingFiles && window._pendingFiles[keyPendiente]) {
+            // Todavía no se había publicado: alcanza con quitarla de pendientes, sin tocar GitHub.
+            delete window._pendingFiles[keyPendiente];
+          } else {
+            window._pendingDeletes = window._pendingDeletes || {};
+            window._pendingDeletes[keyPendiente] = true;
+          }
+          if (typeof refreshPublishStatus === 'function') refreshPublishStatus();
         } else {
           var ni = action === 'up' ? idx-1 : idx+1;
           if (ni >= 0 && ni < activo.imagenes.length) {
@@ -540,12 +553,27 @@ function guardar() {
 /* ── ELIMINAR ── */
 function eliminar() {
   if (!confirm('¿Eliminar "' + activo.nombre + '"? Esta acción no se puede deshacer.')) return;
+  // Limpiar las imágenes pendientes asociadas a este proyecto (las que aún no se publicaron)
+  if (window._pendingFiles && activo.codigo) {
+    var prefix = activo.codigo + '/';
+    Object.keys(window._pendingFiles).forEach(function(k) {
+      if (k.indexOf(prefix) === 0) delete window._pendingFiles[k];
+    });
+  }
+  // Registrar las imágenes ya publicadas para que se borren realmente de GitHub al publicar
+  if (activo.codigo && activo.imagenes && activo.imagenes.length) {
+    window._pendingDeletes = window._pendingDeletes || {};
+    activo.imagenes.forEach(function(nombre) {
+      window._pendingDeletes[activo.codigo + '/' + nombre] = true;
+    });
+  }
   proyectos = proyectos.filter(function(x){ return x.id !== activo.id; });
   dbSave();
   activo = null;
   renderSidebar();
   document.getElementById('main').innerHTML = '<div class="empty"><p>Proyecto eliminado.</p></div>';
-  toast('ok','Proyecto eliminado.');
+  toast('ok','Proyecto eliminado. Las imágenes se borrarán de GitHub al publicar.');
+  refreshPublishStatus();
 }
 
 /* ── EXPORTAR ── */
@@ -655,6 +683,13 @@ function initGithubPanel() {
   });
 
   document.getElementById('btnPublish').addEventListener('click', publicarAGithub);
+  document.getElementById('btnClearPending').addEventListener('click', function() {
+    if (!confirm('¿Cancelar todas las subidas y eliminaciones pendientes (sin publicar)?')) return;
+    window._pendingFiles = {};
+    window._pendingDeletes = {};
+    refreshPublishStatus();
+    toast('ok','Pendientes limpiados.');
+  });
 
   refreshPublishStatus();
 }
@@ -663,18 +698,27 @@ function refreshPublishStatus() {
   var info = document.getElementById('ghPendingInfo');
   if (!info) return;
   var keys = window._pendingFiles ? Object.keys(window._pendingFiles) : [];
-  if (keys.length === 0) {
+  var delKeys = window._pendingDeletes ? Object.keys(window._pendingDeletes) : [];
+
+  if (keys.length === 0 && delKeys.length === 0) {
     info.textContent = 'Sin imágenes nuevas pendientes (se subirá solo proyectos.js).';
     return;
   }
-  // Agrupar por código de proyecto para detectar a simple vista a qué carpeta van
-  var porCodigo = {};
-  keys.forEach(function(k) {
-    var cod = k.split('/')[0];
-    porCodigo[cod] = (porCodigo[cod] || 0) + 1;
-  });
-  var detalle = Object.keys(porCodigo).map(function(c){ return c + ' (' + porCodigo[c] + ')'; }).join(', ');
-  info.textContent = keys.length + ' imagen(es) pendiente(s) → ' + detalle;
+
+  var partes = [];
+  if (keys.length) {
+    var porCodigo = {};
+    keys.forEach(function(k) {
+      var cod = k.split('/')[0];
+      porCodigo[cod] = (porCodigo[cod] || 0) + 1;
+    });
+    var detalle = Object.keys(porCodigo).map(function(c){ return c + ' (' + porCodigo[c] + ')'; }).join(', ');
+    partes.push(keys.length + ' para subir → ' + detalle);
+  }
+  if (delKeys.length) {
+    partes.push(delKeys.length + ' para ELIMINAR de GitHub → ' + delKeys.join(', '));
+  }
+  info.innerHTML = partes.join('<br>');
 }
 
 function ghLog(msg, cls) {
@@ -704,6 +748,28 @@ function strToBase64Utf8(str) {
 }
 
 // Sube o actualiza un archivo en GitHub via Contents API
+function ghDeleteFile(owner, repo, token, path, message) {
+  var encodedPath = path.split('/').map(encodeURIComponent).join('/');
+  var url = 'https://api.github.com/repos/' + owner + '/' + repo + '/contents/' + encodedPath;
+  return fetch(url, { headers: { 'Authorization': 'Bearer ' + token, 'Accept': 'application/vnd.github+json' } })
+    .then(function(res) { return res.ok ? res.json() : null; })
+    .then(function(existing) {
+      if (!existing || !existing.sha) {
+        // El archivo no existe en GitHub (ya estaba borrado, o nunca se publicó) — no hay nada que hacer.
+        return { ok: true, _skipped: true };
+      }
+      return fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + token,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message: message, sha: existing.sha })
+      });
+    });
+}
+
 function ghPutFile(owner, repo, token, path, base64Content, message) {
   // Codificamos cada segmento del path por separado (preservamos las barras "/")
   var encodedPath = path.split('/').map(encodeURIComponent).join('/');
@@ -767,12 +833,17 @@ function publicarAGithub() {
     .then(function(res) {
       if (!res.ok) return res.json().then(function(err){ throw new Error('proyectos.js: ' + (err.message || res.status)); });
       ghLog('✓ proyectos.js subido correctamente.', 'ok');
+      var deleteKeys = Object.keys(window._pendingDeletes || {});
+      return eliminarImagenesEnSecuencia(deleteKeys, owner, repo, token);
+    })
+    .then(function() {
       return subirImagenesEnSecuencia(pendingKeys, pending, owner, repo, token);
     })
     .then(function() {
       ghLog('Publicación completa. El sitio se actualizará en GitHub Pages en 1-2 minutos.', 'ok');
       toast('ok','Publicado correctamente en GitHub.');
       window._pendingFiles = {};
+      window._pendingDeletes = {};
       refreshPublishStatus();
     })
     .catch(function(err) {
@@ -782,6 +853,26 @@ function publicarAGithub() {
     .finally(function() {
       btn.disabled = false;
     });
+}
+
+// Borra imágenes una por una de GitHub (las que el usuario quitó del admin)
+function eliminarImagenesEnSecuencia(keys, owner, repo, token) {
+  if (!keys.length) return Promise.resolve();
+  var i = 0;
+  function next() {
+    if (i >= keys.length) return Promise.resolve();
+    var key = keys[i]; // formato "CODIGO/nombre.png"
+    ghLog('Eliminando ' + key + ' de GitHub…', 'run');
+    return ghDeleteFile(owner, repo, token, 'projects/' + key, 'Eliminar imagen ' + key + ' desde CMOF Admin')
+      .then(function(res) {
+        if (res._skipped) { ghLog('· ' + key + ' (ya no existía en GitHub)', 'ok'); }
+        else if (!res.ok) { return res.json().then(function(err){ throw new Error(key + ': ' + (err.message || res.status)); }); }
+        else { ghLog('✓ eliminada: ' + key, 'ok'); }
+        i++;
+        return next();
+      });
+  }
+  return next();
 }
 
 // Sube imágenes una por una (la API de GitHub no soporta lotes en un solo request)
