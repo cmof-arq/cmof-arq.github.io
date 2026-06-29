@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 29/6/2026, 05:16:24
+// Generado por CMOF Admin — 29/6/2026, 05:41:39
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -229,7 +229,6 @@ var proyectosData = [
     "web_es": "",
     "web_en": "",
     "imagenes": [
-      "P-07-05.png",
       "P-08-01-ALT-720.png",
       "P-08-03-ALT-720.png",
       "P-08-04 -ALT-720.png",
