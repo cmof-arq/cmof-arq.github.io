@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 21/6/2026, 1:26:49 p.m.
+// Generado por CMOF Admin — 29/6/2026, 04:43:30
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -84,9 +84,9 @@ var proyectosData = [
   },
   {
     "id": "p1780988025043",
-    "codigo": "K-GELC.307",
-    "nombre": "Casa G&E 307",
-    "tipologia": "Residential",
+    "codigo": "K-GELC-307",
+    "nombre": "Casa GLENDA & ELADIO - 307",
+    "tipologia": "K",
     "estado": "Construido",
     "anio_inicio": "2022",
     "anio_fin": "2023",
@@ -94,7 +94,7 @@ var proyectosData = [
     "ciudad": "La Cuesta - La Calera",
     "provincia": "Córdoba",
     "pais": "Argentina",
-    "lat": "31 21 43",
+    "lat": "31 21 40",
     "lat_hem": "S",
     "lon": "064 19 34",
     "lon_hem": "W",
@@ -106,7 +106,9 @@ var proyectosData = [
     "imagenes": [
       "K-GELC.307-01.png",
       "K-GELC.307-02.png"
-    ]
+    ],
+    "web_es": "",
+    "web_en": ""
   },
   {
     "id": "p1780988370950",
