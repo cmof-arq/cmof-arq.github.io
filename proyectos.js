@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 29/6/2026, 04:43:30
+// Generado por CMOF Admin — 29/6/2026, 04:44:52
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -114,7 +114,7 @@ var proyectosData = [
     "id": "p1780988370950",
     "codigo": "K-PMIY",
     "nombre": "Casa PABLO & RENATA",
-    "tipologia": "H",
+    "tipologia": "K",
     "estado": "Construido",
     "anio_inicio": "2017",
     "anio_fin": "2019",
