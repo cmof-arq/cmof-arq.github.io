@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 29/6/2026, 04:44:52
+// Generado por CMOF Admin — 29/6/2026, 04:45:54
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -43,7 +43,7 @@ var proyectosData = [
     "id": "p1780987781964",
     "codigo": "K-EGSC",
     "nombre": "Casa ELENA & GUILLERMO",
-    "tipologia": "H",
+    "tipologia": "K",
     "estado": "En obra",
     "anio_inicio": "2023",
     "anio_fin": "2026",
@@ -147,7 +147,7 @@ var proyectosData = [
     "id": "p1781033858892",
     "codigo": "K-EGLR.302",
     "nombre": "Casa ELENA & GUILLERMO - LR",
-    "tipologia": "H",
+    "tipologia": "K",
     "estado": "Construido",
     "anio_inicio": "2012",
     "anio_fin": "2013",
