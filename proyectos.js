@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 29/6/2026, 04:45:54
+// Generado por CMOF Admin — 29/6/2026, 04:58:37
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -177,38 +177,10 @@ var proyectosData = [
     "web_en": ""
   },
   {
-    "id": "p1781037475837",
-    "codigo": "K-GELC307",
-    "nombre": "Casa GLENDA & ELADIO",
-    "tipologia": "H",
-    "estado": "Construido",
-    "anio_inicio": "2021",
-    "anio_fin": "2022",
-    "superficie": "392",
-    "ciudad": "La Calera",
-    "provincia": "Córdoba",
-    "pais": "Argentina",
-    "lat": "31 21 40",
-    "lat_hem": "S",
-    "lon": "064 19 34",
-    "lon_hem": "W",
-    "altitud": "562",
-    "memoria_es": "",
-    "memoria_en": "",
-    "concepto_es": "",
-    "concepto_en": "",
-    "imagenes": [
-      "K-EGLC-307-01.jpg",
-      "K-EGLC-307-02.jpg"
-    ],
-    "web_es": "",
-    "web_en": ""
-  },
-  {
     "id": "p1781039870192",
     "codigo": "M-JQEP",
     "nombre": "JAQUE PRODUCTORA",
-    "tipologia": "Otros",
+    "tipologia": "H",
     "estado": "Construido",
     "anio_inicio": "2008",
     "anio_fin": "2021",
@@ -229,6 +201,8 @@ var proyectosData = [
       "M-JQEP-01.png",
       "M-JQEP-02.png",
       "M-JQEP-03.png"
-    ]
+    ],
+    "web_es": "",
+    "web_en": ""
   }
 ];
