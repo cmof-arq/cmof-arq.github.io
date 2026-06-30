@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 30/6/2026, 12:15:36
+// Generado por CMOF Admin — 30/6/2026, 12:21:20
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -139,35 +139,6 @@ var proyectosData = [
       "K-PMIY-05.png",
       "K-PMIY-06.png",
       "K-PMIY-07.png"
-    ],
-    "web_es": "",
-    "web_en": ""
-  },
-  {
-    "id": "p1781039870192",
-    "codigo": "M-JQEP",
-    "nombre": "JAQUE PRODUCTORA",
-    "tipologia": "H",
-    "estado": "Construido",
-    "anio_inicio": "2008",
-    "anio_fin": "2021",
-    "superficie": "393",
-    "ciudad": "Córdoba",
-    "provincia": "Córdoba",
-    "pais": "Argentina",
-    "lat": "31 20 59",
-    "lat_hem": "S",
-    "lon": "064 14 27",
-    "lon_hem": "W",
-    "altitud": "449",
-    "memoria_es": "",
-    "memoria_en": "",
-    "concepto_es": "",
-    "concepto_en": "",
-    "imagenes": [
-      "M-JQEP-01.png",
-      "M-JQEP-02.png",
-      "M-JQEP-03.png"
     ],
     "web_es": "",
     "web_en": ""
