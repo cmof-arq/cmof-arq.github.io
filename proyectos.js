@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 30/6/2026, 12:31:58
+// Generado por CMOF Admin — 30/6/2026, 02:14:47
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -237,6 +237,37 @@ var proyectosData = [
       "M-JQEP-01.png",
       "M-JQEP-02.png",
       "M-JQEP-03.png"
+    ]
+  },
+  {
+    "id": "p1782794442959",
+    "codigo": "K-RDMO",
+    "nombre": "Casa DONADIO MOLVENTO",
+    "tipologia": "K",
+    "estado": "En obra",
+    "anio_inicio": "2024",
+    "anio_fin": "2025",
+    "superficie": "521",
+    "ciudad": "Villa Ciudad Parque (MOLVENTO)",
+    "provincia": "Córdoba",
+    "pais": "Argentina",
+    "lat": "31 50 39",
+    "lat_hem": "S",
+    "lon": "064 31 34",
+    "lon_hem": "W",
+    "altitud": "788",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "",
+    "web_en": "",
+    "imagenes": [
+      "K-RDMO-IMG-02-IA.png",
+      "K-RDMO-IMG-01-IA.png",
+      "K-RDMO-PLN-00-PLANTA BAJA.png",
+      "K-RDMO-PLN-01-FACHADA ESTE-1.png",
+      "K-RDMO-PLN-02-VISTA SUR-1-1.png"
     ]
   }
 ];
