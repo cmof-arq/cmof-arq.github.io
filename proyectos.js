@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 29/6/2026, 11:58:26
+// Generado por CMOF Admin — 30/6/2026, 12:09:04
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -139,38 +139,6 @@ var proyectosData = [
       "K-PMIY-05.png",
       "K-PMIY-06.png",
       "K-PMIY-07.png"
-    ],
-    "web_es": "",
-    "web_en": ""
-  },
-  {
-    "id": "p1781033858892",
-    "codigo": "K-EGLR-302",
-    "nombre": "Casa ELENA & GUILLERMO - LR",
-    "tipologia": "K",
-    "estado": "Construido",
-    "anio_inicio": "2012",
-    "anio_fin": "2013",
-    "superficie": "513",
-    "ciudad": "La Calera",
-    "provincia": "Córdoba",
-    "pais": "Argentina",
-    "lat": "31 20 43",
-    "lat_hem": "S",
-    "lon": "064 18 54",
-    "lon_hem": "W",
-    "altitud": "506",
-    "memoria_es": "",
-    "memoria_en": "",
-    "concepto_es": "",
-    "concepto_en": "",
-    "imagenes": [
-      "K-EGLR.202-01.png",
-      "K-EGLR.202-02.png",
-      "K-EGLR.202-03.png",
-      "K-EGLR.202-04.png",
-      "K-EGLR.202-05.png",
-      "K-EGLR.202-06.png"
     ],
     "web_es": "",
     "web_en": ""
