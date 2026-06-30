@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 29/6/2026, 06:15:55
+// Generado por CMOF Admin — 29/6/2026, 11:22:53
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -145,7 +145,7 @@ var proyectosData = [
   },
   {
     "id": "p1781033858892",
-    "codigo": "K-EGLR.302",
+    "codigo": "K-EGLR-302",
     "nombre": "Casa ELENA & GUILLERMO - LR",
     "tipologia": "K",
     "estado": "Construido",
