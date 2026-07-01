@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 30/6/2026, 10:09:02
+// Generado por CMOF Admin — 1/7/2026, 03:16:16
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -299,6 +299,34 @@ var proyectosData = [
       "K-JPBP - IMG-IA-02.png",
       "K-JPBP - IMG-IA-03.png",
       "K-JPBP - IMG-IA-04.png"
+    ]
+  },
+  {
+    "id": "p1782886299560",
+    "codigo": "K-PMLD",
+    "nombre": "Casa MOTRICH - LA DESEADA",
+    "tipologia": "K",
+    "estado": "En obra",
+    "anio_inicio": "2025",
+    "anio_fin": "2026",
+    "superficie": "",
+    "ciudad": "La Calera",
+    "provincia": "Córdoba",
+    "pais": "Argentina",
+    "lat": "31 20 36",
+    "lat_hem": "S",
+    "lon": "064 19 31",
+    "lon_hem": "W",
+    "altitud": "625",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "",
+    "web_en": "",
+    "imagenes": [
+      "K-PMLD - IMG-IA-001.jpg",
+      "K-PMLD - IMG-IA-002.png"
     ]
   }
 ];
