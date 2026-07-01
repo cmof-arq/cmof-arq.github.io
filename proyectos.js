@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 30/6/2026, 07:43:35
+// Generado por CMOF Admin — 30/6/2026, 09:25:09
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -269,6 +269,35 @@ var proyectosData = [
       "K-RDMO-PLN-00-PLANTA BAJA.png",
       "K-RDMO-PLN-01-FACHADA ESTE-1.png",
       "K-RDMO-PLN-02-VISTA SUR-1-1.png"
+    ]
+  },
+  {
+    "id": "p1782860430300",
+    "codigo": "K-JPBLP",
+    "nombre": "Casa BALDACINI - LA PANKANA",
+    "tipologia": "K",
+    "estado": "Proyecto",
+    "anio_inicio": "2022",
+    "anio_fin": "2022",
+    "superficie": "335",
+    "ciudad": "La Calera",
+    "provincia": "Córdoba",
+    "pais": "Argentina",
+    "lat": "31 20 22",
+    "lat_hem": "S",
+    "lon": "064 19 02",
+    "lon_hem": "W",
+    "altitud": "538",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "",
+    "web_en": "",
+    "imagenes": [
+      "K-JPBP - IMG-IA-01.png",
+      "K-JPBP - IMG-IA-02.png",
+      "K-JPBP - IMG-IA-03.png"
     ]
   }
 ];
