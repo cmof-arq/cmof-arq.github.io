@@ -1036,8 +1036,12 @@ function openProject(id) {
     function restartAutoplay() {
       if (window._carouselTimer) clearInterval(window._carouselTimer);
       if (imgs.length > 1) {
-        window._carouselTimer = setInterval(next, 2000);
+        window._carouselTimer = setInterval(next, 4000);
       }
+    }
+
+    function pauseAutoplay() {
+      if (window._carouselTimer) { clearInterval(window._carouselTimer); window._carouselTimer = null; }
     }
 
     // Mostrar flechas solo si hay más de una imagen
@@ -1046,6 +1050,10 @@ function openProject(id) {
     arrowR.classList.toggle('hidden', !multi);
     dotsEl.style.display = multi ? '' : 'none';
 
+    // Click en la imagen: pausa. Flechas: reanuda.
+    document.getElementById('d-track').addEventListener('click', function(e) {
+      if (e.target.classList.contains('carousel-slide')) pauseAutoplay();
+    });
     arrowL.onclick = function() { prev(); restartAutoplay(); };
     arrowR.onclick = function() { next(); restartAutoplay(); };
 
