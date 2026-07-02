@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 2/7/2026, 03:14:40
+// Generado por CMOF Admin — 2/7/2026, 11:53:47
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -324,7 +324,13 @@ var proyectosData = [
     "concepto_en": "",
     "web_es": "Casa en La Deseada.\n(en construcción)",
     "web_en": "House in La Deseada\n(under construction)",
-    "imagenes": []
+    "imagenes": [
+      "K-PMLD - IMG-IA-001.jpg",
+      "K-PMLD - IMG-IA-002.png",
+      "K-PMLD - IMG-IA-004.png",
+      "K-PMLD-0Escena 1_4.png",
+      "P-11-01 - K-PMLD - ai-render-12679313.jpg"
+    ]
   },
   {
     "id": "p1782971910185",
