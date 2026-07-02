@@ -155,42 +155,40 @@ html, body {
 }
 
 /* Botón hamburguesa — tamaño similar al logo, siempre visible */
+/* Botón flecha toggle del sidebar */
 .sidebar-toggle {
-  width: 36px;
-  height: 36px;
+  width: 28px;
+  height: 28px;
   flex-shrink: 0;
-  margin: 0.6rem 0 0 0.6rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
   background: var(--surface);
   border: 1px solid var(--border2);
   border-radius: 3px;
   cursor: pointer;
   position: absolute;
-  top: 0;
-  left: 0;
+  top: 0.5rem;
+  left: 0.5rem;
   z-index: 5;
   transition: left 0.35s cubic-bezier(.4,0,.2,1), background 0.2s;
 }
-.sidebar-toggle:hover { background: var(--surface2); }
-.sidebar-toggle span {
-  display: block;
+.sidebar-toggle:hover { background: var(--surface2); border-color: var(--orange); }
+.sidebar-toggle svg {
   width: 16px;
-  height: 1.5px;
-  background: var(--muted);
-  transition: background 0.2s;
+  height: 16px;
+  color: var(--muted);
+  transition: color 0.2s;
+  flex-shrink: 0;
 }
-.sidebar-toggle:hover span { background: var(--orange); }
+.sidebar-toggle:hover svg { color: var(--orange); }
 
 /* Cuando el sidebar está expandido, el botón se posiciona pegado a su borde derecho */
 .content.expanded .sidebar-toggle {
-  left: calc(100% / 7 - 36px - 0.6rem);
+  left: calc(100% / 7 - 28px - 0.5rem);
 }
 @media (min-width: 1540px) {
-  .content.expanded .sidebar-toggle { left: calc(220px - 36px - 0.6rem); }
+  .content.expanded .sidebar-toggle { left: calc(220px - 28px - 0.5rem); }
 }
 
 /* ─ SIDEBAR: lista proyectos (1/7) ─ */
@@ -216,18 +214,87 @@ html, body {
 }
 
 .sidebar-head {
-  padding: 0.9rem 1rem 0.7rem;
+  padding: 0.7rem 0.8rem 0.5rem;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
 
 .sidebar-head h2 {
-  font-size: 0.6rem;
-  letter-spacing: 0.2em;
+  font-size: 1.02rem; /* 0.6 × 1.7 = 1.02rem */
+  letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--orange);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.7rem;
+  line-height: 1;
 }
+
+/* Botón FILTROS desplegable */
+.filtros-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  background: transparent;
+  border: 1px solid var(--border2);
+  border-radius: 3px;
+  color: var(--muted);
+  font-family: 'Square721BT', sans-serif;
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+  margin-bottom: 0;
+}
+.filtros-toggle:hover { border-color: var(--orange); color: var(--orange); }
+.filtros-toggle.open { border-color: var(--orange); color: var(--orange); }
+.filtros-toggle-arrow {
+  width: 10px;
+  height: 10px;
+  flex-shrink: 0;
+  transition: transform 0.2s;
+}
+.filtros-toggle.open .filtros-toggle-arrow { transform: rotate(180deg); }
+
+.filtros-panel {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s cubic-bezier(.4,0,.2,1);
+}
+.filtros-panel.open { max-height: 500px; }
+
+.filtros-section {
+  padding: 0.6rem 0 0;
+}
+.filtros-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  margin-bottom: 0.35rem;
+  user-select: none;
+}
+.filtros-section-label {
+  font-size: 0.56rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.filtros-section-arrow {
+  width: 8px;
+  height: 8px;
+  color: var(--muted);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.filtros-section-header.open .filtros-section-arrow { transform: rotate(180deg); }
+.filtros-section-body {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease;
+}
+.filtros-section-body.open { max-height: 300px; }
 
 .sort-btn {
   display: flex;
@@ -247,67 +314,31 @@ html, body {
 .sort-btn svg { width: 11px; height: 11px; }
 .sort-btn:hover { border-color: #0E6BA8; color: #8cd7f7; }
 .sort-btn.active { border-color: #0E6BA8; color: #8cd7f7; background: rgba(14,107,168,0.12); }
-.sort-btn.asc svg { transform: scaleY(-1); }
 
-/* Filtros rápidos */
-.filter-label {
-  font-size: 0.56rem;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 0.35rem;
-}
-.filter-label-year-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 0.6rem;
-  padding-top: 0.6rem;
-  border-top: 1px solid var(--border);
-  margin-bottom: 0.35rem;
-}
-.filter-label-year-row .filter-label {
-  margin-bottom: 0;
-}
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem;
-}
-.filters-year {
-  margin-top: 0;
-}
+.filters { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.filters-year { margin-top: 0; }
 .filter-btn {
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 2px 6px;
-  border-radius: 2px;
-  border: 1px solid var(--border2);
-  background: transparent;
-  color: var(--muted);
-  cursor: pointer;
-  transition: all 0.15s;
+  font-size: 0.58rem; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 2px 6px; border-radius: 2px; border: 1px solid var(--border2);
+  background: transparent; color: var(--muted); cursor: pointer; transition: all 0.15s;
 }
-.filter-btn:hover, .filter-btn.active {
-  border-color: var(--orange);
-  color: var(--orange);
-}
-.filter-btn.year-btn:hover, .filter-btn.year-btn.active {
-  border-color: #0E6BA8;
-  color: #8cd7f7;
-}
+.filter-btn:hover, .filter-btn.active { border-color: var(--orange); color: var(--orange); }
+.filter-btn.year-btn:hover, .filter-btn.year-btn.active { border-color: #0E6BA8; color: #8cd7f7; }
+.filter-label { font-size: 0.56rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.35rem; }
 
-/* Lista de proyectos */
+/* Lista de proyectos — scroll limitado a altura de pantalla */
 .project-list {
   flex: 1;
   overflow-y: auto;
   padding: 0.4rem 0;
+  max-height: calc(100vh - 160px);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
 }
-
 .project-list::-webkit-scrollbar { width: 4px; }
+.project-list::-webkit-scrollbar-track { background: transparent; }
 .project-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+.project-list::-webkit-scrollbar-thumb:hover { background: var(--orange); }
 
 .proj-item {
   padding: 0.65rem 1rem;
@@ -646,33 +677,64 @@ html, body {
   <div class="content">
 
     <!-- SIDEBAR TOGGLE (visible siempre, debajo del logo) -->
+    <!-- SIDEBAR TOGGLE: flecha que cambia dirección -->
     <button class="sidebar-toggle" id="sidebarToggle" title="Mostrar/ocultar proyectos">
-      <span></span><span></span><span></span>
+      <svg id="toggleArrow" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+        <polygon points="8,4 16,12 8,20"/>
+      </svg>
     </button>
 
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
       <div class="sidebar-head">
         <h2>Proyectos</h2>
-        <div class="filter-label">Tipo</div>
-        <div class="filters" id="filters">
-          <button class="filter-btn active" data-filter="all">Todos</button>
-          <!-- Generado por JS desde las tipologías presentes -->
-        </div>
-        <div class="filter-label-year-row">
-          <div class="filter-label">Año</div>
-          <button class="sort-btn" id="sortYearBtn" title="Ordenar por año">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h6M3 12h4M3 17h2M16 4v16M16 4l-3 3M16 4l3 3"/></svg>
-            Ordenar
-          </button>
-        </div>
-        <div class="filters filters-year" id="filtersYear">
-          <!-- Generado por JS desde los años presentes -->
-        </div>
+
+        <!-- Botón FILTROS desplegable -->
+        <button class="filtros-toggle" id="filtrosToggle">
+          <span>Filtros</span>
+          <svg class="filtros-toggle-arrow" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+            <polygon points="4,8 20,8 12,18"/>
+          </svg>
+        </button>
+
+        <div class="filtros-panel" id="filtrosPanel">
+
+          <!-- Sección TIPO -->
+          <div class="filtros-section">
+            <div class="filtros-section-header" id="tipoHeader">
+              <span class="filtros-section-label">Tipo</span>
+              <svg class="filtros-section-arrow" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <polygon points="4,8 20,8 12,18"/>
+              </svg>
+            </div>
+            <div class="filtros-section-body" id="tipoBody">
+              <div class="filters" id="filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sección AÑO -->
+          <div class="filtros-section">
+            <div class="filtros-section-header" id="anioHeader">
+              <span class="filtros-section-label">Año</span>
+              <svg class="filtros-section-arrow" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                <polygon points="4,8 20,8 12,18"/>
+              </svg>
+              <button class="sort-btn" id="sortYearBtn" title="Ordenar por año" style="margin-left:auto">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h6M3 12h4M3 17h2M16 4v16M16 4l-3 3M16 4l3 3"/></svg>
+                Ordenar
+              </button>
+            </div>
+            <div class="filtros-section-body" id="anioBody">
+              <div class="filters filters-year" id="filtersYear"></div>
+            </div>
+          </div>
+
+        </div><!-- /filtrosPanel -->
       </div>
-      <div class="project-list" id="project-list">
-        <!-- Generado por JS -->
-      </div>
+
+      <div class="project-list" id="project-list"></div>
     </div>
 
     <!-- DETALLE -->
@@ -917,13 +979,6 @@ function openProject(id) {
   var p = proyectos.find(function(x){ return x.id === id; });
   if (!p) return;
 
-  // Colapsar sidebar automáticamente para liberar espacio
-  var content = document.querySelector('.content');
-  if (content && !content.classList.contains('collapsed')) {
-    content.classList.add('collapsed');
-    content.classList.remove('expanded');
-  }
-
   // Sidebar: activar ítem
   document.querySelectorAll('.proj-item').forEach(function(el) {
     el.classList.toggle('active', el.dataset.id === id);
@@ -1080,16 +1135,70 @@ function dmsToDecimal(dms, hem) {
   return dec;
 }
 
-/* ── Sidebar colapsable ── */
+/* ── Sidebar colapsable con flecha direccional ── */
 (function() {
   var content = document.querySelector('.content');
   var toggle  = document.getElementById('sidebarToggle');
+  var arrow   = document.getElementById('toggleArrow');
   if (!content || !toggle) return;
-  content.classList.add('expanded'); // estado inicial: expandido
+
+  content.classList.add('expanded');
+
+  function updateArrow() {
+    var collapsed = content.classList.contains('collapsed');
+    // ► cuando está colapsado (apunta derecha = expandir), ◄ cuando está expandido (apunta izquierda = colapsar)
+    arrow.innerHTML = collapsed
+      ? '<polygon points="8,4 16,12 8,20"/>'   // apunta derecha → expandir
+      : '<polygon points="16,4 8,12 16,20"/>'; // apunta izquierda → colapsar
+  }
+
+  updateArrow();
+
   toggle.addEventListener('click', function() {
     var collapsed = content.classList.toggle('collapsed');
     content.classList.toggle('expanded', !collapsed);
+    updateArrow();
   });
+})();
+
+/* ── Filtros: botón FILTROS desplegable + secciones TIPO y AÑO ── */
+(function() {
+  // Panel principal FILTROS
+  var filtrosBtn   = document.getElementById('filtrosToggle');
+  var filtrosPanel = document.getElementById('filtrosPanel');
+  if (filtrosBtn && filtrosPanel) {
+    filtrosBtn.addEventListener('click', function() {
+      var open = filtrosPanel.classList.toggle('open');
+      filtrosBtn.classList.toggle('open', open);
+    });
+  }
+
+  // Sub-sección TIPO
+  var tipoHeader = document.getElementById('tipoHeader');
+  var tipoBody   = document.getElementById('tipoBody');
+  if (tipoHeader && tipoBody) {
+    tipoHeader.addEventListener('click', function(e) {
+      // Evitar que el click en el botón "Ordenar" dentro abra/cierre la sección
+      if (e.target.closest('#sortYearBtn')) return;
+      var open = tipoBody.classList.toggle('open');
+      tipoHeader.classList.toggle('open', open);
+    });
+    tipoBody.classList.add('open');
+    tipoHeader.classList.add('open');
+  }
+
+  // Sub-sección AÑO
+  var anioHeader = document.getElementById('anioHeader');
+  var anioBody   = document.getElementById('anioBody');
+  if (anioHeader && anioBody) {
+    anioHeader.addEventListener('click', function(e) {
+      if (e.target.closest('#sortYearBtn')) return;
+      var open = anioBody.classList.toggle('open');
+      anioHeader.classList.toggle('open', open);
+    });
+    anioBody.classList.add('open');
+    anioHeader.classList.add('open');
+  }
 })();
 
 /* ── Selector de idioma (placeholder visual; integración completa de textos pendiente) ── */
