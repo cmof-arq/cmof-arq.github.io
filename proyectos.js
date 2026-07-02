@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 2/7/2026, 12:17:29
+// Generado por CMOF Admin — 2/7/2026, 06:42:50
 var proyectosData = [
   {
     "id": "p1780987587201",
