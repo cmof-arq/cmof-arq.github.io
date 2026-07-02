@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 1/7/2026, 12:39:11
+// Generado por CMOF Admin — 2/7/2026, 03:14:40
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -325,5 +325,35 @@ var proyectosData = [
     "web_es": "Casa en La Deseada.\n(en construcción)",
     "web_en": "House in La Deseada\n(under construction)",
     "imagenes": []
+  },
+  {
+    "id": "p1782971910185",
+    "codigo": "E-NAT-2",
+    "nombre": "EDIFICIO NATURE-2",
+    "tipologia": "K",
+    "estado": "Proyecto",
+    "anio_inicio": "2022",
+    "anio_fin": "-",
+    "superficie": "4700",
+    "ciudad": "Asunción",
+    "provincia": "DC",
+    "pais": "Paraguay",
+    "lat": "25 17 13",
+    "lat_hem": "S",
+    "lon": "57 35 44",
+    "lon_hem": "W",
+    "altitud": "96",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "EDIFICIO NATURE 2\n\nEdificio de uso mixto que combina Locales comerciales de doble altura en planta baja (2 unidades)  dos pisos de oficinas , diez niveles de departamentos de 1 y 2 dormitorios y un nivel de amenities y espacios comunes .\nSuperficiee:\nLocales: 2 ud\nOficinas: (planta libre a subdividir)\nDptos 1 Dormitorio: 37 ud.\nDptos 2 Dormitorios: 19 ud\nCocheras: 19 ud",
+    "web_en": "",
+    "imagenes": [
+      "E-NAT-E-IMG-IA-01.png",
+      "E-NAT-E-IMG-IA-02.png",
+      "E-NAT-E-IMG-IA-03.png",
+      "E-NAT-E-IMG-IA-04.png"
+    ]
   }
 ];
