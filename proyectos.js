@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 3/7/2026, 01:58:41
+// Generado por CMOF Admin — 3/7/2026, 02:03:38
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -303,8 +303,8 @@ var proyectosData = [
   },
   {
     "id": "p1782971910185",
-    "codigo": "E-NAT-2",
-    "nombre": "EDIFICIO NATURE-2",
+    "codigo": "E-NAT-e1",
+    "nombre": "EDIFICIO NATURE / e1",
     "tipologia": "K",
     "estado": "Proyecto",
     "anio_inicio": "2022",
