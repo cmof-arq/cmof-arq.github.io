@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 3/7/2026, 02:03:38
+// Generado por CMOF Admin — 5/7/2026, 12:35:17
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -359,6 +359,40 @@ var proyectosData = [
       "K-PMLD - IMG-IA-001.jpg",
       "K-PMLD - IMG-IA-002.png",
       "K-PMLD - IMG-IA-004.png"
+    ]
+  },
+  {
+    "id": "p1783264922446",
+    "codigo": "E-NAT-E2",
+    "nombre": "EDIFICIO NATURE / e2",
+    "tipologia": "K",
+    "estado": "Proyecto",
+    "anio_inicio": "2022",
+    "anio_fin": "-",
+    "superficie": "4850",
+    "ciudad": "Asunción",
+    "provincia": "DC",
+    "pais": "Paraguay",
+    "lat": "25 17 13",
+    "lat_hem": "S",
+    "lon": "257 35 44",
+    "lon_hem": "W",
+    "altitud": "96",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "EDIFICIO NATURE 2\n\nEdificio de uso mixto que combina Locales comerciales de doble altura en planta baja (2 unidades)  dos pisos de oficinas , dos torres de  nueve y diez niveles de departamentos de 1 y 2 dormitorios y un nivel de amenities y espacios comunes con piscina en puente.\nSuperficie: 4850 m2\nLocales: comerciales: 2 ud\nOficinas: (planta libre a subdividir)\nDptos 1 Dormitorio: 39 ud.\nDptos 2 Dormitorios: 21 ud\nCocheras: 19 ud",
+    "web_en": "",
+    "imagenes": [
+      "E-NAT-E2-IMG-IA-01.png",
+      "E-NAT-E2-IMG-IA-06.png",
+      "E-NAT-E2-IMG-IA-08.png",
+      "E-NAT-E2-IMG-IA-07.png",
+      "E-NAT-E2-IMG-IA-02.png",
+      "E-NAT-E2-IMG-IA-03.png",
+      "E-NAT-E2-IMG-IA-04.png",
+      "E-NAT-E2-IMG-IA-05.png"
     ]
   }
 ];
