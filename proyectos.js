@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 6/7/2026, 02:21:39
+// Generado por CMOF Admin — 6/7/2026, 02:31:04
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -393,6 +393,37 @@ var proyectosData = [
       "E-NAT-E2-IMG-IA-03.png",
       "E-NAT-E2-IMG-IA-04.png",
       "E-NAT-E2-IMG-IA-05.png"
+    ]
+  },
+  {
+    "id": "p1783357336660",
+    "codigo": "I-LAM-O",
+    "nombre": "OFICINAS INDUSTRIA LAM SA",
+    "tipologia": "O",
+    "estado": "Proyecto",
+    "anio_inicio": "2025",
+    "anio_fin": "2026",
+    "superficie": "516 m2",
+    "ciudad": "Córdoba",
+    "provincia": "Córdoba",
+    "pais": "Argentina",
+    "lat": "31 24 12",
+    "lat_hem": "S",
+    "lon": "064 05 18",
+    "lon_hem": "W",
+    "altitud": "362",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "OFICINAS INDUSTRIA LAM SA\n\nNuevas oficinas administrativas de Instustria LAM SA.\nUbicadas en zona sur de la ciudad de Córdoba, desarrolladas en 2 plantas con una superficie total de 516 m2.\nRealizada con estructura de perfileria metálica de perfiles de alma llena y envolvente con sistema de paneles compuestos metalicos con aislante para muros y cubierta.",
+    "web_en": "",
+    "imagenes": [
+      "I-LAM-O - 00.png",
+      "I-LAM-O - 01.png",
+      "I-LAM-O - 02.png",
+      "I-LAM-O - 03.png",
+      "I-LAM-O - 04.png"
     ]
   }
 ];
