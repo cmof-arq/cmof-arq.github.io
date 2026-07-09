@@ -1,12 +1,12 @@
-// Generado por CMOF Admin Estudio — 23/6/2026, 4:25:23 p.m.
+// Generado por CMOF Admin Estudio — 9/7/2026, 02:35:49
 var estudioData = {
   "texto": "",
   "equipo": [
     {
       "id": "m_1782241148595_nfjsy",
       "nombre": "CESAR M. ORTIZ FERRER",
-      "rol": "Arquitecto",
-      "bio": "Arquitecto especializado en proyectos inmobiliarios residenciales y hoteleros, donde la arquitectura, la identidad y el valor a largo plazo se conciben como un sistema coherente.\n\nCon casi 30 años de experiencia profesional, trabajo en la intersección del diseño arquitectónico, la dirección técnica y la realidad construida, centrándome en proyectos de hostelería, turismo y desarrollos residenciales. Mi trabajo aborda proyectos donde la experiencia espacial, la funcionalidad y la durabilidad influyen directamente en el rendimiento de los edificios a lo largo del tiempo.\n\nEn los últimos años, he liderado proyectos de hostelería de alta gama y residenciales de lujo desde la concepción inicial hasta la construcción, transformando la identidad y el programa en entornos construidos que favorecen la experiencia, la claridad operativa y el uso a largo plazo.\n\nMi enfoque es pragmático y orientado al diseño, centrado en decisiones arquitectónicas que refuerzan el posicionamiento, facilitan el uso diario y protegen el valor a lo largo del tiempo.",
+      "rol": "Arquitecto | Director de Diseño",
+      "bio": "César Ortiz Ferrer fundó CMOF en 1997 y cuenta con más de 29 años de experiencia liderando proyectos de arquitectura desde el concepto inicial hasta su construcción.\n\nSu enfoque parte de la convicción de que el verdadero valor de la arquitectura surge de decisiones de diseño tomadas a partir de una comprensión profunda de cada proyecto. Antes de diseñar, busca comprender el lugar, las personas, el propósito, el contexto y las condiciones que darán sentido a la arquitectura, para que cada decisión responda a una misma lógica y el proyecto se convierta en una solución coherente, auténtica y duradera.\n\nCon especial dedicación a proyectos de hotelería, desarrollos residenciales e inmobiliarios, lidera propuestas donde la identidad arquitectónica, la experiencia de quienes habitan los espacios, el desempeño funcional y el valor a largo plazo se conciben como un único sistema.",
       "email": "cmof2@hotmail.com",
       "foto": ""
     }
