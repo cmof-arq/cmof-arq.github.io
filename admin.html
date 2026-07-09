@@ -497,16 +497,42 @@ function guardar() {
   var codigoViejo = p.codigo;
   var codigoNuevo = gv('f_codigo');
 
-  // Si el código cambió, migrar las claves de archivos pendientes (imágenes aún no publicadas)
-  if (codigoViejo && codigoNuevo && codigoViejo !== codigoNuevo && window._pendingFiles) {
-    var prefix = codigoViejo + '/';
-    Object.keys(window._pendingFiles).forEach(function(key) {
-      if (key.indexOf(prefix) === 0) {
-        var newKey = codigoNuevo + '/' + key.slice(prefix.length);
-        window._pendingFiles[newKey] = window._pendingFiles[key];
-        delete window._pendingFiles[key];
-      }
+  // Si el código cambió, hay que manejar las imágenes ya publicadas
+  if (codigoViejo && codigoNuevo && codigoViejo !== codigoNuevo) {
+
+    // 1) Migrar los pendingFiles (imágenes aún no publicadas) al nuevo código
+    if (window._pendingFiles) {
+      var prefix = codigoViejo + '/';
+      Object.keys(window._pendingFiles).forEach(function(key) {
+        if (key.indexOf(prefix) === 0) {
+          var newKey = codigoNuevo + '/' + key.slice(prefix.length);
+          window._pendingFiles[newKey] = window._pendingFiles[key];
+          delete window._pendingFiles[key];
+        }
+      });
+    }
+
+    // 2) Si el proyecto tiene imágenes ya publicadas en GitHub (las que están en p.imagenes
+    //    pero NO en _pendingFiles con el código viejo), marcarlas para:
+    //    a) eliminar de la carpeta vieja en GitHub
+    //    b) avisarle al usuario que tiene que re-seleccionarlas para la carpeta nueva
+    var yaPublicadas = (p.imagenes || []).filter(function(nombre) {
+      var keyVieja = codigoViejo + '/' + nombre;
+      return !(window._pendingFiles && window._pendingFiles[keyVieja]);
     });
+
+    if (yaPublicadas.length > 0) {
+      window._pendingDeletes = window._pendingDeletes || {};
+      yaPublicadas.forEach(function(nombre) {
+        window._pendingDeletes[codigoViejo + '/' + nombre] = true;
+      });
+      // Avisamos al usuario que tiene que re-seleccionar las imágenes
+      setTimeout(function() {
+        toast('err', '⚠ El código cambió: re-seleccioná las ' + yaPublicadas.length + ' imagen(es) del proyecto para publicarlas en la nueva carpeta.');
+      }, 500);
+    }
+
+    refreshPublishStatus();
   }
 
   p.codigo      = codigoNuevo;
@@ -795,6 +821,134 @@ function ghPutFile(owner, repo, token, path, base64Content, message) {
     });
 }
 
+/* ══════════════════════════════════════════════════
+   SEO: páginas estáticas por proyecto + sitemap.xml
+   Se generan y suben automáticamente al publicar.
+══════════════════════════════════════════════════ */
+
+function slugCodigo(codigo) {
+  var s = String(codigo || '').toLowerCase();
+  var from = 'áéíóúñàèìòùäëïöü';
+  var to   = 'aeiounaeiouaeiou';
+  for (var i = 0; i < from.length; i++) s = s.split(from[i]).join(to[i]);
+  s = s.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return s || 'proyecto';
+}
+
+function generarPaginaProyecto(p) {
+  var slug = slugCodigo(p.codigo);
+  var tipoLbl = TLBL_BASE[p.tipologia] || p.tipologia || '';
+  var ubicacion = [p.ciudad, p.provincia, p.pais].filter(Boolean).join(', ');
+  var periodo = p.anio_inicio ? (p.anio_inicio + (p.anio_fin ? '\u2013' + p.anio_fin : '')) : '';
+  var memoria = (p.web_es || p.memoria_es || '').trim();
+  var descBase = memoria || (p.nombre + ' \u2014 ' + tipoLbl + (ubicacion ? ' en ' + ubicacion : ''));
+  var descCorta = descBase.slice(0, 155);
+  var tituloPagina = p.nombre + ' \u2014 ' + tipoLbl + (ubicacion ? ' en ' + ubicacion : '') + ' | CMOF Architecture Office';
+  var basePath = 'projects/' + p.codigo + '/';
+
+  var imgsHtml = (p.imagenes || []).map(function(img, i) {
+    var altTxt = p.nombre + (tipoLbl ? ' - ' + tipoLbl : '') + (i > 0 ? ' - vista ' + (i + 1) : '');
+    return '<img src="' + basePath + xe(img) + '" alt="' + xe(altTxt) + '" loading="' + (i === 0 ? 'eager' : 'lazy') + '" style="width:100%;display:block;margin-bottom:0.6rem;border-radius:2px;">';
+  }).join('\n');
+
+  var metaRows = [];
+  metaRows.push('<span>Tipolog\u00eda <b>' + xe(tipoLbl) + '</b></span>');
+  if (periodo) metaRows.push('<span>Per\u00edodo <b>' + xe(periodo) + '</b></span>');
+  if (p.superficie) metaRows.push('<span>Superficie <b>' + xe(p.superficie) + ' m\u00b2</b></span>');
+  if (ubicacion) metaRows.push('<span>Ubicaci\u00f3n <b>' + xe(ubicacion) + '</b></span>');
+  if (p.estado) metaRows.push('<span>Estado <b>' + xe(p.estado) + '</b></span>');
+
+  return '<!DOCTYPE html>\n<html lang="es">\n<head>\n' +
+    '<meta charset="UTF-8">\n' +
+    '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
+    '<meta name="description" content="' + xe(descCorta) + '">\n' +
+    '<title>' + xe(tituloPagina) + '</title>\n' +
+    '<link rel="canonical" href="https://cmof-arq.github.io/proyecto-' + slug + '.html">\n' +
+    '<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">\n' +
+    '<link rel="shortcut icon" href="favicon.ico">\n' +
+    '<style>\n' +
+    '@font-face{font-family:\'Conthrax\';src:url(\'assets/fonts/CONTHRAX-SEMIBOLD.OTF\') format(\'opentype\');font-weight:600;font-style:normal;font-display:swap;}\n' +
+    '@font-face{font-family:\'Square721BT\';src:url(\'assets/fonts/SQUARE721_BT_BOLD.TTF\') format(\'truetype\');font-weight:700;font-style:normal;font-display:swap;}\n' +
+    '@font-face{font-family:\'Square721BT\';src:url(\'assets/fonts/SQUARE721_BT_ROMAN.TTF\') format(\'truetype\');font-weight:400;font-style:normal;font-display:swap;}\n' +
+    ':root{--bg:#111110;--orange:#ff6600;--muted:#888880;--border:#2a2a28;--text:#e8e6e0;}\n' +
+    '*{margin:0;padding:0;box-sizing:border-box;}\n' +
+    'body{background:var(--bg);color:var(--text);font-family:\'Square721BT\',sans-serif;line-height:1.6;}\n' +
+    '.topbar{height:48px;display:flex;align-items:center;padding:0 1.5rem;border-bottom:1px solid var(--border);gap:1.5rem;}\n' +
+    '.topbar-logo{display:flex;align-items:center;gap:0.8rem;text-decoration:none;}\n' +
+    '.topbar-logo img{height:28px;}\n' +
+    '.topbar-name{font-family:\'Conthrax\',sans-serif;font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--text);}\n' +
+    '.topbar-nav{margin-left:auto;display:flex;gap:1.5rem;}\n' +
+    '.topbar-nav a{font-size:0.68rem;letter-spacing:0.18em;text-transform:uppercase;color:#0E6BA8;text-decoration:none;}\n' +
+    '.topbar-nav a.active{color:var(--orange);}\n' +
+    '.wrap{max-width:1100px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}\n' +
+    '.cod{font-size:0.75rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--orange);margin-bottom:0.4rem;}\n' +
+    'h1{font-size:1.8rem;font-weight:700;margin-bottom:1.2rem;}\n' +
+    '.meta{display:flex;flex-wrap:wrap;gap:1.5rem;font-size:0.78rem;color:var(--muted);margin-bottom:2rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border);}\n' +
+    '.meta b{color:var(--text);font-weight:400;}\n' +
+    '.body{display:flex;gap:2.5rem;flex-wrap:wrap;}\n' +
+    '.gallery{flex:1 1 60%;min-width:280px;}\n' +
+    '.memoria{flex:1 1 30%;min-width:240px;font-size:0.85rem;color:var(--text);white-space:pre-wrap;}\n' +
+    '.back{display:inline-block;margin-top:2rem;font-size:0.75rem;letter-spacing:0.1em;text-transform:uppercase;color:#0E6BA8;text-decoration:none;}\n' +
+    '@media(max-width:768px){.body{flex-direction:column;}}\n' +
+    '</style>\n</head>\n<body>\n' +
+    '<div class="topbar">\n' +
+    '  <a class="topbar-logo" href="index.html"><img src="LOGO-CMOF - Q-2023 - ORIGINAL.png" alt="CMOF"><span class="topbar-name">CMOF</span></a>\n' +
+    '  <nav class="topbar-nav">\n' +
+    '    <a href="index.html">Home</a>\n' +
+    '    <a href="portfolio.html" class="active">Portfolio</a>\n' +
+    '    <a href="web-estudio.html">Estudio</a>\n' +
+    '    <a href="web-publicaciones.html">Publicaciones</a>\n' +
+    '    <a href="web-contacto.html">Contacto</a>\n' +
+    '  </nav>\n</div>\n' +
+    '<div class="wrap">\n' +
+    '  <div class="cod">' + xe(p.codigo) + '</div>\n' +
+    '  <h1>' + xe(p.nombre) + '</h1>\n' +
+    '  <div class="meta">' + metaRows.join('\n    ') + '</div>\n' +
+    '  <div class="body">\n' +
+    '    <div class="gallery">' + imgsHtml + '</div>\n' +
+    '    <div class="memoria">' + xe(memoria) + '</div>\n' +
+    '  </div>\n' +
+    '  <a class="back" href="portfolio.html">\u2190 Volver al portfolio</a>\n' +
+    '</div>\n</body>\n</html>\n';
+}
+
+function generarSitemap(lista) {
+  var hoy = new Date().toISOString().slice(0, 10);
+  var paginas = ['', 'portfolio.html', 'web-estudio.html', 'web-publicaciones.html', 'web-contacto.html'];
+  var urls = paginas.map(function(pg) {
+    return '  <url><loc>https://cmof-arq.github.io/' + pg + '</loc><lastmod>' + hoy + '</lastmod></url>';
+  });
+  lista.forEach(function(p) {
+    if (!p.codigo) return;
+    var slug = slugCodigo(p.codigo);
+    urls.push('  <url><loc>https://cmof-arq.github.io/proyecto-' + slug + '.html</loc><lastmod>' + hoy + '</lastmod></url>');
+  });
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + urls.join('\n') + '\n</urlset>\n';
+}
+
+// Genera y sube una página estática por proyecto, una por una
+function subirPaginasProyectosEnSecuencia(lista, owner, repo, token) {
+  var pend = lista.filter(function(p) { return p.codigo; });
+  if (!pend.length) return Promise.resolve();
+  var i = 0;
+  function next() {
+    if (i >= pend.length) return Promise.resolve();
+    var p = pend[i];
+    var path = 'proyecto-' + slugCodigo(p.codigo) + '.html';
+    ghLog('Generando p\u00e1gina de proyecto: ' + path + '\u2026', 'run');
+    var html = generarPaginaProyecto(p);
+    var b64 = strToBase64Utf8(html);
+    return ghPutFile(owner, repo, token, path, b64, 'Generar p\u00e1gina de proyecto ' + p.codigo + ' desde CMOF Admin')
+      .then(function(res) {
+        if (!res.ok) return res.json().then(function(err) { throw new Error(path + ': ' + (err.message || res.status)); });
+        ghLog('\u2713 ' + path, 'ok');
+        i++;
+        return next();
+      });
+  }
+  return next();
+}
+
 function publicarAGithub() {
   var token = gv('ghToken');
   var owner = gv('ghOwner') || 'cmof-arq';
@@ -824,6 +978,19 @@ function publicarAGithub() {
   }
   pendingKeys = keysValidas;
 
+  // Si una imagen está marcada para borrar Y también para subir con el mismo path,
+  // cancelar el borrado (alcanza con sobrescribirla via PUT)
+  if (window._pendingDeletes) {
+    pendingKeys.forEach(function(k) {
+      var pathCompleto = 'projects/' + k;
+      Object.keys(window._pendingDeletes).forEach(function(delKey) {
+        if ('projects/' + delKey === pathCompleto) {
+          delete window._pendingDeletes[delKey];
+        }
+      });
+    });
+  }
+
   // 1) Subir proyectos.js
   var jsonStr = JSON.stringify(proyectos, null, 2);
   var jsStr = '// Generado por CMOF Admin — ' + new Date().toLocaleString() + '\nvar proyectosData = ' + jsonStr + ';\n';
@@ -840,6 +1007,18 @@ function publicarAGithub() {
       return subirImagenesEnSecuencia(pendingKeys, pending, owner, repo, token);
     })
     .then(function() {
+      ghLog('Generando páginas estáticas de proyectos (SEO)…', 'run');
+      return subirPaginasProyectosEnSecuencia(proyectos, owner, repo, token);
+    })
+    .then(function() {
+      ghLog('Actualizando sitemap.xml…', 'run');
+      var sitemapXml = generarSitemap(proyectos);
+      var sitemapB64 = strToBase64Utf8(sitemapXml);
+      return ghPutFile(owner, repo, token, 'sitemap.xml', sitemapB64, 'Actualizar sitemap.xml desde CMOF Admin');
+    })
+    .then(function(res) {
+      if (res && !res.ok) return res.json().then(function(err) { throw new Error('sitemap.xml: ' + (err.message || res.status)); });
+      ghLog('✓ sitemap.xml actualizado.', 'ok');
       ghLog('Publicación completa. El sitio se actualizará en GitHub Pages en 1-2 minutos.', 'ok');
       toast('ok','Publicado correctamente en GitHub.');
       window._pendingFiles = {};
