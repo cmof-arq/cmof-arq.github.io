@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 10/7/2026, 11:33:38
+// Generado por CMOF Admin — 10/7/2026, 11:48:41
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -424,6 +424,35 @@ var proyectosData = [
       "I-LAM-O - 02.png",
       "I-LAM-O - 03.png",
       "I-LAM-O - 04.png"
+    ]
+  },
+  {
+    "id": "p1783693821021",
+    "codigo": "K-JG-LC",
+    "nombre": "Casa GHIONE - La Cuesta",
+    "tipologia": "K",
+    "estado": "Proyecto",
+    "anio_inicio": "2021",
+    "anio_fin": "2021",
+    "superficie": "646 m2",
+    "ciudad": "La Calera",
+    "provincia": "Córdoba",
+    "pais": "Argentina",
+    "lat": "31 21 44",
+    "lat_hem": "S",
+    "lon": "064 19 38",
+    "lon_hem": "W",
+    "altitud": "614",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "Casa GHIONE",
+    "web_en": "",
+    "imagenes": [
+      "K-JGLC-IMG-IA-01.png",
+      "K-JGLC-IMG-IA-02.png",
+      "K-JGLC-IMG-IA-03.png"
     ]
   }
 ];
