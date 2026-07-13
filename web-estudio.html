@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="CMOF Architecture Office — Estudio, equipo y trayectoria. César Ortiz Ferrer, arquitecto.">
-<title>Estudio | CMOF Architecture Office</title>
+<title>Studio | CMOF Architecture Office</title>
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
@@ -121,35 +121,98 @@ html, body {
   padding: 3.5rem 2rem 5rem;
 }
 
-/* Texto institucional */
+/* Texto institucional — hero simplificado */
 .estudio-intro {
-  margin-bottom: 4rem;
-  max-width: 780px;
+  margin-bottom: 4.5rem;
+  max-width: 760px;
 }
 .estudio-kicker {
   font-size: 0.65rem;
   letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--orange);
-  margin-bottom: 0.8rem;
+  margin-bottom: 1.2rem;
 }
 .estudio-title {
   font-family: 'Conthrax', sans-serif;
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
-  letter-spacing: 0.04em;
+  font-weight: 600;
+  font-size: clamp(1.5rem, 2.8vw, 2.2rem);
+  letter-spacing: 0.01em;
+  text-transform: none;
+  margin-bottom: 0;
+  line-height: 1.35;
+}
+
+.enfoque-block {
+  margin-bottom: 4.5rem;
+  max-width: 640px;
+}
+.enfoque-title {
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
-  margin-bottom: 1.6rem;
-  line-height: 1.2;
+  color: var(--orange);
+  margin-bottom: 1rem;
 }
 .estudio-text {
   font-size: 0.92rem;
-  line-height: 1.9;
-  color: var(--text);
+  line-height: 1.85;
+  color: var(--muted);
   white-space: pre-wrap;
+  max-width: 640px;
 }
 .estudio-text.loading { color: var(--muted); font-style: italic; }
 
-/* Sección equipo */
+/* Tríada Comprender / Diseñar / Construir */
+.triad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  margin-bottom: 5rem;
+  padding-top: 2.8rem;
+  border-top: 1px solid var(--border);
+}
+.triad-item {
+  padding-right: 2.2rem;
+}
+.triad-item + .triad-item {
+  border-left: 1px solid var(--border);
+  padding-left: 2.2rem;
+}
+.triad-num {
+  font-family: 'Conthrax', sans-serif;
+  font-weight: 600;
+  font-size: 2.6rem;
+  line-height: 1;
+  color: var(--border2);
+  margin-bottom: 1.1rem;
+}
+.triad-word {
+  font-family: 'Conthrax', sans-serif;
+  font-size: 1.05rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text);
+  display: inline-block;
+  margin-bottom: 1.1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid var(--orange);
+}
+.triad-desc {
+  font-size: 0.84rem;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 260px;
+}
+
+@media (max-width: 700px) {
+  .triad { grid-template-columns: 1fr; gap: 2.2rem; }
+  .triad-item { padding-right: 0; }
+  .triad-item + .triad-item { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 2.2rem; }
+  .triad-desc { max-width: none; }
+}
+
+/* Sección equipo / Professional Network */
 .team-section-title {
   font-size: 0.65rem;
   letter-spacing: 0.25em;
@@ -158,6 +221,17 @@ html, body {
   margin-bottom: 1.8rem;
   padding-bottom: 0.8rem;
   border-bottom: 1px solid var(--border);
+}
+
+.network-group {
+  margin-bottom: 2.6rem;
+}
+.network-cat-title {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: 1.4rem;
 }
 
 .team-grid {
@@ -225,6 +299,38 @@ html, body {
   font-style: italic;
 }
 
+/* Cierre + CTA */
+.closing {
+  margin-top: 5rem;
+  padding-top: 3rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+}
+.closing-phrase {
+  font-family: 'Conthrax', sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  line-height: 1.4;
+  max-width: 640px;
+  margin: 0 auto 1.8rem;
+}
+.closing-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Square721BT', sans-serif;
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bg);
+  background: var(--orange);
+  padding: 0.85rem 1.8rem;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: opacity 0.2s;
+}
+.closing-cta:hover { opacity: 0.85; }
+
 @media (max-width: 600px) {
   .topbar-nav { display: none; }
   .page-content { padding: 2rem 1.2rem 3rem; }
@@ -260,14 +366,41 @@ html, body {
 <div class="page-content">
 
   <div class="estudio-intro">
-    <div class="estudio-kicker">CMOF Architecture Office</div>
-    <h1 class="estudio-title">El Estudio</h1>
+    <div class="estudio-kicker">Studio</div>
+    <h1 class="estudio-title">Cada proyecto comienza comprendiendo aquello que lo hace único.</h1>
+  </div>
+
+  <div class="enfoque-block">
+    <div class="enfoque-title">Enfoque</div>
     <div class="estudio-text loading" id="estudio-texto">Cargando...</div>
   </div>
 
-  <div class="team-section-title">Equipo</div>
-  <div class="team-grid" id="team-grid">
-    <div class="team-empty">Cargando equipo...</div>
+  <div class="triad">
+    <div class="triad-item">
+      <div class="triad-num">01</div>
+      <div class="triad-word">Comprender</div>
+      <div class="triad-desc">Cada proyecto comienza comprendiendo sus condiciones particulares antes de tomar decisiones de diseño.</div>
+    </div>
+    <div class="triad-item">
+      <div class="triad-num">02</div>
+      <div class="triad-word">Diseñar</div>
+      <div class="triad-desc">La arquitectura surge como la síntesis del lugar, las personas, el propósito y el funcionamiento.</div>
+    </div>
+    <div class="triad-item">
+      <div class="triad-num">03</div>
+      <div class="triad-word">Construir</div>
+      <div class="triad-desc">Acompañamos cada proyecto desde la primera idea hasta la obra para preservar la intención del diseño.</div>
+    </div>
+  </div>
+
+  <div class="team-section-title">Professional Network</div>
+  <div id="network-container">
+    <div class="team-empty">Cargando…</div>
+  </div>
+
+  <div class="closing">
+    <div class="closing-phrase">La arquitectura comienza mucho antes del primer trazo.</div>
+    <a class="closing-cta" href="web-contacto.html">Conversemos sobre tu proyecto →</a>
   </div>
 
 </div>
@@ -283,11 +416,24 @@ function xe(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;')
 
 function demoEstudioData() {
   return {
-    texto: 'CMOF Architecture Office es un estudio de arquitectura fundado en 1997 en Córdoba, Argentina, especializado en proyectos de hospitality boutique, residencial de alta gama, industrial y oficinas.\n\nNuestro trabajo parte de una convicción simple: la estrategia es el camino hacia el diseño, no un fin en sí mismo. Cada proyecto se piensa de la mano entre la dirección creativa y la viabilidad real de construirlo y operarlo.',
+    texto: 'CMOF es un estudio de arquitectura fundado en 1997 en Córdoba, Argentina. Trabajamos en proyectos de hotelería, arquitectura residencial, industrial y de oficinas.\n\nAntes de diseñar, buscamos comprender: el lugar, las personas, el propósito y las condiciones reales de cada proyecto. Esa comprensión ordena cada decisión, desde la primera idea hasta la obra construida.',
     equipo: [
-      { nombre: 'César Ortiz Ferrer', rol: 'Arquitecto — Fundador', bio: 'Director de proyecto y diseño. Especializado en hotelería boutique y arquitectura residencial.', email: 'cmof2@hotmail.com', foto: '' }
+      { nombre: 'César Ortiz Ferrer', rol: 'Arquitecto | Director de Diseño', categoria: '', bio: 'Fundó CMOF en 1997 y cuenta con más de 29 años de experiencia liderando proyectos de arquitectura desde el concepto inicial hasta su construcción. Graduado con Diploma de Honor en la Facultad de Arquitectura de la Universidad Católica de Córdoba.', email: 'cmof2@hotmail.com', foto: '' }
     ]
   };
+}
+
+function renderMemberCard(m) {
+  var fotoHtml = m.foto
+    ? '<img class="team-photo" src="' + xe(m.foto) + '" alt="' + xe(m.nombre) + '" onerror="this.outerHTML=\'<div class=&quot;team-photo-placeholder&quot;>' + xe((m.nombre||'?').charAt(0)) + '</div>\'">'
+    : '<div class="team-photo-placeholder">' + xe((m.nombre||'?').charAt(0)) + '</div>';
+  return '<div class="team-card">' +
+      fotoHtml +
+      '<div class="team-name">' + xe(m.nombre) + '</div>' +
+      '<div class="team-role">' + xe(m.rol) + '</div>' +
+      '<div class="team-bio">' + xe(m.bio) + '</div>' +
+      (m.email ? '<a class="team-email" href="mailto:' + xe(m.email) + '">' + xe(m.email) + '</a>' : '') +
+    '</div>';
 }
 
 function renderEstudio(data) {
@@ -295,27 +441,35 @@ function renderEstudio(data) {
   textoEl.textContent = data.texto || '';
   textoEl.classList.remove('loading');
 
-  var grid = document.getElementById('team-grid');
+  var container = document.getElementById('network-container');
   var equipo = data.equipo || [];
   if (equipo.length === 0) {
-    grid.innerHTML = '<div class="team-empty">Equipo en construcción.</div>';
+    container.innerHTML = '<div class="team-empty">Red profesional en construcción.</div>';
     return;
   }
-  grid.innerHTML = '';
+
+  // Agrupar por categoria (texto libre). Sin categoria => grupo '' (sin encabezado).
+  var order = [], groups = {};
   equipo.forEach(function(m) {
-    var card = document.createElement('div');
-    card.className = 'team-card';
-    var fotoHtml = m.foto
-      ? '<img class="team-photo" src="' + xe(m.foto) + '" alt="' + xe(m.nombre) + '" onerror="this.outerHTML=\'<div class=&quot;team-photo-placeholder&quot;>' + xe((m.nombre||'?').charAt(0)) + '</div>\'">'
-      : '<div class="team-photo-placeholder">' + xe((m.nombre||'?').charAt(0)) + '</div>';
-    card.innerHTML =
-      fotoHtml +
-      '<div class="team-name">' + xe(m.nombre) + '</div>' +
-      '<div class="team-role">' + xe(m.rol) + '</div>' +
-      '<div class="team-bio">' + xe(m.bio) + '</div>' +
-      (m.email ? '<a class="team-email" href="mailto:' + xe(m.email) + '">' + xe(m.email) + '</a>' : '');
-    grid.appendChild(card);
+    var key = (m.categoria || '').trim();
+    if (!groups[key]) { groups[key] = []; order.push(key); }
+    groups[key].push(m);
   });
+
+  // Si todo está en el grupo sin categoría, mostrar grid simple sin subtítulos.
+  if (order.length === 1 && order[0] === '') {
+    container.innerHTML = '<div class="team-grid">' + equipo.map(renderMemberCard).join('') + '</div>';
+    return;
+  }
+
+  var html = '';
+  order.forEach(function(key) {
+    html += '<div class="network-group">';
+    if (key) html += '<div class="network-cat-title">' + xe(key) + '</div>';
+    html += '<div class="team-grid">' + groups[key].map(renderMemberCard).join('') + '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
 }
 
 function loadEstudio() {
