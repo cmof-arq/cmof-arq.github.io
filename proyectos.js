@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 16/7/2026, 02:20:10
+// Generado por CMOF Admin — 16/7/2026, 02:21:55
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -419,6 +419,7 @@ var proyectosData = [
     "web_es": "OFICINAS INDUSTRIA LAM SA\n\nNuevas oficinas administrativas de Instustria LAM SA.\nUbicadas en zona sur de la ciudad de Córdoba, desarrolladas en 2 plantas con una superficie total de 516 m2.\nRealizada con estructura de perfileria metálica de perfiles de alma llena y envolvente con sistema de paneles compuestos metalicos con aislante para muros y cubierta.",
     "web_en": "",
     "imagenes": [
+      "I-LAM-O - 00-b.png",
       "I-LAM-O - 00.png",
       "I-LAM-O - 01.png",
       "I-LAM-O - 02.png",
