@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 20/7/2026, 06:15:14
+// Generado por CMOF Admin — 22/7/2026, 01:18:48
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -61,9 +61,18 @@ var proyectosData = [
     "concepto_es": "",
     "concepto_en": "",
     "imagenes": [
-      "K-EGSC-001.jpg",
+      "K-EGSC-IMG-IA-02.png",
+      "K-EGSC-IMG-IA-05.png",
       "K-EGSC-002.jpg",
+      "K-EGSC-IMG-IA-06.png",
+      "K-EGSC-IMG-IA-07.png",
+      "K-EGSC-IMG-IA-06-black.png",
+      "K-EGSC-IMG-IA-07-BLACK-3.png",
+      "K-EGSC-IMG-IA-08-BLACK.png",
+      "K-EGSC-IMG-IA-09-BLACK.png",
+      "K-EGSC-IMG-IA-10-BLACK.png",
       "K-EGSC-003.jpg",
+      "K-EGSC-001.jpg",
       "K-EGSC-004.jpg",
       "K-EGSC-008.jpg",
       "K-EGSC-010.jpg",
