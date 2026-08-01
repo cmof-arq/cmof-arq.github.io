@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 22/7/2026, 01:18:48
+// Generado por CMOF Admin — 1/8/2026, 03:57:30
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -467,6 +467,44 @@ var proyectosData = [
       "K-JGLC-IMG-IA-01.png",
       "K-JGLC-IMG-IA-02.png",
       "K-JGLC-IMG-IA-03.png"
+    ]
+  },
+  {
+    "id": "p1785607220415",
+    "codigo": "K-MXSA",
+    "nombre": "MX HOUSE",
+    "tipologia": "K",
+    "estado": "Proyecto",
+    "anio_inicio": "2022",
+    "anio_fin": "2022",
+    "superficie": "655",
+    "ciudad": "Stellenbosch",
+    "provincia": "Western Cape",
+    "pais": "South Africa",
+    "lat": "33 52 50",
+    "lat_hem": "S",
+    "lon": "018 51 30",
+    "lon_hem": "E",
+    "altitud": "272",
+    "memoria_es": "",
+    "memoria_en": "",
+    "concepto_es": "",
+    "concepto_en": "",
+    "web_es": "",
+    "web_en": "",
+    "imagenes": [
+      "K-MXSA-IA-001.png",
+      "K-MXSA-IA-002.png",
+      "K-MXSA-IA-004.png",
+      "K-MXSA-IA-005-A.png",
+      "K-MXSA-IA-006-B1a.png",
+      "K-MXSA-IA-006-B1b.png",
+      "K-MXSA-IA-006.png",
+      "K-MXSA-IA-007-B.png",
+      "K-MXSA-IA-008-B.png",
+      "K-MXSA-IA-009-B.png",
+      "K-MXSA-IA-009.png",
+      "K-MXSA-IA-010.png"
     ]
   }
 ];
