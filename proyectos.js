@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 18/8/2026, 04:59:29
+// Generado por CMOF Admin — 18/8/2026, 05:16:37
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -328,11 +328,18 @@ var proyectosData = [
     "concepto_es": "",
     "concepto_en": "",
     "web_es": "Casa MOTRICH\n\n(en Construcción)",
-    "web_en": "",
+    "web_en": "MOTRICH House\n\n(under Construction)",
     "imagenes": [
-      "K-PMLD - IMG-IA-001.jpg",
-      "K-PMLD - IMG-IA-002.png",
-      "K-PMLD - IMG-IA-004.png"
+      "K-PMLD - IMG-IA-004.png",
+      "K-PMLD - PROYECTO Z - 01.png",
+      "K-PMLD - PROYECTO Z - 02.png",
+      "K-PMLD - PROYECTO Z - 03.png",
+      "K-PMLD - PROYECTO Z - 04.png",
+      "K-PMLD - PROYECTO Z - 05.png",
+      "K-PMLD - PROYECTO Z - 06.png",
+      "K-PMLD - PROYECTO Z - 07.png",
+      "K-PMLD - PROYECTO Z --- 08.jpg",
+      "K-PMLD - IMG-IA-002.png"
     ]
   },
   {
