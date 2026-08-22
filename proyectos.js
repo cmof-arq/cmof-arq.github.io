@@ -1,4 +1,4 @@
-// Generado por CMOF Admin — 20/8/2026, 11:44:19
+// Generado por CMOF Admin — 22/8/2026, 03:17:58
 var proyectosData = [
   {
     "id": "p1780987587201",
@@ -42,7 +42,7 @@ var proyectosData = [
   {
     "id": "p1780987781964",
     "codigo": "K-EGSC",
-    "nombre": "Casa ELENA & GUILLERMO",
+    "nombre": "Casa E & G - San Clemente",
     "tipologia": "K",
     "estado": "En obra",
     "anio_inicio": "2023",
@@ -94,7 +94,7 @@ var proyectosData = [
   {
     "id": "p1780988025043",
     "codigo": "K-GELC-307",
-    "nombre": "Casa GLENDA & ELADIO - 307",
+    "nombre": "Casa GE-307 - La Cuesta",
     "tipologia": "K",
     "estado": "Construido",
     "anio_inicio": "2022",
@@ -122,7 +122,7 @@ var proyectosData = [
   {
     "id": "p1780988370950",
     "codigo": "K-PMIY",
-    "nombre": "Casa PABLO & RENATA",
+    "nombre": "Casa P & R - Intiyaco",
     "tipologia": "K",
     "estado": "Construido",
     "anio_inicio": "2017",
@@ -155,7 +155,7 @@ var proyectosData = [
   {
     "id": "p1782789108878",
     "codigo": "K-EGLR-202",
-    "nombre": "Casa ELENA & GUILLERMO - LR",
+    "nombre": "Casa E & G - La Rufina",
     "tipologia": "K",
     "estado": "Construido",
     "anio_inicio": "2012",
@@ -216,7 +216,7 @@ var proyectosData = [
   {
     "id": "p1782794442959",
     "codigo": "K-RDMO",
-    "nombre": "Casa DONADIO MOLVENTO",
+    "nombre": "Casa DND - Molvento",
     "tipologia": "K",
     "estado": "En obra",
     "anio_inicio": "2024",
@@ -248,7 +248,7 @@ var proyectosData = [
   {
     "id": "p1782860430300",
     "codigo": "K-JPBLP",
-    "nombre": "Casa BALDACINI - LA PANKANA",
+    "nombre": "Casa JPB - La Pankana",
     "tipologia": "K",
     "estado": "Proyecto",
     "anio_inicio": "2022",
